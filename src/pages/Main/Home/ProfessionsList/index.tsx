@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, SafeAreaView, Text, View } from 'react-native';
+import { Button, FlatList, SafeAreaView, Text, View } from 'react-native';
 import CardProfession, { CardProfessionProps } from '../../../../components/CardProfession';
 import styles from './styles';
 import FilterProfessions from '../../../../components/FilterProfessions';
@@ -39,7 +39,7 @@ const renderItem = ({ item }: { item: CardProfessionProps }, navigation: any) =>
 
 export default function ProfessionsList({ navigation }: any) {
   const [buttonSelected, setButtonSelected] = useState(1);
-  
+
   useEffect(() => {
     console.log(buttonSelected);
     //Aqui ficará a requisição com o filtro já setado
@@ -47,12 +47,52 @@ export default function ProfessionsList({ navigation }: any) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <FilterProfessions onPress={setButtonSelected} button={buttonSelected}/>
+      {/* <Button title={'teste'} onPress={() => navigation.navigate('ProvidersList', {profession: 'teste'})}></Button> */}
+      <FilterProfessions onPress={setButtonSelected} button={buttonSelected} />
+      <Text style={styles.titleServices}>Serviços Domésticos</Text>
       <View style={styles.listPage}>
         <FlatList style={styles.list}
           data={DATA}
           renderItem={({ item }) => { return renderItem({ item }, navigation) }}
-          keyExtractor={(item, index) => index.toString()} />
+          keyExtractor={(item, index) => index.toString()}
+          horizontal={true}
+        />
+      </View>
+      <Text style={styles.titleServices}>Serviços Domésticos</Text>
+      <View style={styles.listPage}>
+        <FlatList style={styles.list}
+          data={DATA}
+          renderItem={({ item }) => { return renderItem({ item }, navigation) }}
+          keyExtractor={(item, index) => index.toString()}
+          horizontal={true}
+        />
+      </View>
+      <Text style={styles.titleServices}>Serviços Domésticos</Text>
+      <View style={styles.listPage}>
+        <FlatList style={styles.list}
+          data={DATA}
+          renderItem={({ item }) => { return renderItem({ item }, navigation) }}
+          keyExtractor={(item, index) => index.toString()}
+          horizontal={true}
+        />
+      </View>
+      <Text style={styles.titleServices}>Serviços Domésticos</Text>
+      <View style={styles.listPage}>
+        <FlatList style={styles.list}
+          data={DATA}
+          renderItem={({ item }) => { return renderItem({ item }, navigation) }}
+          keyExtractor={(item, index) => index.toString()}
+          horizontal={true}
+        />
+      </View>
+      <Text style={styles.titleServices}>Serviços Domésticos</Text>
+      <View style={styles.listPage}>
+        <FlatList style={styles.list}
+          data={DATA}
+          renderItem={({ item }) => { return renderItem({ item }, navigation) }}
+          keyExtractor={(item, index) => index.toString()}
+          horizontal={true}
+        />
       </View>
     </SafeAreaView>
   );

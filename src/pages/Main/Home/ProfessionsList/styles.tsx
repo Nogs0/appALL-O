@@ -9,10 +9,17 @@ export default StyleSheet.create({
     },
     listPage: {
         width: '100%',
-        height: '93%',
+        height: 100,
         alignItems: 'center',
     },
     list: {
         width: '100%',
+    },
+    titleServices: {
+        marginTop: 15,
+        marginLeft: 15,
+        color: 'black',
+        fontSize: 24,
+        fontFamily: 'Rubik-Bold'
     }
 })
