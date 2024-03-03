@@ -135,7 +135,6 @@ const renderItem = ({ item }: { item: CardProps }, navigation: any) => {
             name={item.name}
             profession={item.profession}
             navigation={navigation} />
-        // navigation={navigation} />
     );
 };
 
@@ -144,7 +143,7 @@ export default function ProvidersList({ route, navigation }: any) {
 
     return (
         <SafeAreaView style={styles.container}>
-            <Filter navigation={() => navigation.goBack()} profession={profession} />
+            <Filter navigation={() => navigation.pop()} profession={profession} />
             <View style={styles.listPage}>
                 <FlatList style={styles.list}
                     data={DATA}

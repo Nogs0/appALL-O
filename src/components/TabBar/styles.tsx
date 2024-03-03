@@ -3,7 +3,7 @@ import { orangeDefault1 } from "../../shared/styleConsts";
 
 export default StyleSheet.create({
     container: {
-        height: '7%',
+        height: '6%',
         backgroundColor: orangeDefault1
     },
     buttonContainer: {

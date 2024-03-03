@@ -3,3 +3,8 @@ export enum ButtonFilterEnum {
     all,
     lastSeen
 }
+
+export enum TabProviderEnum {
+    apresentation = 1,
+    comments
+}

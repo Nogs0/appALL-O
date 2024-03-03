@@ -1,13 +1,13 @@
 import { StyleSheet } from "react-native";
-import { whiteDefault } from "../../shared/styleConsts";
+import { orangeDefault1, whiteDefault } from "../../shared/styleConsts";
 
 export default StyleSheet.create({
     container: {
-        width: '100%',
         backgroundColor: whiteDefault,
+        marginBottom: 5
     },
     titleServices: {
-        marginTop: 15,
+        marginTop: 10,
         marginLeft: 15,
         color: 'black',
         fontSize: 24,

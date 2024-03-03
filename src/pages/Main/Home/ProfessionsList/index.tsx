@@ -27,13 +27,11 @@ export default function ProfessionsList({ navigation }: any) {
   return (
     <SafeAreaView style={styles.container}>
       <FilterProfessions onPress={setButtonSelected} button={buttonSelected} />
-      <View style={styles.listPage}>
         <FlatList
           data={DATA}
           renderItem={({item}) => renderItem({item}, navigation)}
           keyExtractor={(item, index) => index.toString()}          
-        />
-      </View>
+        />        
     </SafeAreaView>
   );
 }

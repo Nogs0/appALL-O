@@ -19,6 +19,16 @@ export default StyleSheet.create({
         height: 100,
         borderRadius: 50
     },
+    nameText: {
+        fontFamily: 'Rubik-Bold',
+        color: 'black',
+        fontSize: 24
+    },
+    professionText: {
+        fontFamily: 'Rubik-Bold',
+        color: 'black',
+        fontSize: 20
+    },
     infoContainer: {
         flex: 0.3
     },

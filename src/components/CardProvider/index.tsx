@@ -22,7 +22,7 @@ const getStatus = (status: boolean) => {
 export default function CardProvider(props: CardProps) {
     return (
         <SafeAreaView style={styles.container}>
-            <TouchableOpacity style={styles.contentContainer} onPress={() => props.navigation.navigate('ViewProvider', props)}>
+            <TouchableOpacity style={styles.contentContainer} onPress={() => props.navigation.navigate('ViewProvider')}>
                 <View style={styles.imageContainer}>
                     <Image style={styles.image} source={props.image}></Image>
                     <Text style={styles.nameProvider}>{props.name}</Text>

@@ -5,9 +5,5 @@ export default StyleSheet.create({
     container: {
         height: '100%',
         backgroundColor: whiteDefault,
-    },
-    listPage: {
-        height: '93%',
-        alignItems: 'center',
     }
 })
