@@ -20,3 +20,8 @@
 ```properties
     a
 ```
+
+> Ou você pode rodar o comando:
+```properties
+    npx react-native run-android
+```
