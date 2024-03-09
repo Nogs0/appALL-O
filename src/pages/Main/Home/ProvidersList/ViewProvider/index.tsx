@@ -10,6 +10,8 @@ const DATA: any = {
     profession: 'Eletricista'
 } 
 
+const a: number = 3.5;
+
 export default function ViewProvider() {
     const [buttonSelected, setButtonSelected] = useState(1);
 
@@ -27,7 +29,7 @@ export default function ViewProvider() {
                 <Text style={styles.professionText}>{DATA.profession}</Text>
             </View>
             <View style={styles.infoContainer}>
-                <StarsRating />
+                <StarsRating stars={3.5}/>
             </View>
             <View style={styles.imagesContainer}>
 
