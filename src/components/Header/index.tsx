@@ -7,11 +7,10 @@ export const Header =
     <SafeAreaView style={styles.container}>
         <View style={styles.menuContainer} >
             <TouchableOpacity>
-                <Icon name='menu' size={40}></Icon>
+                <Icon color='black' name='menu' size={30}></Icon>
             </TouchableOpacity>
         </View >
         <View style={styles.perfilContainer}>
-            <Text style={styles.name}>Jorginho</Text>
             <Image style={styles.imgPerfil} source={require('../../assets/images/foto-de-perfil-homem.png')}></Image>
         </View>
     </SafeAreaView>

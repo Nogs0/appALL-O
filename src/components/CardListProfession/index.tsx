@@ -3,13 +3,13 @@ import { Image, Text, TouchableOpacity, View, ViewBase } from 'react-native'
 import styles from './styles'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
-export type CardProfessionProps = {
+export type CardListProfessionProps = {
     profession: string,
     image: any,
     navigation: () => any
 }
 
-export default function CardProfession(props: CardProfessionProps) {
+export default function CardListProfession(props: CardListProfessionProps) {
     return (
         <SafeAreaView style={styles.container}>
             <TouchableOpacity style={styles.touchableContainer} 

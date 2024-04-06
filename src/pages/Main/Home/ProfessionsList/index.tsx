@@ -13,7 +13,6 @@ const DATA: string[] = [
 ]
 
 const renderItem = ({item}: {item: string}, navigation: any) => {
-  return <ListOccupationArea navigation={navigation} occupationArea={item} />;
 };
 
 export default function ProfessionsList({ navigation }: any) {
@@ -26,12 +25,7 @@ export default function ProfessionsList({ navigation }: any) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <FilterProfessions onPress={setButtonSelected} button={buttonSelected} />
-        <FlatList
-          data={DATA}
-          renderItem={({item}) => renderItem({item}, navigation)}
-          keyExtractor={(item, index) => index.toString()}          
-        />        
+     
     </SafeAreaView>
   );
 }
