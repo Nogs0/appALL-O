@@ -4,7 +4,7 @@ import { blackDefault, greyDefault, orangeDefault1 } from "../../shared/styleCon
 export default StyleSheet.create({
     container: {
         paddingTop: 20,
-        flex: 1,
+        flex: 0.15,
     },
     label: {
         left: 10,
@@ -15,7 +15,7 @@ export default StyleSheet.create({
     },
     containerSearch:{
         margin: '2%',
-        height: '12%',
+        height: '45%',
         backgroundColor: greyDefault,
         borderRadius: 30,
       flexDirection: 'row' ,

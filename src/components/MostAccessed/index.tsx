@@ -6,7 +6,7 @@ import CardsMostAccessed from '../CardsMostAccessed'
 export default function MostAccessed() {
   return (
     <SafeAreaView style={style.container}>
-      <Text>Most Accessed In Your Neighborhood</Text>
+      <Text style={style.label}>Most Accessed In Your Neighborhood</Text>
       <CardsMostAccessed></CardsMostAccessed>
     </SafeAreaView>
   )
