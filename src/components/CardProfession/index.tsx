@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView } from 'react-native'
+import { View, Text, SafeAreaView, Touchable, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { blackDefault, greyDefault, orangeDefault1 } from '../../shared/styleConsts'
@@ -15,10 +15,12 @@ export default function CardProfession(props: CardProfession) {
 
   return (
     <SafeAreaView style={style.container}>
-      <View style={[style.informationContainer, {backgroundColor: props.selected ? orangeDefault1 : greyDefault}]}>
+      <TouchableOpacity 
+        style={[style.informationContainer, {backgroundColor: props.selected ? orangeDefault1 : greyDefault}]}
+        onPress={() => console.log(`pressionou`, props.profession)}>
         <Icon color={blackDefault} name={props.professionIcon} size={35}></Icon>
         <Text style={style.professionName}>{props.profession}</Text>
-      </View>
+      </TouchableOpacity>
     </SafeAreaView>
   )
 }

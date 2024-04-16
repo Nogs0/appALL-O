@@ -8,7 +8,8 @@ export default StyleSheet.create({
     },
     informationContainer: {
         alignItems: 'center',
-        margin: 5,
+        marginTop: 7,
+        marginHorizontal: 5,
         backgroundColor: greyDefault,
         borderRadius: 15,
         padding: 10

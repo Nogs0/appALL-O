@@ -1,10 +1,11 @@
 import { StyleSheet } from "react-native";
-import { blackDefault, greyDefault, orangeDefault1 } from "../../shared/styleConsts";
+import { blackDefault, greyDefault, orangeDefault1, whiteDefault } from "../../shared/styleConsts";
 
 export default StyleSheet.create({
     container: {
         paddingTop: 20,
         flex: 0.15,
+        backgroundColor: whiteDefault
     },
     label: {
         left: 10,
@@ -13,19 +14,20 @@ export default StyleSheet.create({
         fontSize: 25,
         fontFamily: 'Rubik-Light'
     },
-    containerSearch:{
+    containerSearch: {
         margin: '2%',
         height: '45%',
         backgroundColor: greyDefault,
         borderRadius: 30,
-      flexDirection: 'row' ,
+        flexDirection: 'row',
     },
     iconSearch: {
-      position: 'absolute',
-      paddingTop: 13,
-      paddingLeft: 15
+        position: 'absolute',
+        paddingTop: 13,
+        paddingLeft: 15
     },
     search: {
+        flex: 1,
         marginLeft: 35,
     }
 })

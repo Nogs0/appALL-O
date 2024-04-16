@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView } from 'react-native';
+import { SafeAreaView, ScrollView, View } from 'react-native';
 import MostAccessed from '../../../components/MostAccessed';
 import SearchForAProfessional from '../../../components/SearchForAProfessional';
 import Highlights from '../../../components/Highlights';
@@ -9,11 +9,13 @@ import { whiteDefault } from '../../../shared/styleConsts';
 export default function Home() {
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: whiteDefault}}>
-      <SearchForAProfessional></SearchForAProfessional>
-      <MostAccessed></MostAccessed>
-      <Highlights></Highlights>
-      <OtherProfessions></OtherProfessions>
+    <SafeAreaView style={{ flex: 1, backgroundColor: whiteDefault }}>
+      <ScrollView stickyHeaderIndices={[0]}>
+        <SearchForAProfessional />
+        <MostAccessed />
+        <Highlights />
+        <OtherProfessions />
+      </ScrollView>
     </SafeAreaView>
   )
 }

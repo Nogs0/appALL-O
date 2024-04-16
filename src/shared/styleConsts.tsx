@@ -6,6 +6,15 @@ export const orangeDefault3 = "#ffd5a9"
 export const greyDefault = "#d4d4d4";
 export const whiteDefault = "white";
 export const blackDefault = "black";
-export const styles = StyleSheet.create({
 
+export default StyleSheet.create({
+    containerTabBar: {
+        flex: 1,
+    },
+    buttonTabBar: {
+        marginVertical: 5,
+        width: '80%',
+        height: '80%',
+        borderRadius: 30
+    }
 })

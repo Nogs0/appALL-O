@@ -4,10 +4,11 @@ import { blackDefault } from "../../shared/styleConsts";
 export default StyleSheet.create({
     container: {
         flex: 0.3,
-        marginHorizontal: 25,
+        marginHorizontal: 25
     },
     label: {
         color: blackDefault,
-        fontSize: 18
+        fontSize: 18,
+        fontFamily: 'Rubik-Regular'
     }
 })
