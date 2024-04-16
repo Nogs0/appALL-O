@@ -1,7 +1,7 @@
 import { View, Text, FlatList } from 'react-native'
 import React from 'react'
 import styles from './styles'
-import CardProfession, { CardProfessionProps } from '../CardProfession';
+import CardListProfession, { CardListProfessionProps } from '../CardListProfession';
 
 const DATA: any[] = [
     {
@@ -30,9 +30,9 @@ const DATA: any[] = [
     }
 ]
 
-const renderItem = ({ item }: { item: CardProfessionProps }, navigation: any) => {
+const renderItem = ({ item }: { item: CardListProfessionProps }, navigation: any) => {
     return (
-        <CardProfession navigation={() => navigation.navigate('ProvidersList', { profession: item.profession })} profession={item.profession} image={item.image} ></CardProfession>
+        <CardListProfession navigation={() => navigation.navigate('ProvidersList', { profession: item.profession })} profession={item.profession} image={item.image} />
     );
 };
 

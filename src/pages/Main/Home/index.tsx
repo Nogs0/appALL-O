@@ -1,25 +1,21 @@
-import { View, Text } from 'react-native'
-import React, { useEffect } from 'react'
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import ProfessionsList from './ProfessionsList';
-import ProvidersList from './ProvidersList';
-import ViewProvider from './ProvidersList/ViewProvider';
-import { useNavigation } from '@react-navigation/native';
-import { Header } from '../../../components/Header';
-
-const Stack = createNativeStackNavigator();
+import React from 'react';
+import { SafeAreaView, ScrollView, View } from 'react-native';
+import MostAccessed from '../../../components/MostAccessed';
+import SearchForAProfessional from '../../../components/SearchForAProfessional';
+import Highlights from '../../../components/Highlights';
+import OtherProfessions from '../../../components/OtherProfessions';
+import { whiteDefault } from '../../../shared/styleConsts';
 
 export default function Home() {
 
   return (
-    <Stack.Navigator initialRouteName='ProfessionsList' screenOptions={{header: () => Header}}>
-        <Stack.Group>
-            <Stack.Screen name='ProfessionsList' component={ProfessionsList} />
-            <Stack.Group screenOptions={{ presentation: 'modal' }}>
-                <Stack.Screen name='ProvidersList' component={ProvidersList} />
-                <Stack.Screen name='ViewProvider' component={ViewProvider} />
-            </Stack.Group>
-        </Stack.Group>
-    </Stack.Navigator>
+    <SafeAreaView style={{ flex: 1, backgroundColor: whiteDefault }}>
+      <ScrollView stickyHeaderIndices={[0]}>
+        <SearchForAProfessional />
+        <MostAccessed />
+        <Highlights />
+        <OtherProfessions />
+      </ScrollView>
+    </SafeAreaView>
   )
 }

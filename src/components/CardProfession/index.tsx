@@ -1,26 +1,26 @@
-import React from 'react'
-import { Image, Text, TouchableOpacity, View, ViewBase } from 'react-native'
-import styles from './styles'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { View, Text, SafeAreaView, Touchable, TouchableOpacity } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import { blackDefault, greyDefault, orangeDefault1 } from '../../shared/styleConsts'
+import style from './style'
 
-export type CardProfessionProps = {
-    profession: string,
-    image: any,
-    navigation: () => any
+export type CardProfession = {
+  selected: boolean,
+  profession: string,
+  professionId: number,
+  professionIcon: string
 }
 
-export default function CardProfession(props: CardProfessionProps) {
-    return (
-        <SafeAreaView style={styles.container}>
-            <TouchableOpacity style={styles.touchableContainer} 
-            onPress={props.navigation}>
-                <View style={styles.imageContainer}>
-                    <Image style={styles.image} source={props.image}></Image>
-                </View>
-                <View style={styles.profissionContainer}>
-                    <Text style={styles.profission}>{props.profession}</Text>
-                </View>
-            </TouchableOpacity >
-        </SafeAreaView>
-    )
+export default function CardProfession(props: CardProfession) {
+
+  return (
+    <SafeAreaView style={style.container}>
+      <TouchableOpacity 
+        style={[style.informationContainer, {backgroundColor: props.selected ? orangeDefault1 : greyDefault}]}
+        onPress={() => console.log(`pressionou`, props.profession)}>
+        <Icon color={blackDefault} name={props.professionIcon} size={35}></Icon>
+        <Text style={style.professionName}>{props.profession}</Text>
+      </TouchableOpacity>
+    </SafeAreaView>
+  )
 }
