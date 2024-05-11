@@ -3,7 +3,7 @@ import { whiteDefault } from "../../../../shared/styleConsts";
 
 export default StyleSheet.create({
     container: {
-        height: '100%',
+        flex: 1,
         backgroundColor: whiteDefault,
     }
 })

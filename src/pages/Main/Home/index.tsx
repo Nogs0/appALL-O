@@ -6,13 +6,13 @@ import Highlights from '../../../components/Highlights';
 import OtherProfessions from '../../../components/OtherProfessions';
 import { whiteDefault } from '../../../shared/styleConsts';
 
-export default function Home() {
+export default function Home(props: any) {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: whiteDefault }}>
       <ScrollView stickyHeaderIndices={[0]}>
         <SearchForAProfessional />
-        <MostAccessed />
+        <MostAccessed/>
         <Highlights />
         <OtherProfessions />
       </ScrollView>

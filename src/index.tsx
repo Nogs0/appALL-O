@@ -1,13 +1,12 @@
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
-import { StatusBar, TouchableOpacity, View } from 'react-native';
-import styleConsts, { greyDefault, orangeDefault1, whiteDefault } from './shared/styleConsts';
-import Main from './pages/Main/Main';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Chat from './pages/Chat/Chat';
-import Notifications from './pages/Notifications/Notifications';
+import { StatusBar } from 'react-native';
 import ButtonTabBar from './components/ButtonTabBar';
+import Chat from './pages/Chat/Chat';
+import Main from './pages/Main/Main';
+import Notifications from './pages/Notifications/Notifications';
+import { whiteDefault } from './shared/styleConsts';
 
 const Tab = createBottomTabNavigator();
 export default function App() {

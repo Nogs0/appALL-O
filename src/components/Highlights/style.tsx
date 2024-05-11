@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { blackDefault, whiteDefault } from "../../shared/styleConsts";
+import { blackDefault, orangeDefault1, whiteDefault } from "../../shared/styleConsts";
 
 export default StyleSheet.create({
     container: {
@@ -13,6 +13,7 @@ export default StyleSheet.create({
         justifyContent: 'flex-start'
     },
     containerImage: {
+        paddingRight: 10,
         flex: 0.9,
         flexDirection: 'row',
         borderRadius: 15,
@@ -32,7 +33,7 @@ export default StyleSheet.create({
     },
     imageProfessional: {
         flex: 1,
-        width: 'auto',
+        width: 340,
         height: 200,
         borderRadius: 15
     }

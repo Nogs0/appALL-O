@@ -1,7 +1,7 @@
 export enum ButtonFilterEnum {
     nextToYou = 1, 
-    all,
-    lastSeen
+    bestRated,
+    recognized
 }
 
 export enum TabProviderEnum {

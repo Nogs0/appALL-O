@@ -1,9 +1,9 @@
-import { View, Text, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
-import styles from './styles'
+import React from 'react'
+import { FlatList, View } from 'react-native'
 import { ButtonFilterEnum } from '../../shared/Enums/enums'
-import { greyDefault } from '../../shared/styleConsts'
 import ButtonTab from '../ButtonTab'
+import styles from './styles'
+import { greyDefault, orangeDefault1, whiteDefault } from '../../shared/styleConsts'
 
 type FilterProfessionsProps = {
     button: ButtonFilterEnum,
@@ -13,9 +13,9 @@ type FilterProfessionsProps = {
 export default function FilterProfessions(props: FilterProfessionsProps) {
     return (
         <View style={styles.container}>
-            <ButtonTab width={'33.34%'} onPress={() => {props.onPress(ButtonFilterEnum.nextToYou)}} text={'Next to you'} borderBottomColor={props.button == 1 ? 'white' : greyDefault} />
-            <ButtonTab width={'33.34%'} onPress={() => {props.onPress(ButtonFilterEnum.all)}} text={'All'} borderBottomColor={props.button == 2 ? 'white' : greyDefault} />
-            <ButtonTab width={'33.34%'} onPress={() => {props.onPress(ButtonFilterEnum.lastSeen)}} text={'Last seen'} borderBottomColor={props.button == 3 ? 'white' : greyDefault} />
+            <ButtonTab backgroundColor={props.button == ButtonFilterEnum.nextToYou ? orangeDefault1 : whiteDefault} color={props.button == ButtonFilterEnum.nextToYou ? whiteDefault : greyDefault} width={'30%'} onPress={() => { props.onPress(ButtonFilterEnum.nextToYou) }} text={'Next to you'} />
+            <ButtonTab backgroundColor={props.button == ButtonFilterEnum.bestRated ? orangeDefault1 : whiteDefault} color={props.button == ButtonFilterEnum.bestRated ? whiteDefault : greyDefault} width={'30%'} onPress={() => { props.onPress(ButtonFilterEnum.bestRated) }} text={'Best rated'} />
+            <ButtonTab backgroundColor={props.button == ButtonFilterEnum.recognized ? orangeDefault1 : whiteDefault} color={props.button == ButtonFilterEnum.recognized ? whiteDefault : greyDefault} width={'30%'} onPress={() => { props.onPress(ButtonFilterEnum.recognized) }} text={'Recognized'} />
         </View>
     )
 }

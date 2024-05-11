@@ -1,18 +1,20 @@
 import { StyleSheet } from "react-native";
+import { greyDefault } from "../../shared/styleConsts";
 
 export default StyleSheet.create({
     containerOption: {
-        height: '100%',
-        borderBottomWidth: 5,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        borderWidth: 1,
+        borderColor: greyDefault,
+        borderRadius: 20
     },
     option: {
+        paddingHorizontal: 10,
+        paddingVertical: 3,
         fontFamily: 'Rubik-SemiBold',
-        fontSize: 22,
-        height: 30,
+        fontSize: 14,
         textAlign: 'center',
         justifyContent: 'center',
-        color: 'white',
     }
 })

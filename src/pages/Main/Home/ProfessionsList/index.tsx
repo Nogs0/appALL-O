@@ -1,31 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, SafeAreaView, View } from 'react-native';
-import FilterProfessions from '../../../../components/FilterProfessions';
-import ListOccupationArea from '../../../../components/ListOccupationArea';
+import { SafeAreaView } from 'react-native';
 import styles from './styles';
+import HeaderProfessionsList from '../../../../components/HeaderProfessionsList/indext';
+import FilterProfessions from '../../../../components/FilterProfessions';
+import { ButtonFilterEnum } from '../../../../shared/Enums/enums';
 
-const DATA: string[] = [
-  'Automotive Services',
-  'Residencial Services',
-  'Construction Services',
-  'Design Services',
-  'Gambiarra Services'
-]
-
-const renderItem = ({item}: {item: string}, navigation: any) => {
-};
-
-export default function ProfessionsList({ navigation }: any) {
-  const [buttonSelected, setButtonSelected] = useState(1);
+export default function ProfessionsList({ navigation, profession }: any) {
+  const [buttonSelected, setButtonSelected] = useState<ButtonFilterEnum>(ButtonFilterEnum.nextToYou);
 
   useEffect(() => {
     console.log(buttonSelected);
-    //Aqui ficará a requisição com o filtro já setado
   }, [buttonSelected]);
 
   return (
     <SafeAreaView style={styles.container}>
-     
+      <HeaderProfessionsList profession={profession} navigation={navigation} />
+      <FilterProfessions onPress={(pressionado: any) => setButtonSelected(pressionado)} button={buttonSelected}/>
     </SafeAreaView>
   );
 }
