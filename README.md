@@ -33,6 +33,6 @@ Telas de login e navegação inicial:
     <tr>
         <td><img src="demonstration/cliente.png" width=200/></td>
         <td><img src="demonstration/prestador.png" width=200/></td>
-        <td><img src="demonstration/app_demonstration.gif" width=250></td>
+        <td><img src="demonstration/app_demonstration.gif" width=200></td>
     </tr>
 </table>
