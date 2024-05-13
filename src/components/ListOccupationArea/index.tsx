@@ -32,7 +32,7 @@ const DATA: any[] = [
 
 const renderItem = ({ item }: { item: CardListProfessionProps }, navigation: any) => {
     return (
-        <CardListProfession navigation={() => navigation.navigate('ProvidersList', { profession: item.profession })} profession={item.profession} image={item.image} />
+        <CardListProfession navigation={() => navigation.navigate('ProfessionalsList', { profession: item.profession })} profession={item.profession} image={item.image} />
     );
 };
 

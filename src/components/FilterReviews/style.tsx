@@ -1,11 +1,13 @@
 import { StyleSheet } from "react-native";
-import { orangeDefault1, orangeDefault2, whiteDefault } from "../../shared/styleConsts";
+import { whiteDefault } from "../../shared/styleConsts";
 
 export default StyleSheet.create({
     container: {
-        height: '6%',
+        flex: 0.05,
+        paddingHorizontal: 20,
+        paddingBottom: 10,
         flexDirection: 'row',
-        backgroundColor: orangeDefault2,
+        backgroundColor: whiteDefault,
         justifyContent: 'space-between',
         alignItems: 'center',
     }

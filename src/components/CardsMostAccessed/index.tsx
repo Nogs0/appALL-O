@@ -6,7 +6,7 @@ import style from './style'
 export default function CardsMostAccessed(props: any) {
 
     const goToListProfession = (professionId: number, professionName: string) =>  {
-        props.navigation.navigate("ProfessionsList", {professionId, professionName})
+        props.navigation.navigate("ProfessionalList", {professionId, professionName})
     }
 
     return (

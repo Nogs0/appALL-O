@@ -5,7 +5,7 @@ import style from './style'
 import { orangeDefault1 } from '../../shared/styleConsts'
 import FilterProfessions from '../FilterProfessions'
 
-export default function HeaderProfessionsList({ profession, navigation }: any) {
+export default function HeaderProfessionalList({ profession, navigation }: any) {
     return (
         <SafeAreaView style={style.container}>
             <TouchableOpacity style={style.goBack} onPress={() => navigation.goBack()}>

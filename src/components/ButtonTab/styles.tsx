@@ -7,7 +7,7 @@ export default StyleSheet.create({
         justifyContent: 'center',
         borderWidth: 1,
         borderColor: greyDefault,
-        borderRadius: 20
+        borderRadius: 20,
     },
     option: {
         paddingHorizontal: 10,
@@ -16,5 +16,6 @@ export default StyleSheet.create({
         fontSize: 14,
         textAlign: 'center',
         justifyContent: 'center',
+        height: 25
     }
 })

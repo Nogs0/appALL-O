@@ -1,20 +1,21 @@
 import { StyleSheet } from "react-native";
-import { orangeDefault3 } from "../../shared/styleConsts";
+import { greenDefault, greenDefault2, greyDefault, orangeDefault3 } from "../../shared/styleConsts";
 
 export default StyleSheet.create({
     container: {
         width: '100%',
         marginTop: 15,
-        alignItems: 'center'
-    },
-    contentContainer: {
+        alignItems: 'center',
         flex: 1,
         flexDirection: 'row',
-        elevation: 5,
-        width: '95%',
-        borderRadius: 10,
-        padding: 10,
-        backgroundColor: orangeDefault3,
+        borderBottomColor: greyDefault,
+        borderBottomWidth: 1,
+        paddingVertical: 10,
+        paddingHorizontal: 20
+    },
+    contentContainer: {
+        flex: 0.9,
+        flexDirection: 'row'
     },
     imageContainer: {
         flex: 0.3,
@@ -25,20 +26,34 @@ export default StyleSheet.create({
         height: 80,
         borderRadius: 50
     },
-    nameProvider: {
+    informationContainer: {
+        flex: 0.7,
+        alignItems: 'flex-start',
+        marginLeft: 20,
+    },
+    nameProfessional: {
         fontFamily: 'Rubik-Bold',
         color: 'black',
-        alignContent: 'center'
     },
-    timeDistance: {
+    info: {
         fontFamily: 'Rubik-Bold',
         color: 'black',
         alignContent: 'center',
         fontSize: 10
     },
-    informationContainer: {
-        flex: 0.7,
+    infoObs: {
+        fontFamily: 'Rubik-Bold',
+        color: greenDefault,
+        textAlign: 'center',
+        fontSize: 10,
+        backgroundColor: greenDefault2,
+        borderRadius: 10,
+        width: '70%'
+    },
+    favoriteContainer: {
+        flex: 0.1,
         alignItems: 'flex-end',
+        justifyContent: 'center',
     },
     status: {
         color: 'black',
