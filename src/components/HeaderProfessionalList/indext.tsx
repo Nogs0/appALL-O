@@ -11,7 +11,7 @@ export default function HeaderProfessionalList({ profession, navigation }: any) 
             <TouchableOpacity style={style.goBack} onPress={() => navigation.goBack()}>
                 <Icon size={35} name={'chevron-left'} color={orangeDefault1}></Icon>
             </TouchableOpacity>
-            <Text style={style.label}>Eletricista</Text>
+            <Text style={style.label}>{profession}</Text>
         </SafeAreaView>
     )
 }

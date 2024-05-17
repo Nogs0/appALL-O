@@ -3,7 +3,8 @@ import { blackDefault, orangeDefault1 } from "../../shared/styleConsts";
 
 export default StyleSheet.create({
     container: {
-        height: 150
+        flex: 1,
+        marginVertical: 20 
     },
     name: {
         color: orangeDefault1,
@@ -13,6 +14,6 @@ export default StyleSheet.create({
     description : {
         color: blackDefault,
         fontFamily: 'Rubik-SemiBold',
-        textAlign: 'justify'
+        textAlign: 'justify',
     }
 })

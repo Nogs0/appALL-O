@@ -5,8 +5,12 @@ import FilterProfessions from '../../../../components/FilterProfessions';
 import { ButtonFilterEnumProfessions } from '../../../../shared/Enums/enums';
 import styles from './styles';
 import HeaderProfessionalList from '../../../../components/HeaderProfessionalList/indext';
+import { useNavigation } from '@react-navigation/native';
 
-export default function ProfessionalList({ navigation, profession }: any) {
+export default function ProfessionalList(props: any) {
+  const [params, setParams] = useState<any>(props.route.params)
+  console.log(props)
+  const navigation = useNavigation();
   const DATA: CardProps[] = [
     {
       id: 1,
@@ -144,7 +148,7 @@ export default function ProfessionalList({ navigation, profession }: any) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <HeaderProfessionalList profession={profession} navigation={navigation} />
+      <HeaderProfessionalList profession={params.profession} navigation={navigation} />
       <FilterProfessions onPress={(pressionado: any) => setButtonSelected(pressionado)} button={buttonSelected}/>
       <FlatList
         style={styles.listContainer}

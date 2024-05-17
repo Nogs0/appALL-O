@@ -1,6 +1,7 @@
 import React from 'react'
 import { FlatList, Image, SafeAreaView, Text, TouchableOpacity } from 'react-native'
 import style from './style'
+import { useNavigation } from '@react-navigation/native';
 
 const DATA = [
   {
@@ -21,17 +22,20 @@ const DATA = [
   }
 ]
 
-const renderItem = (image: any, name: string) => {
-  return (
-    <TouchableOpacity style={style.containerImage}>
-      <Image style={style.imageProfessional}
-        source={image}></Image>
-      <Text style={style.nameProfessional}>{name}</Text>
-    </TouchableOpacity>
-  )
-}
-
 export default function Highlights() {
+
+  const navigation = useNavigation();
+
+  const renderItem = (item: any, navigation: any) => {
+    return (
+      <TouchableOpacity style={style.containerImage} onPress={() => navigation.navigate('ProfessionalProfile', { id: 1, navigation })}>
+        <Image style={style.imageProfessional}
+          source={item.image}></Image>
+        <Text style={style.nameProfessional}>{item.name}</Text>
+      </TouchableOpacity>
+    )
+  }
+
   return (
     <SafeAreaView style={style.container}>
       <Text style={style.label}>Outstanding Professional</Text>
@@ -39,7 +43,7 @@ export default function Highlights() {
         horizontal={true}
         data={DATA}
         keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => renderItem(item.image, item.name)}
+        renderItem={({ item }) => renderItem(item, navigation)}
       />
     </SafeAreaView>
   )

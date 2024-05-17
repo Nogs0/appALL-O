@@ -24,7 +24,7 @@ export default function HighlightRate({ id }: any) {
                     <View style={style.infoContainer}>
                         <View style={style.rate}>
                             <Text style={style.name}>{rate.client}</Text>
-                            <Text style={style.rateNote}>{`"${rate.rateNote}"`}</Text>
+                            <Text ellipsizeMode='tail' numberOfLines={2} style={style.rateNote}>{`"${rate.rateNote}"`}</Text>
                         </View>
                         <View style={style.rateStars}>
                             <Icon name={'star'} color={whiteDefault} size={13}>{`${rate.rateGrade.toFixed(1)}`}</Icon>

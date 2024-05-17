@@ -3,12 +3,14 @@ import { blackDefault, orangeDefault1, whiteDefault } from "../../shared/styleCo
 
 export default StyleSheet.create({
     container: {
-        flex: 0.5,
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     rateContent: {
-        flex: 1,
+        flex: 0.7,
         flexDirection: 'row-reverse',
-        justifyContent: 'flex-end'
+        justifyContent: 'flex-end',
     },
     imageContainer: {
         flex: 0.2,
@@ -16,9 +18,9 @@ export default StyleSheet.create({
     image: {
         position: 'absolute',
         left: '50%',
-        top: '15%',
-        width: 80,
-        height: 80,
+        top: '10%',
+        width: 60,
+        height: 60,
         borderRadius: 50
     },
     infoContainer: {
@@ -26,8 +28,8 @@ export default StyleSheet.create({
         backgroundColor: orangeDefault1,
         borderBottomLeftRadius: 30,
         borderTopLeftRadius: 30,
-        paddingLeft: 50,
-        paddingVertical: 10,
+        paddingLeft: 40,
+        paddingVertical: 5,
         flexDirection: 'row'
     },
     rate: {

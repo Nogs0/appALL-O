@@ -3,24 +3,24 @@ import { blackDefault, orangeDefault1 } from "../../shared/styleConsts";
 
 export default StyleSheet.create({
     container: {
-        flex: 0.5,
+        flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     card: {
         borderWidth: 1,
         borderRadius: 15,
-        width: '20%',
-        height: '50%',
+        width: '18%',
+        height: '70%',
+        marginVertical: 10,
         marginHorizontal: 20,
-        padding: 10,
         justifyContent: 'center'
     },
     data: {
         textAlign: 'center',
         color: orangeDefault1,
-        fontSize: 30,
+        fontSize: 18,
         fontFamily: 'Rubik-Bold'
     },
     description: {

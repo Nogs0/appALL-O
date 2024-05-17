@@ -3,9 +3,9 @@ import React from 'react';
 import { Header } from '../../components/Header';
 import Home from './Home';
 import ProfessionalList from './Home/ProfessionalList';
-import ProfessionalProfile from '../../components/ProfessionalProfile';
+import ProfessionalProfile from './Home/ProfessionalList/ProfessionalProfile';
 import { orangeDefault1 } from '../../shared/styleConsts';
-import ProfessionalReviews from '../../components/ProfessionalReviews';
+import ProfessionalReviews from './Home/ProfessionalList/ProfessionalProfile/ProfessionalReviews';
 
 const Stack = createNativeStackNavigator();
 export default function Main() {

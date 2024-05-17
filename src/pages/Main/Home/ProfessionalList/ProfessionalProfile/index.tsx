@@ -1,12 +1,12 @@
-import { View, Text, SafeAreaView, ActivityIndicator } from 'react-native'
+import { View, Text, SafeAreaView, ActivityIndicator, Image, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import style from './style'
-import HeaderProfessional from '../HeaderProfessional/indext'
-import StarsRating from '../StarsRating';
-import ProfessionalDescription from '../ProfessionalDescription';
-import { orangeDefault1, whiteDefault } from '../../shared/styleConsts';
-import HighlightRate from '../HighlightRate';
-import InfoCards from '../InfoCards';
+import HeaderProfessional from '../../../../../components/HeaderProfessional/indext'
+import StarsRating from '../../../../../components/StarsRating';
+import ProfessionalDescription from '../../../../../components/ProfessionalDescription';
+import { orangeDefault1, whiteDefault } from '../../../../../shared/styleConsts';
+import HighlightRate from '../../../../../components/HighlightRate';
+import InfoCards from '../../../../../components/InfoCards';
 
 export default function ProfessionalProfile(props: any) {
     const [params, setParams] = useState<any>(props.route.params);
@@ -42,20 +42,24 @@ export default function ProfessionalProfile(props: any) {
                         <Text style={style.nameProfessional}>{professional.name}</Text>
                         <View style={style.firstSection}>
                             <StarsRating id={professional.id} rate={professional.rate} numberRate={professional.numberRate} navigation={params.navigation} />
-                            <ProfessionalDescription description={professional.description} />
+                            <Image style={style.image} source={require('../../../../../assets/images/eletricista.jpg')}></Image>
                         </View>
                         <View style={style.secondSection}>
-                            <HighlightRate id={professional.id}/>
-                            <InfoCards id={professional.id}/>
+                            <ProfessionalDescription description={professional.description} />
                         </View>
                         <View style={style.thirdSection}>
-                            <Text style={style.doesntSendMessage}>Este usuário ainda não anexou nenhuma imagem!</Text>
+                            <HighlightRate id={professional.id} />
+                        </View>
+                        <View style={style.fourthSection}>
+                            <InfoCards id={professional.id} />
                         </View>
                     </View>
                 </>
+
             ) : (
                 <ActivityIndicator size={'large'} color={orangeDefault1} />
-            )}
+            )
+            }
         </SafeAreaView>
     )
 }

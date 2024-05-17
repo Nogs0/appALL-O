@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { blackDefault, greyDefault, orangeDefault1, whiteDefault } from "../../shared/styleConsts";
+import { blackDefault, greyDefault, orangeDefault1, whiteDefault } from "../../../../../../shared/styleConsts";
 
 export default StyleSheet.create({
     container: {
@@ -54,5 +54,12 @@ export default StyleSheet.create({
     date: {
         color: blackDefault,
         fontFamily: 'Rubik-Light',
+    },
+    listContainer: {
+        flex: 0.8
+    },
+    imageReview: {
+        width: 30,
+        height: 30,
     }
 })
