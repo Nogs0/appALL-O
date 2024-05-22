@@ -12,7 +12,7 @@ export default function HighlightRate({ id }: any) {
         setRate({
             client: 'Fernando Clientela',
             rateGrade: 5,
-            rateNote: 'Esse cara foi fera, profissional muito bom!',
+            rateNote: 'Esse cara foi fera, profissaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaional muito bom!',
             image: require('../../assets/images/foto-de-perfil-homem.png')
         });
     }, [id])
@@ -24,7 +24,7 @@ export default function HighlightRate({ id }: any) {
                     <View style={style.infoContainer}>
                         <View style={style.rate}>
                             <Text style={style.name}>{rate.client}</Text>
-                            <Text ellipsizeMode='tail' numberOfLines={2} style={style.rateNote}>{`"${rate.rateNote}"`}</Text>
+                            <Text ellipsizeMode='tail' numberOfLines={4} style={style.rateNote}>{`"${rate.rateNote}"`}</Text>
                         </View>
                         <View style={style.rateStars}>
                             <Icon name={'star'} color={whiteDefault} size={13}>{`${rate.rateGrade.toFixed(1)}`}</Icon>

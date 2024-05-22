@@ -19,9 +19,10 @@ export default StyleSheet.create({
         fontFamily: 'Rubik-SemiBold'
     },
     firstSection: {
-        flex: 0.1,
+        flex: 0.15,
         flexDirection: 'row',
         justifyContent: 'space-between',
+        alignItems: 'center',
         paddingTop: 10,
         marginHorizontal: 20
     },
@@ -32,15 +33,14 @@ export default StyleSheet.create({
         right: '15%'
     },
     secondSection: {
-        flex: 0.4,
         marginHorizontal: 20,
         justifyContent: 'space-between',
     },
     thirdSection: {
-        flex: 0.3,
+        flex: 0.4,
     },
     fourthSection: {
-        flex: 0.2,
+        flex: 0.3,
     },
     doesntSendMessage: {
         color: greyDefault,

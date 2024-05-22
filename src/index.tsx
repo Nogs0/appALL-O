@@ -3,10 +3,10 @@ import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
 import { StatusBar } from 'react-native';
 import ButtonTabBar from './components/ButtonTabBar';
-import Chat from './pages/Chat/Chat';
 import Main from './pages/Main/Main';
-import Notifications from './pages/Notifications/Notifications';
 import { whiteDefault } from './shared/styleConsts';
+import Notifications from './pages/Notifications';
+import Chat from './pages/Chat';
 
 const Tab = createBottomTabNavigator();
 export default function App() {

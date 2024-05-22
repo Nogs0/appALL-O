@@ -6,6 +6,7 @@ export default StyleSheet.create({
         flexDirection: 'row',
         backgroundColor: whiteDefault,
         justifyContent: 'space-between',
+        alignItems: 'center',
         width: '100%',
         padding: 5,
     },
@@ -19,9 +20,9 @@ export default StyleSheet.create({
         width: '75%',
     },
     imgPerfil: {
-        height: '100%',
-        width: '10%',
-        borderRadius: 100,
+        height: 50,
+        width: 50,
+        borderRadius: 50,
         marginRight: '5%'
     }
 })

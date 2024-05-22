@@ -3,7 +3,7 @@ import { blackDefault, greyDefault, orangeDefault1, whiteDefault } from "../../s
 
 export default StyleSheet.create({
     container: {
-        paddingTop: 20,
+        paddingTop: 10,
         flex: 0.15,
         backgroundColor: whiteDefault
     },

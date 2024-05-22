@@ -3,7 +3,6 @@ import { blackDefault, orangeDefault1 } from "../../shared/styleConsts";
 
 export default StyleSheet.create({
     container: {
-        flex: 1,
         marginVertical: 20 
     },
     name: {

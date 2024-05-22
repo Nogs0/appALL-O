@@ -6,7 +6,7 @@ export default function ProfessionalDescription({ description }: any) {
   return (
     <View style={style.container}>
       <Text style={style.name}>{`Sobre o profissional...`}</Text>
-      <Text ellipsizeMode='tail' numberOfLines={10} style={style.description}>{`"${description}"`}</Text>
+      <Text ellipsizeMode='tail' numberOfLines={6} style={style.description}>{`"${description}"`}</Text>
     </View>
   )
 }
