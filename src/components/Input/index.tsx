@@ -6,7 +6,7 @@ import styles from './styles'
 type InputProps = {
     text: string,
     placeHolder: string
-    onChangeText: () => any
+    onChangeText: any
 }
 export default function Input(props: InputProps) {
   return (

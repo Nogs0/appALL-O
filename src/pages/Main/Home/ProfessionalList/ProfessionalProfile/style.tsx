@@ -4,7 +4,6 @@ import { greenDefault, greyDefault, orangeDefault, whiteDefault } from "../../..
 export default StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
         justifyContent: 'center'
     },
     contentContainer: {

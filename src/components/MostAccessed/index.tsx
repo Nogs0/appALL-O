@@ -10,7 +10,7 @@ export default function MostAccessed() {
   return (
     <SafeAreaView style={style.container}>
       <Text style={style.label}>Most Accessed In Your Neighborhood</Text>
-      <CardsMostAccessed navigation={navigation}></CardsMostAccessed>
+      <CardsMostAccessed navigation={navigation} ></CardsMostAccessed>
     </SafeAreaView>
   )
 }

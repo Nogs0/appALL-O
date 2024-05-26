@@ -15,6 +15,7 @@ interface AuthContextData {
     isProfessional: boolean,
     signIn(professional: boolean): Promise<void>,
     signOut(): void,
+    register(professional: boolean): void,
     loading: boolean
 }
 
@@ -72,9 +73,13 @@ function AuthProvider({ children }: any) {
         setUser(null);
     }
 
+    async function register(professional: boolean) {
+        setIsProfessional(professional);
+    }
+
     return (
         <AuthContext.Provider
-            value={{ signed: !!user, user, isProfessional, signIn, signOut, loading }}>
+            value={{ signed: !!user, user, isProfessional, signIn, signOut, register, loading }}>
             {children}
         </AuthContext.Provider>
     )

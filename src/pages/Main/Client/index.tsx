@@ -1,6 +1,6 @@
 import React from 'react'
 import { Image, SafeAreaView, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import HeaderClient from '../../../components/HeaderProfessional copy/indext'
+import HeaderClient from '../../../components/HeaderClient/indext'
 import style from './style'
 
 export default function ClientArea({ navigation }: any) {

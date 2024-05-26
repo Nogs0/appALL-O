@@ -8,15 +8,28 @@ export default StyleSheet.create({
         alignItems: 'center',
     },
     botao: {
-        marginVertical: 100,
+        marginTop: 100,
         padding: 20,
         width: 300,
         height: 100,
         backgroundColor: whiteDefault,
         borderRadius: 20
     },
+    botao2: {
+        marginVertical: 20,
+        padding: 5,
+        width: 200,
+        height: 40,
+        backgroundColor: whiteDefault,
+        borderRadius: 20
+    },
     text: {
         fontSize: 40,
+        textAlign: 'center',
+        color: blackDefault
+    },
+    text2: {
+        fontSize: 20,
         textAlign: 'center',
         color: blackDefault
     }

@@ -1,11 +1,13 @@
 import { StyleSheet } from "react-native";
+import { blackDefault, greyDefault } from "../../shared/styleConsts";
 
 export default StyleSheet.create({
     input: {
-        width: '80%',
-        borderWidth: 2,
-        borderRadius: 10,
-        borderColor: '#ffffff',
-        margin: 10
+        borderRadius: 5,
+        backgroundColor: greyDefault,
+        elevation: 3,
+        marginVertical: '2.5%',
+        color: blackDefault,
+        flex: 1
     }
 })
