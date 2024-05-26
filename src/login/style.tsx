@@ -4,7 +4,7 @@ import { blackDefault, greyDefault, orangeDefault, whiteDefault } from "../share
 export default StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: orangeDefault,
+        backgroundColor: "white",
         alignItems: 'center',
     },
     botao: {
@@ -19,5 +19,10 @@ export default StyleSheet.create({
         fontSize: 40,
         textAlign: 'center',
         color: blackDefault
+    },
+    logo:{
+        marginTop : 40,
+        flex:1,
+        alignItems:'center'
     }
 })
