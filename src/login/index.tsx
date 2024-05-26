@@ -2,7 +2,7 @@ import React from 'react';
 import { SafeAreaView, Text, TouchableOpacity } from 'react-native';
 import { useAuth } from '../contexts/auth';
 import style from './style';
-
+import Icon from 'react-native-vector-icons/MaterialIcons'
 
 import LogoCliente from '../assets/images/@types/svg/LOGIN-CLIENTE.svg'
 import LogoProfissional from  '../assets/images/@types/svg/LOGIN-PROF.svg'
@@ -45,6 +45,7 @@ export default function SignIn() {
         <SafeAreaView style={style.container}>
             {logo}
             <TouchableOpacity style={[style.botaoTrocaLogin, {backgroundColor: color}]}  onPress={switchColor}>
+                <Icon name='change-circle' size={22} style={style.iconeTroca}></Icon>
                 <Text style={style.textTrocaLogin}> {text} </Text>
             </TouchableOpacity>
            <TextInput placeholder="E-mail"style={style.input} onChangeText={setEmail}/>
