@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Image, SafeAreaView, Text, TouchableOpacity, View } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import { greyDefault, orangeDefault1, yellowDefault } from '../../shared/styleConsts'
+import { greyDefault, orangeDefault, yellowDefault } from '../../shared/styleConsts'
 import styles from './styles'
 
 export type CardProps = {
@@ -25,7 +25,7 @@ export default function CardProfessional({ props }: any) {
         console.log(`${id} atualizou Favorito -> `, favorite);
     }
     const getFavorite = (favorite: boolean) => {
-        return favorite ? <Icon name='heart' size={20} color={orangeDefault1}></Icon> :
+        return favorite ? <Icon name='heart' size={20} color={orangeDefault}></Icon> :
             <Icon name='heart-outline' size={20} color={greyDefault}></Icon>;
     }
 
@@ -39,7 +39,7 @@ export default function CardProfessional({ props }: any) {
 
     return (
         <SafeAreaView style={styles.container}>
-            <TouchableOpacity style={styles.contentContainer} onPress={() => props.navigation.navigate('ProfessionalProfile', props)}>
+            <TouchableOpacity style={styles.contentContainer} onPress={() => props.navigation.navigate('ProfessionalProfile', { id: props.id })}>
                 <View style={styles.imageContainer}>
                     <Image style={styles.image} source={props.image}></Image>
                 </View>

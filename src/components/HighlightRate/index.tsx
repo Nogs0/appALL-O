@@ -4,7 +4,7 @@ import style from './style';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { whiteDefault } from '../../shared/styleConsts';
 
-export default function HighlightRate({ id }: any) {
+export default function HighlightRate({ id, defaultColor }: any) {
 
     const [rate, setRate] = useState<any>();
 
@@ -21,7 +21,7 @@ export default function HighlightRate({ id }: any) {
         <SafeAreaView style={style.container}>
             {rate ? (
                 <View style={style.rateContent}>
-                    <View style={style.infoContainer}>
+                    <View style={[style.infoContainer, {backgroundColor: defaultColor}]}>
                         <View style={style.rate}>
                             <Text style={style.name}>{rate.client}</Text>
                             <Text ellipsizeMode='tail' numberOfLines={4} style={style.rateNote}>{`"${rate.rateNote}"`}</Text>

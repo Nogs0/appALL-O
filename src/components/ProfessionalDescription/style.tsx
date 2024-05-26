@@ -1,12 +1,11 @@
 import { StyleSheet } from "react-native";
-import { blackDefault, orangeDefault1 } from "../../shared/styleConsts";
+import { blackDefault, orangeDefault } from "../../shared/styleConsts";
 
 export default StyleSheet.create({
     container: {
         marginVertical: 20 
     },
     name: {
-        color: orangeDefault1,
         fontFamily: 'Rubik-SemiBold',
         fontSize: 18
     },

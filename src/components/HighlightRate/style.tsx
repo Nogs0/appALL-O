@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { blackDefault, orangeDefault1, whiteDefault } from "../../shared/styleConsts";
+import { blackDefault, whiteDefault } from "../../shared/styleConsts";
 
 export default StyleSheet.create({
     container: {
@@ -24,7 +24,6 @@ export default StyleSheet.create({
     },
     infoContainer: {
         flex: 0.8,
-        backgroundColor: orangeDefault1,
         borderBottomLeftRadius: 30,
         borderTopLeftRadius: 30,
         paddingLeft: 40,

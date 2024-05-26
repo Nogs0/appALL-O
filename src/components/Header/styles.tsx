@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { greyDefault, orangeDefault1, whiteDefault } from "../../shared/styleConsts";
+import { greyDefault, orangeDefault, whiteDefault } from "../../shared/styleConsts";
 
 export default StyleSheet.create({
     container: {

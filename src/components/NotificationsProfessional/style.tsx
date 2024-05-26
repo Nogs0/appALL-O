@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { blackDefault, greyDefault, orangeDefault, whiteDefault } from "../../../../../../shared/styleConsts";
+import { whiteDefault, greyDefault, blackDefault } from "../../shared/styleConsts";
 
 export default StyleSheet.create({
     container: {
@@ -42,7 +42,7 @@ export default StyleSheet.create({
         textAlign: 'left',
         fontSize: 16
     },
-    rateNote:{
+    message:{
         color: blackDefault,
         fontSize: 14
     },

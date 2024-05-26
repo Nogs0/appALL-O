@@ -1,7 +1,7 @@
 import { View, Text, SafeAreaView, Touchable, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import { blackDefault, greyDefault, orangeDefault1 } from '../../shared/styleConsts'
+import { blackDefault, greyDefault, orangeDefault } from '../../shared/styleConsts'
 import style from './style'
 import { useNavigation } from '@react-navigation/native'
 

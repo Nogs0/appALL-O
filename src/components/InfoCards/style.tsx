@@ -1,5 +1,5 @@
 import { StyleSheet, TouchableOpacityComponent } from "react-native";
-import { blackDefault, orangeDefault1 } from "../../shared/styleConsts";
+import { blackDefault, orangeDefault } from "../../shared/styleConsts";
 
 export default StyleSheet.create({
     container: {
@@ -19,7 +19,6 @@ export default StyleSheet.create({
     },
     data: {
         textAlign: 'center',
-        color: orangeDefault1,
         fontSize: 18,
         fontFamily: 'Rubik-Bold'
     },

@@ -1,10 +1,11 @@
 import { StyleSheet } from "react-native";
-import { greenDefault, greyDefault, orangeDefault1, whiteDefault } from "../../../../../shared/styleConsts";
+import { greenDefault, greyDefault, orangeDefault, whiteDefault } from "../../../../../shared/styleConsts";
 
 export default StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: orangeDefault1,
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     contentContainer: {
         flex: 1,
@@ -13,7 +14,6 @@ export default StyleSheet.create({
         borderTopRightRadius: 50,
     },
     nameProfessional: {
-        color: orangeDefault1,
         textAlign: 'center',
         fontSize: 32,
         fontFamily: 'Rubik-SemiBold'

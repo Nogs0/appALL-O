@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import { FlatList, Image, Modal, SafeAreaView, Text, Touchable, TouchableOpacity, View, VirtualizedList } from 'react-native'
+import { ActivityIndicator, FlatList, Image, Modal, SafeAreaView, Text, Touchable, TouchableOpacity, View, VirtualizedList } from 'react-native'
 import style from './style'
 import HeaderProfessional from '../../../../../../components/HeaderProfessional/indext'
 import FilterReviews from '../../../../../../components/FilterReviews';
 import Stars from '../../../../../../components/Stars';
 import { ButtonFilterEnumReviews } from '../../../../../../shared/Enums/enums';
+import { whiteDefault } from '../../../../../../shared/styleConsts';
 
 export default function ProfessionalReviews(props: any) {
 
-    const [params, setParams] = useState<any>(props);
+    const [params, setParams] = useState<any>(props.route?.params);
     const [reviews, setReviews] = useState<any>();
 
     const getReviews = (id: number) => {
@@ -162,17 +163,19 @@ export default function ProfessionalReviews(props: any) {
     }
 
     useEffect(() => {
-        getReviews(params.route.params.id);
+        console.log(params)
+        getReviews(params.id);
     }, [params])
 
     return (
-        <SafeAreaView style={style.container}>
+        <SafeAreaView style={[style.container, {backgroundColor: params?.defaultColor}]}>
             {reviews ? (
                 <>
-                    <HeaderProfessional title={'Reviews'} navigation={params?.navigation} />
+                    <HeaderProfessional title={'Reviews'} navigation={props?.navigation} 
+                    defaultColor={params?.defaultColor}/>
                     <View style={style.contentContainer}>
-                        <Text style={style.nameProfessional}>{reviews.professionalName}</Text>
-                        <FilterReviews onPress={(pressionado: any) => setButtonSelected(pressionado)} button={buttonSelected} />
+                        <Text style={[style.nameProfessional, {color: params?.defaultColor}]}>{reviews.professionalName}</Text>
+                        <FilterReviews onPress={(pressionado: any) => setButtonSelected(pressionado)} button={buttonSelected} defaultColor={params?.defaultColor}/>
                         <FlatList
                             style={style.listContainer}
                             data={reviews.revs}
@@ -181,7 +184,7 @@ export default function ProfessionalReviews(props: any) {
                         />
                     </View>
                 </>
-            ) : (<></>)}
+            ) : (<ActivityIndicator size={"large"} color={whiteDefault}></ActivityIndicator>)}
         </SafeAreaView>
     )
 }

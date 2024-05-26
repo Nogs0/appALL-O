@@ -1,17 +1,18 @@
-import { View, Text, SafeAreaView, ActivityIndicator, Image, ScrollView } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import style from './style'
-import HeaderProfessional from '../../../../../components/HeaderProfessional/indext'
-import StarsRating from '../../../../../components/StarsRating';
-import ProfessionalDescription from '../../../../../components/ProfessionalDescription';
-import { orangeDefault1, whiteDefault } from '../../../../../shared/styleConsts';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, Image, SafeAreaView, Text, View } from 'react-native';
+import HeaderProfessional from '../../../../../components/HeaderProfessional/indext';
 import HighlightRate from '../../../../../components/HighlightRate';
 import InfoCards from '../../../../../components/InfoCards';
+import ProfessionalDescription from '../../../../../components/ProfessionalDescription';
+import StarsRating from '../../../../../components/StarsRating';
+import { useAuth } from '../../../../../contexts/auth';
+import { blueDefault, orangeDefault, whiteDefault } from '../../../../../shared/styleConsts';
+import style from './style';
 
 export default function ProfessionalProfile(props: any) {
+    const { isProfessional, signOut } = useAuth();
     const [params, setParams] = useState<any>(props.route.params);
     const [professional, setProfessional] = useState<any>();
-    const [backgroundColor, setBackgroundColor] = useState<string>(whiteDefault);
 
     const getProfessional = (id: number) => {
         setProfessional({
@@ -24,40 +25,47 @@ export default function ProfessionalProfile(props: any) {
             favorite: true,
             timeDistance: 30,
             numberRate: 30,
-            description: 'Meu trabalho é garantir que a corrente flua de forma segura e eficiente. Desde a instalação até a manutenção, estou sempre atento aos detalhes para evitar falhas elétricas. Cuido para que cada conexão seja firme e cada circuito seja adequadamente protegido. Minha meta é fornecer energia confiável para que todos possam contar com eletricidade sempre que necessário.'
+            description: 'Meu trabalho é garantir que a corrente flua de forma segura e eficiente. Desde a instalação até a manutenção, estou sempre atento aos detalhes para evitar falhas elétricas. Cuido para que cada conexão seja firme e cada circuito seja adequadamente protegido.'
         })
-        setBackgroundColor(orangeDefault1);
+    }
+
+    const handleSignOut = () => {
+        signOut();
     }
 
     useEffect(() => {
-        getProfessional(params.id);
+        getProfessional(params?.id);
     }, [params])
 
     return (
-        <SafeAreaView style={[style.container, { backgroundColor }]}>
+        <SafeAreaView style={[style.container, { backgroundColor: isProfessional ? blueDefault : orangeDefault }]}>
             {professional ? (
                 <>
-                    <HeaderProfessional title={professional.profession} navigation={params.navigation} />
+                    <HeaderProfessional title={isProfessional ? 'SEU PERFIL' : professional.profession}
+                        navigation={props.navigation}
+                        signOut={handleSignOut}
+                        isProfessional={isProfessional}
+                        defaultColor={isProfessional ? blueDefault : orangeDefault} />
                     <View style={style.contentContainer}>
-                        <Text style={style.nameProfessional}>{professional.name}</Text>
+                        <Text style={[style.nameProfessional, { color: isProfessional ? blueDefault : orangeDefault }]}>{professional.name}</Text>
                         <View style={style.firstSection}>
-                            <StarsRating id={professional.id} rate={professional.rate} numberRate={professional.numberRate} navigation={params.navigation} />
+                            <StarsRating id={professional.id} rate={professional.rate} numberRate={professional.numberRate} navigation={props.navigation} defaultColor={isProfessional ? blueDefault : orangeDefault} />
                             <Image style={style.image} source={require('../../../../../assets/images/eletricista.jpg')}></Image>
                         </View>
                         <View style={style.secondSection}>
-                            <ProfessionalDescription description={professional.description} />
+                            <ProfessionalDescription description={professional.description} defaultColor={isProfessional ? blueDefault : orangeDefault} />
                         </View>
                         <View style={style.thirdSection}>
-                            <HighlightRate id={professional.id} />
+                            <HighlightRate id={professional.id} defaultColor={isProfessional ? blueDefault : orangeDefault} />
                         </View>
                         <View style={style.fourthSection}>
-                            <InfoCards id={professional.id} />
+                            <InfoCards id={professional.id} defaultColor={isProfessional ? blueDefault : orangeDefault} />
                         </View>
                     </View>
                 </>
 
             ) : (
-                <ActivityIndicator size={'large'} color={orangeDefault1} />
+                <ActivityIndicator size={'large'} color={whiteDefault} />
             )
             }
         </SafeAreaView>
