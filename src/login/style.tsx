@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { blackDefault, greyDefault, orangeDefault, whiteDefault } from "../shared/styleConsts";
+import { blackDefault, greyDefault2, orangeDefault, whiteDefault, orangeDefault4 } from "../shared/styleConsts";
 
 export default StyleSheet.create({
     container: {
@@ -7,22 +7,43 @@ export default StyleSheet.create({
         backgroundColor: "white",
         alignItems: 'center',
     },
-    botao: {
-        marginVertical: 100,
-        padding: 20,
-        width: 300,
-        height: 100,
-        backgroundColor: whiteDefault,
-        borderRadius: 20
+    botaoTrocaLogin: {
+        marginTop: 40,
+        width: 150,
+        height: 30,
+        backgroundColor: 'orange',
+        justifyContent: 'center',
+        marginBottom: 20
     },
-    text: {
-        fontSize: 40,
+    botaoAcao: {
+        marginTop: 20,
+        width: 190,
+        height: 50,
+        backgroundColor: 'orange',
+        justifyContent: 'center',
+        marginBottom: 20
+    },
+    textTrocaLogin: {
+        fontSize: 13,
         textAlign: 'center',
-        color: blackDefault
+        color: whiteDefault
+    },
+    textAcao:{
+        fontSize: 15,
+        textAlign: 'center',
+        color: whiteDefault
     },
     logo:{
         marginTop : 40,
         flex:1,
         alignItems:'center'
-    }
+    },
+    input:{
+        marginVertical: 10,
+        backgroundColor: greyDefault2,
+        width: 220,
+        height: 50,
+    },
+
+
 })
