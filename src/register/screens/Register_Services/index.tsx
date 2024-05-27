@@ -6,11 +6,14 @@ import Input from '../../../components/Input'
 import { useRegister } from '../../../contexts/register'
 import { blackDefault, greyDefault, whiteDefault } from '../../../shared/styleConsts'
 import style from './style'
+
+import styleRegister from '../../style';
+
 export default function Register_Services({ navigation }: any) {
 
-  const { professional } = useRegister();
+  const { professional, setServices } = useRegister();
   const [servico, setServico] = useState<string>('');
-  const [listServicos, setListServicos] = useState<number[]>([1, 2, 3]);
+  const [listServicos, setListServicos] = useState<number[]>(!!professional ? professional.services : [1, 2, 3]);
 
   const servicosBase = [
     {
@@ -31,7 +34,8 @@ export default function Register_Services({ navigation }: any) {
     }
   ]
   const handleButtonNext = () => {
-    navigation.navigate('Register_Services');
+    setServices(listServicos);
+    navigation.navigate('Register_Description');
   }
 
   const addItem = () => {
@@ -67,10 +71,10 @@ export default function Register_Services({ navigation }: any) {
   }
 
   return (
-    <SafeAreaView style={style.container}>
+    <SafeAreaView style={styleRegister.defaultContainer}>
       <HeaderRegisterProfessional navigation={navigation} />
-      <View style={style.contentContainer}>
-        <Text style={[style.text, { fontFamily: 'Rubik-SemiBold' }]}>Quais serviços você faz?</Text>
+      <View style={styleRegister.defaultContentContainer}>
+        <Text style={styleRegister.title}>Quais serviços você faz?</Text>
 
         <View style={style.addProfessionContainer}>
           <Input placeHolder={'Serviço'} text={servico} onChangeText={setServico} />
@@ -85,9 +89,9 @@ export default function Register_Services({ navigation }: any) {
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => renderItem(item)} />
 
-        <TouchableOpacity style={style.buttonNext}
+        <TouchableOpacity style={styleRegister.buttonNext}
           onPress={() => handleButtonNext()}>
-          <Text style={style.textButtonNext}>Prosseguir</Text>
+          <Text style={styleRegister.textButtonNext}>Prosseguir</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
