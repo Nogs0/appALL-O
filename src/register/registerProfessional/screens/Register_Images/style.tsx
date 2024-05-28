@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { blueDefault, whiteDefault } from "../../../shared/styleConsts";
+import { blueDefault, whiteDefault } from "../../../../shared/styleConsts";
 
 export default StyleSheet.create({
     buttonAddImage: {

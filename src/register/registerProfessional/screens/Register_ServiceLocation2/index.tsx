@@ -1,11 +1,10 @@
 import React, { useState } from 'react'
 import { SafeAreaView, Text, TouchableOpacity, View } from 'react-native'
-import HeaderRegisterProfessional from '../../../components/HeaderRegisterProfessional'
-import Input from '../../../components/Input'
-import { useRegister } from '../../../contexts/register'
-import style from './style'
+import HeaderRegisterProfessional from '../../../../components/HeaderRegisterProfessional'
+import Input from '../../../../components/Input'
+import { useRegister } from '../../../../contexts/register'
 
-import styleRegister from '../../style';
+import styleRegister from '../../style'
 export default function Register_ServiceLocation({ navigation }: any) {
 
   const { professional, setAddress } = useRegister();
@@ -30,7 +29,7 @@ export default function Register_ServiceLocation({ navigation }: any) {
       <HeaderRegisterProfessional navigation={navigation} />
       <View style={styleRegister.defaultContentContainer}>
         <Text style={styleRegister.title}>Como o cliente pode te encontrar?</Text>
-        <View style={style.inputsContainer}>
+        <View style={styleRegister.inputsContainer}>
           <Input placeHolder='CEP' text={postalCode} onChangeText={setPostalCode} />
           <Input placeHolder='Bairro' text={neighborhood} onChangeText={setNeighborhood} />
           <Input placeHolder='Rua' text={street} onChangeText={setStreet} />

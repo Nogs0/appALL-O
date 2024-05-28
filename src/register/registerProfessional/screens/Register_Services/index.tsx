@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import { FlatList, SafeAreaView, Text, TouchableOpacity, View } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import HeaderRegisterProfessional from '../../../components/HeaderRegisterProfessional'
-import Input from '../../../components/Input'
-import { useRegister } from '../../../contexts/register'
-import { blackDefault, greyDefault, whiteDefault } from '../../../shared/styleConsts'
+import HeaderRegisterProfessional from '../../../../components/HeaderRegisterProfessional'
+import Input from '../../../../components/Input'
+import { useRegister } from '../../../../contexts/register'
+import { blackDefault, greyDefault, whiteDefault } from '../../../../shared/styleConsts'
 import style from './style'
 
 import styleRegister from '../../style';

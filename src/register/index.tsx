@@ -1,16 +1,11 @@
-import { View, Text, SafeAreaView, TouchableOpacity } from 'react-native'
+import { View, Text } from 'react-native'
 import React from 'react'
-import HeaderRegisterProfessional from '../components/HeaderRegisterProfessional'
-import style from './style'
-import Register_InitialInformations from './screens/Register_InitialInformations'
+import { useAuth } from '../contexts/auth'
+import RegisterProfessional from './registerProfessional';
+import RegisterClient from './registerCLient';
 
-export default function RegisterProfessional({ navigation }: any) {
-  return (
-    <SafeAreaView style={style.container}>
-      <HeaderRegisterProfessional navigation={navigation} initialScreen />
-      <View style={style.contentContainer}>
-        <Register_InitialInformations navigation={navigation}/>
-      </View>
-    </SafeAreaView>
-  )
+export default function Register({navigation}: any) {
+    const {isProfessional} = useAuth();
+
+    return isProfessional ? <RegisterProfessional goBack={() => navigation.goBack()}/> : <RegisterClient goBack={() => navigation.goBack()}/>
 }

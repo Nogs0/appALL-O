@@ -1,4 +1,5 @@
 import { createContext, useContext, useState } from "react";
+import { useAuth } from "./auth";
 
 interface Address {
     postalCode: string,
@@ -37,6 +38,7 @@ interface RegisterContextData {
     setServices(services: number[]): void,
     setAddress(address: Address): void,
     setContacts(contacts: Contacts): void,
+    setImages(images: any): void,
     endingRegister(): Promise<string>
 }
 
@@ -44,8 +46,11 @@ const RegisterContext = createContext<RegisterContextData>({} as RegisterContext
 
 function RegisterProvider({ children }: any) {
 
+    const { endRegister } = useAuth();
+
     const [professional, setProfessional] = useState<ProfessionalCreateDto | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
+
     function setInitialInformations(params: InitialInformations) {
         setProfessional((prev) => {
             if (!prev)
@@ -120,7 +125,7 @@ function RegisterProvider({ children }: any) {
 
     return (
         <RegisterContext.Provider
-            value={{ professional, setInitialInformations, setDescription, setServices, setAddress, setContacts, endingRegister, loading }}>
+            value={{ professional, setInitialInformations, setDescription, setServices, setAddress, setContacts, setImages, endingRegister, loading }}>
             {children}
         </RegisterContext.Provider>
     )

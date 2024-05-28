@@ -1,9 +1,9 @@
 import React from 'react';
 import { ActivityIndicator, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import HeaderRegisterProfessional from '../../../components/HeaderRegisterProfessional';
-import { useRegister } from '../../../contexts/register';
-import { blackDefault, blueDefault, whiteDefault } from '../../../shared/styleConsts';
+import HeaderRegisterProfessional from '../../../../components/HeaderRegisterProfessional';
+import { useRegister } from '../../../../contexts/register';
+import { blackDefault, blueDefault, whiteDefault } from '../../../../shared/styleConsts';
 import styleRegister from '../../style';
 import style from './style';
 

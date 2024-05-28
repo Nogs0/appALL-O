@@ -2,20 +2,24 @@ import React from 'react';
 import { SafeAreaView, Text, TouchableOpacity } from 'react-native';
 import { useAuth } from '../contexts/auth';
 import style from './style';
+import Register from '../register';
 
 export default function SignIn({ navigation }: any) {
-    const { signIn, register, isProfessional } = useAuth();
-    function handleSignIn(professional: boolean) {
+    const { signIn, register, isProfessional, isRegister } = useAuth();
+
+    const handleSignIn = (professional: boolean) => {
         signIn(professional);
     }
 
-    function handleRegister(professional: boolean) {
+    const handleRegister = (professional: boolean) => {
         register(professional);
     }
 
-    return isProfessional ?
-        navigation.navigate('RegisterProfessional')
-        :
+    if (isRegister) {
+        return <Register navigation={navigation}/>; 
+    }
+
+    return (
         <SafeAreaView style={style.container}>
             <TouchableOpacity style={style.botao}
                 onPress={() => handleSignIn(true)}>
@@ -33,5 +37,5 @@ export default function SignIn({ navigation }: any) {
                 onPress={() => handleRegister(false)}>
                 <Text style={style.text2}>registrar</Text>
             </TouchableOpacity>
-        </SafeAreaView>
+        </SafeAreaView>)
 }

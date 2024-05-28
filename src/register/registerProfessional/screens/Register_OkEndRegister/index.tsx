@@ -1,17 +1,17 @@
 import React from 'react';
 import { SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import HeaderRegisterProfessional from '../../../components/HeaderRegisterProfessional';
-import { blackDefault } from '../../../shared/styleConsts';
+import HeaderRegisterProfessional from '../../../../components/HeaderRegisterProfessional';
+import { blackDefault } from '../../../../shared/styleConsts';
 import style from './style';
 import styleRegister from '../../style';
-import { useAuth } from '../../../contexts/auth';
+import { useAuth } from '../../../../contexts/auth';
 
 export default function Register_OkEndRegister({ navigation }: any) {
 
-  const { register } = useAuth();
+  const { endRegister } = useAuth();
   const handleButtonOk = () => {
-    register(false);
+    endRegister();
     navigation.navigate('SignIn')
   }
 

@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { SafeAreaView, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import HeaderRegisterProfessional from '../../../components/HeaderRegisterProfessional'
-import { useRegister } from '../../../contexts/register'
-import { greyDefault } from '../../../shared/styleConsts'
+import HeaderRegisterProfessional from '../../../../components/HeaderRegisterProfessional'
+import { useRegister } from '../../../../contexts/register'
+import { greyDefault } from '../../../../shared/styleConsts'
 import style from './style'
 import styleRegister from '../../style';
 

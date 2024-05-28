@@ -5,13 +5,13 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { whiteDefault } from '../../shared/styleConsts'
 import { useAuth } from '../../contexts/auth'
 
-export default function HeaderRegisterProfessional({ navigation, initialScreen, endingRegister }: any) {
-  const { register } = useAuth();
+export default function HeaderRegisterProfessional({ navigation, initialScreen, endingRegister, goBack }: any) {
+  const { endRegister } = useAuth();
 
   const handleRegisterOut = () => {
     if (initialScreen) {
-      register(false);
-      navigation.navigate("SignIn");
+      endRegister();
+      goBack;
     }
     else navigation.goBack();
   }

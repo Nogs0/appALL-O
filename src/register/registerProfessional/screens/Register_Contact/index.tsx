@@ -1,9 +1,8 @@
 import { View, Text, SafeAreaView, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
-import { useRegister } from '../../../contexts/register';
-import HeaderRegisterProfessional from '../../../components/HeaderRegisterProfessional';
-import Input from '../../../components/Input';
-import style from './style';
+import { useRegister } from '../../../../contexts/register';
+import HeaderRegisterProfessional from '../../../../components/HeaderRegisterProfessional';
+import Input from '../../../../components/Input';
 import styleRegister from '../../style';
 
 export default function Register_Contact({ navigation }: any) {
@@ -27,7 +26,7 @@ export default function Register_Contact({ navigation }: any) {
       <HeaderRegisterProfessional navigation={navigation} />
       <View style={styleRegister.defaultContentContainer}>
         <Text style={styleRegister.title}>Como o cliente pode entrar em contato?</Text>
-        <View style={style.inputsContainer}>
+        <View style={styleRegister.inputsContainer}>
           <Input placeHolder='Celular' text={cellPhoneNumber} onChangeText={setCellPhoneNumber} />
           <Input placeHolder='Telefone Fixo' text={phoneNumber} onChangeText={setPhoneNumber} />
         </View>

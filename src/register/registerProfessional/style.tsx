@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { blueDefault, whiteDefault } from "../shared/styleConsts";
+import { whiteDefault, blueDefault } from "../../shared/styleConsts";
 
 export default StyleSheet.create({
     container: {
@@ -54,5 +54,8 @@ export default StyleSheet.create({
         fontFamily: 'Rubik-SemiBold',
         color: whiteDefault,
         fontSize: 14
+    },
+    inputsContainer: {
+        width: '100%'
     }
 })

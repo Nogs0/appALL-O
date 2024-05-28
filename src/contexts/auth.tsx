@@ -16,7 +16,9 @@ interface AuthContextData {
     signIn(professional: boolean): Promise<void>,
     signOut(): void,
     register(professional: boolean): void,
-    loading: boolean
+    loading: boolean,
+    isRegister: boolean,
+    endRegister(): void
 }
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
@@ -26,6 +28,7 @@ function AuthProvider({ children }: any) {
     const [token, setToken] = useState<string>();
     const [user, setUser] = useState<User | null>(null);
     const [isProfessional, setIsProfessional] = useState<boolean>(false);
+    const [isRegister, setIsRegister] = useState<boolean>(false);
     const [defaultColor, setDefaultColor] = useState<string>(orangeDefault);
 
     const [loading, setLoading] = useState<boolean>(true);
@@ -74,12 +77,18 @@ function AuthProvider({ children }: any) {
     }
 
     async function register(professional: boolean) {
+        setIsRegister(true);
         setIsProfessional(professional);
+    }
+
+    async function endRegister() {
+        setIsRegister(false);
+        setIsProfessional(false);
     }
 
     return (
         <AuthContext.Provider
-            value={{ signed: !!user, user, isProfessional, signIn, signOut, register, loading }}>
+            value={{ signed: !!user, user, isProfessional, signIn, signOut, register, loading, isRegister, endRegister }}>
             {children}
         </AuthContext.Provider>
     )
