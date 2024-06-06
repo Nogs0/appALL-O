@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
 import HeaderRegisterProfessional from '../../../../components/HeaderRegisterProfessional';
 import Input from '../../../../components/Input';
 import { useRegister } from '../../../../contexts/register';
 import styleRegister from '../../style';
+import InputPassword from '../../../../components/InputPassword';
 
 export default function Register_InitialInformations({ navigation, goBack }: any) {
   const { professional, setInitialInformations } = useRegister();
@@ -17,19 +18,27 @@ export default function Register_InitialInformations({ navigation, goBack }: any
       document, email, password
     });
 
-    navigation.navigate('Register_Services');
+    if (canGoToTheNextStep())
+      navigation.navigate('Register_Services');
+    else Alert.alert("Erro", "Por favor preencha todos os campos!")
   }
 
+  const canGoToTheNextStep = (): boolean => {
+    return (
+      document.length > 0 && email.length > 0 && password.length > 0
+    )
+  }
+  
   return (
     <SafeAreaView style={styleRegister.defaultContainer}>
-      <HeaderRegisterProfessional navigation={navigation} goBack={goBack} initialScreen/>
+      <HeaderRegisterProfessional navigation={navigation} goBack={goBack} initialScreen />
       <View style={styleRegister.defaultContentContainer}>
         <Text style={styleRegister.title}>Seja bem-vindo!</Text>
         <Text style={styleRegister.text}>Preencha os campos para criar a sua conta...</Text>
         <View style={styleRegister.inputsContainer}>
-          <Input placeHolder='CNPJ ou CPF' text={document} onChangeText={setDocument}></Input>
-          <Input placeHolder='Email' text={email} onChangeText={setEmail}></Input>
-          <Input placeHolder='Senha' text={password} onChangeText={setPassword}></Input>
+          <Input placeholder='CNPJ ou CPF' text={document} onChangeText={setDocument}></Input>
+          <Input placeholder='Email' text={email} onChangeText={setEmail}></Input>
+          <InputPassword text={password} onChangeText={setPassword}></InputPassword>
         </View>
         <TouchableOpacity style={styleRegister.buttonNext}
           onPress={() => handleButtonNext()}>

@@ -77,7 +77,7 @@ export default function Register_Services({ navigation }: any) {
         <Text style={styleRegister.title}>Quais serviços você faz?</Text>
 
         <View style={style.addProfessionContainer}>
-          <Input placeHolder={'Serviço'} text={servico} onChangeText={setServico} />
+          <Input placeholder={'Serviço'} text={servico} onChangeText={setServico} />
           <TouchableOpacity style={style.buttonAddContainer} onPress={() => addItem()}>
             <Icon name={'plus'} size={30} color={whiteDefault} style={style.buttonAdd}></Icon>
           </TouchableOpacity>

@@ -3,6 +3,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import api from '../services/api';
 import * as auth from '../services/auth';
 import { blueDefault, orangeDefault } from "../shared/styleConsts";
+import { useRegister } from "./register";
 interface User {
     id: number, 
     name: string,
@@ -24,6 +25,8 @@ interface AuthContextData {
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 function AuthProvider({ children }: any) {
+
+    const { clearProfessional } = useRegister();
 
     const [token, setToken] = useState<string>();
     const [user, setUser] = useState<User | null>(null);
@@ -81,7 +84,8 @@ function AuthProvider({ children }: any) {
         setIsProfessional(professional);
     }
 
-    async function endRegister() {
+    function endRegister() {
+        clearProfessional();
         setIsRegister(false);
         setIsProfessional(false);
     }

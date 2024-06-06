@@ -6,7 +6,7 @@ import Register_Description from './screens/Register_Description'
 import Register_Images from './screens/Register_Images'
 import Register_OkEndRegister from './screens/Register_OkEndRegister'
 import Register_OkProfession from './screens/Register_OkProfession'
-import Register_ServiceLocation from './screens/Register_ServiceLocation2'
+import Register_ServiceLocation from './screens/Register_ServiceLocation'
 import Register_Services from './screens/Register_Services'
 import Register_InitialInformations from './screens/Register_InitialInformations'
 

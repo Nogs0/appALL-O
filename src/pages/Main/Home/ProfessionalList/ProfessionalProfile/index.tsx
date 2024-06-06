@@ -65,7 +65,7 @@ export default function ProfessionalProfile(props: any) {
                 </>
 
             ) : (
-                <ActivityIndicator size={'large'} color={whiteDefault} />
+                <ActivityIndicator size={70} color={whiteDefault} />
             )
             }
         </SafeAreaView>

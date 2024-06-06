@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView, TouchableOpacity } from 'react-native'
+import { View, Text, SafeAreaView, TouchableOpacity, Alert } from 'react-native'
 import React, { useState } from 'react'
 import { useRegister } from '../../../../contexts/register';
 import HeaderRegisterProfessional from '../../../../components/HeaderRegisterProfessional';
@@ -18,7 +18,15 @@ export default function Register_Contact({ navigation }: any) {
       cellPhoneNumber
     });
 
-    navigation.navigate('Register_Images');
+    if (canGoToTheNextStep())
+      navigation.navigate('Register_Images');
+    else Alert.alert("Erro", "Por favor preencha pelo menos um telefone!")
+  }
+
+  const canGoToTheNextStep = (): boolean => {
+    return (
+      phoneNumber.length > 0 || cellPhoneNumber.length > 0
+    )
   }
 
   return (
@@ -27,8 +35,8 @@ export default function Register_Contact({ navigation }: any) {
       <View style={styleRegister.defaultContentContainer}>
         <Text style={styleRegister.title}>Como o cliente pode entrar em contato?</Text>
         <View style={styleRegister.inputsContainer}>
-          <Input placeHolder='Celular' text={cellPhoneNumber} onChangeText={setCellPhoneNumber} />
-          <Input placeHolder='Telefone Fixo' text={phoneNumber} onChangeText={setPhoneNumber} />
+          <Input placeholder='Celular' text={cellPhoneNumber} onChangeText={setCellPhoneNumber} />
+          <Input placeholder='Telefone Fixo' text={phoneNumber} onChangeText={setPhoneNumber} />
         </View>
         <TouchableOpacity style={styleRegister.buttonNext} onPress={() => handleButtonNext()}>
           <Text style={styleRegister.textButtonNext}>Prosseguir</Text>

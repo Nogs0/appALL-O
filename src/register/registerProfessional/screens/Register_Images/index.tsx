@@ -24,7 +24,7 @@ export default function Register_Images({ navigation }: any) {
   return (
     loading ?
       <View style={{flex: 1, backgroundColor: blueDefault, alignItems: 'center', justifyContent: 'center'}}>
-        <ActivityIndicator size={'large'} color={whiteDefault} />
+        <ActivityIndicator size={70} color={whiteDefault} />
       </View>
 
       :
