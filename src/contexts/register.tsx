@@ -10,11 +10,6 @@ interface Address {
     number: string
 }
 
-interface Contacts {
-    phoneNumber: string,
-    cellPhoneNumber: string
-}
-
 interface InitialInformations {
     document: string,
     email: string,
@@ -28,7 +23,7 @@ interface ProfessionalCreateDto {
     services: number[],
     description: string,
     address: Address,
-    contacts: Contacts,
+    phoneNumber: string,
     images: any
 }
 
@@ -39,7 +34,7 @@ interface RegisterContextData {
     setDescription(description: string): void,
     setServices(services: number[]): void,
     setAddress(address: Address): void,
-    setContacts(contacts: Contacts): void,
+    setContacts(phoneNumber: string): void,
     setImages(images: any): void,
     endingRegister(): Promise<string>,
     clearProfessional(): void
@@ -65,10 +60,7 @@ function RegisterProvider({ children }: any) {
             street: '',
             number: ''
         },
-        contacts: {
-            phoneNumber: '',
-            cellPhoneNumber: ''
-        },
+        phoneNumber: '',
         images: []
     });
     const [loading, setLoading] = useState<boolean>(false);
@@ -115,12 +107,12 @@ function RegisterProvider({ children }: any) {
         });
     }
 
-    function setContacts(contacts: Contacts) {
+    function setContacts(phoneNumber: string) {
         setProfessional((prev) => {
             if (!prev)
                 prev = {} as ProfessionalCreateDto;
 
-            prev.contacts = contacts;
+            prev.phoneNumber = phoneNumber;
             return prev;
         });
     }
@@ -141,12 +133,30 @@ function RegisterProvider({ children }: any) {
             setTimeout(() => {
                 resolve("Cadastro finalizado -> Aqui devemos integrar com o cadastro do profissional na API")
                 setLoading(false);
+                clearProfessional();
             }, 2000)
         });
     }
 
     function clearProfessional(): void {
-        setProfessional(null)
+        setProfessional({
+            document: '',
+            email: '',
+            password: '',
+            services: [],
+            description: '',
+            address: {
+                postalCode: '',
+                state: '',
+                city: '',
+                neighborhood: '',
+                street: '',
+                number: ''
+            },
+            phoneNumber: '',
+            images: []
+        })
+        endRegister();
     }
 
     return (

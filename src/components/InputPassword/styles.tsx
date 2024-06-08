@@ -16,6 +16,8 @@ export default StyleSheet.create({
         flex: 1
     },
     eye: {
+        alignItems: 'center',
+        flex: 0.2,
         marginRight: 10
     }
 })

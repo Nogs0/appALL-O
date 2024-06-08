@@ -9,5 +9,9 @@ export default StyleSheet.create({
         marginVertical: '2.5%',
         color: blackDefault,
         flex: 1
+    },
+    textInput: {
+        color: blackDefault,
+        flex: 1
     }
 })

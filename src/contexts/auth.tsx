@@ -26,8 +26,6 @@ const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 function AuthProvider({ children }: any) {
 
-    const { clearProfessional } = useRegister();
-
     const [token, setToken] = useState<string>();
     const [user, setUser] = useState<User | null>(null);
     const [isProfessional, setIsProfessional] = useState<boolean>(false);
@@ -85,7 +83,6 @@ function AuthProvider({ children }: any) {
     }
 
     function endRegister() {
-        clearProfessional();
         setIsRegister(false);
         setIsProfessional(false);
     }

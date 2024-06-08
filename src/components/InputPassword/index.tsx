@@ -12,20 +12,20 @@ type InputPasswordProps = {
 
 export default function InputPassword(props: InputPasswordProps) {
 
-  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [hidePassword, setHidePassword] = useState<boolean>(true);
 
   return (
     <View style={styles.input}>
       <TextInput
-        secureTextEntry={showPassword}
+        secureTextEntry={hidePassword}
         placeholder={'Senha'}
         value={props.text}
         onChangeText={props.onChangeText}
         style={styles.textInput}/>
         <TouchableOpacity
           style={styles.eye}
-          onPress={() => setShowPassword(!showPassword)}>
-          <Icon name={showPassword ? 'eye' : 'eye-off'} size={20} color={blackDefault}></Icon>
+          onPress={() => setHidePassword(!hidePassword)}>
+          <Icon name={hidePassword ? 'eye' : 'eye-off'} size={20} color={blackDefault}></Icon>
         </TouchableOpacity>
     </View>
   )

@@ -10,8 +10,8 @@ export default function HeaderRegisterProfessional({ navigation, initialScreen, 
 
   const handleRegisterOut = () => {
     if (initialScreen) {
-      endRegister();
-      goBack;
+      goBack();
+      // endRegister();
     }
     else navigation.goBack();
   }
