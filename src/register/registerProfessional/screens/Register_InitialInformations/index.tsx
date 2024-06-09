@@ -38,7 +38,6 @@ export default function Register_InitialInformations({ navigation }: any) {
 
   return (
     <ScrollView contentContainerStyle={styleRegister.defaultContainer} keyboardShouldPersistTaps='handled' scrollEnabled={false}>
-      <TouchableOpacity onPress={() => navigation.navigate('Register_Images')}><Text style={{color: redDefault}}>AAAAAAAAAAAAAAAAA</Text></TouchableOpacity>
       <HeaderRegisterProfessional navigation={navigation} goBack={handleGoBack} initialScreen />
       <View style={styleRegister.defaultContentContainer}>
         <Text style={styleRegister.title}>Seja bem-vindo!</Text>

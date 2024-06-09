@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { blueDefault, whiteDefault } from "../../../../shared/styleConsts";
+import { blueDefault, greyDefault, whiteDefault } from "../../../../shared/styleConsts";
 
 export default StyleSheet.create({
     buttonAddImage: {
@@ -11,5 +11,13 @@ export default StyleSheet.create({
     textButtonAddImage: {
         color: whiteDefault,
         fontFamily: 'Rubik-SemiBold'
+    },
+    listContainer: {
+        borderRadius: 10,
+        borderColor: greyDefault,
+        padding: 5,
+        borderWidth: 3,
+        height: 120,
+        width: '100%'
     }
 })

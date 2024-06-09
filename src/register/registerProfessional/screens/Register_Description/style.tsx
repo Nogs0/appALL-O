@@ -7,6 +7,7 @@ export default StyleSheet.create({
         borderRadius: 10,
         borderColor: greyDefault,
         width: '100%',
-        color: blackDefault
+        color: blackDefault,
+        fontFamily: 'Rubik-Light'
     }
 })
