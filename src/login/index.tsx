@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { ActivityIndicator, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Alert, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useAuth } from '../contexts/auth';
 import style from './style';
@@ -9,10 +9,12 @@ import LogoProfissional from '../assets/images/@types/svg/LOGIN-PROF.svg';
 
 
 import { useState } from 'react';
-import { blueDefault, orangeDefault4 } from "../shared/styleConsts";
+import { blackDefault, blueDefault, greyDefault, orangeDefault4, redDefault, whiteDefault } from "../shared/styleConsts";
 
 import Input from '../components/Input';
 import Register from '../register';
+import { SignInInput } from '../services/auth';
+import InputPassword from '../components/InputPassword';
 
 export default function SignIn({ navigation }: any) {
     const { signIn, register, isRegister } = useAuth();
@@ -22,8 +24,9 @@ export default function SignIn({ navigation }: any) {
     const [logo, setLogo] = useState(<LogoCliente />);
     const [text, setText] = useState('CLIENTE');
     const [email, setEmail] = useState('');
-    const [senha, setSenha] = useState('');
+    const [password, setPassword] = useState('');
     const [loading, setLoading] = useState<boolean>(false);
+    const [incorrectCredentials, setIncorrectCredentials] = useState<boolean>(false);
 
     useEffect(() => {
         setColor(isProfessional ? blueDefault : orangeDefault4)
@@ -32,9 +35,27 @@ export default function SignIn({ navigation }: any) {
     }, [isProfessional])
 
     const handleSignIn = () => {
-        setLoading(true)
-        signIn(isProfessional)
-            .finally(() => setLoading(false));
+        if (canSignIn()) {
+            setLoading(true)
+            signIn({
+                email,
+                password,
+                isProfessional
+            } as SignInInput)
+                .then(() => {
+                    setIncorrectCredentials(false)
+                })
+                .catch(() => {
+                    setIncorrectCredentials(true)
+                })
+                .finally(() => {
+                    setLoading(false);
+                });
+        } else setIncorrectCredentials(true);
+    }
+
+    const canSignIn = (): boolean => {
+        return (email.length > 0 && password.length > 0)
     }
 
     const handleRegister = () => {
@@ -49,7 +70,8 @@ export default function SignIn({ navigation }: any) {
 
         <SafeAreaView style={style.container}>
             {loading ?
-                <ActivityIndicator size={70} color={color}></ActivityIndicator> :
+                <ActivityIndicator size={70} color={color}></ActivityIndicator>
+                :
                 <>
                     {logo}
                     <TouchableOpacity
@@ -59,17 +81,39 @@ export default function SignIn({ navigation }: any) {
                         <Text style={style.textTrocaLogin}> {text} </Text>
                     </TouchableOpacity>
                     <View style={style.inputsContainer}>
-                        <Input placeholder='E-mail' text={email} onChangeText={setEmail} />
-                        <Input placeholder="Senha" text={senha} onChangeText={setSenha} />
+                        <Input
+                            onFocus={() => setIncorrectCredentials(false)}
+                            borderColor={incorrectCredentials ? redDefault : greyDefault}
+                            placeholder='E-mail'
+                            text={email}
+                            onChangeText={setEmail} />
+                        <InputPassword
+                            onFocus={() => setIncorrectCredentials(false)}
+                            borderColor={incorrectCredentials ? redDefault : greyDefault}
+                            text={password}
+                            onChangeText={setPassword} />
                     </View>
+                    {incorrectCredentials ?
+                        <Text style={{ color: redDefault }}>*Email ou senha incorretos!</Text> : <></>}
                     <View style={style.buttonsContainer}>
-                        <TouchableOpacity style={[style.botaoAcao, { backgroundColor: color }]} onPress={() => handleSignIn()}>
-                            <Text style={style.textAcao}>ENTRAR</Text>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity style={[style.botaoAcao, { backgroundColor: color }]} onPress={() => handleRegister()}>
-                            <Text style={style.textAcao}>REGISTRAR</Text>
-                        </TouchableOpacity>
+                        <View style={style.signInContainer}>
+                            <TouchableOpacity style={[style.botaoAcao, { backgroundColor: color }]} onPress={() => handleSignIn()}>
+                                <Text style={style.textAcao}>ENTRAR</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={{ alignItems: 'center', padding: 10 }}
+                                onPress={() => console.log('Esqueci minha senha!')}>
+                                <Text style={{ color: redDefault }}>Esqueci minha senha...</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={style.registerContainer}>
+                            <Text style={{ color: blackDefault, fontFamily: 'Rubik-SemiBold' }}>
+                                Não tem uma conta?
+                            </Text>
+                            <TouchableOpacity style={[style.botaoAcao, { backgroundColor: color }]} onPress={() => handleRegister()}>
+                                <Text style={style.textAcao}>REGISTRAR</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </>
 

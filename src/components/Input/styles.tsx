@@ -8,7 +8,9 @@ export default StyleSheet.create({
         elevation: 3,
         marginVertical: '2.5%',
         color: blackDefault,
-        flex: 1
+        flex: 1,
+        borderWidth: 1,
+        borderColor: greyDefault,
     },
     textInput: {
         color: blackDefault,

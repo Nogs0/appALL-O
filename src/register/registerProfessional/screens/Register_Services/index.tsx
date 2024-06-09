@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import HeaderRegisterProfessional from '../../../../components/HeaderRegisterProfessional'
 import Input from '../../../../components/Input'
 import { useRegister } from '../../../../contexts/register'
-import { blackDefault, greyDefault, whiteDefault } from '../../../../shared/styleConsts'
+import { blackDefault, greyDefault, redDefault, whiteDefault } from '../../../../shared/styleConsts'
 import style from './style'
 
 import styleRegister from '../../style';
@@ -15,6 +15,7 @@ export default function Register_Services({ navigation }: any) {
   const [servico, setServico] = useState<string>('');
   const [searchingServico, setSearchingServico] = useState<boolean>(false);
   const [listServicos, setListServicos] = useState<number[]>([]);
+  const [incorrectInformations, setIncorrectInformations] = useState<boolean>(false);
 
   const servicosBase = [
     {
@@ -161,7 +162,7 @@ export default function Register_Services({ navigation }: any) {
     setServices(listServicos);
     if (canGoToTheNextPage())
       navigation.navigate('Register_Description');
-    else Alert.alert("Por favor, preencha com ao menos um serviço!");
+    else setIncorrectInformations(true)
   }
 
   const canGoToTheNextPage = (): boolean => {
@@ -175,6 +176,7 @@ export default function Register_Services({ navigation }: any) {
     if (servicoToAdd) {
       let index = listServicos.findIndex(x => x == servicoToAdd.id)
       if (index == -1) {
+        setIncorrectInformations(false)
         setListServicos((prev) => {
           prev.push(servicoToAdd.id);
           return [...prev];
@@ -271,7 +273,11 @@ export default function Register_Services({ navigation }: any) {
           data={listServicos}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => renderItem(item)} />
-
+        {
+          incorrectInformations ?
+            <Text style={{ color: redDefault, width: '100%', textAlign: 'left' }}>*Por favor, selecione ao menos um serviço!</Text>
+            : <></>
+        }
         <TouchableOpacity style={styleRegister.buttonNext}
           onPress={() => handleButtonNext()}>
           <Text style={styleRegister.textButtonNext}>Prosseguir</Text>

@@ -9,11 +9,13 @@ export default StyleSheet.create({
         borderRadius: 5,
         backgroundColor: greyDefault,
         elevation: 3,
-        alignItems: 'center'
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: greyDefault,
     },
     textInput: {
         color: blackDefault,
-        flex: 1
+        flex: 1,
     },
     eye: {
         alignItems: 'center',

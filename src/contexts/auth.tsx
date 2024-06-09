@@ -4,6 +4,7 @@ import api from '../services/api';
 import * as auth from '../services/auth';
 import { blueDefault, orangeDefault } from "../shared/styleConsts";
 import { useRegister } from "./register";
+import { SignInInput } from "../services/auth";
 interface User {
     id: number, 
     name: string,
@@ -14,7 +15,7 @@ interface AuthContextData {
     signed: boolean,
     user: User | null,
     isProfessional: boolean,
-    signIn(professional: boolean): Promise<void>,
+    signIn(input: SignInInput): Promise<void>,
     signOut(): void,
     register(professional: boolean): void,
     loading: boolean,
@@ -55,10 +56,10 @@ function AuthProvider({ children }: any) {
         loadStorageData();
     });
 
-    async function signIn(professional: boolean): Promise<void> {
+    async function signIn(input: SignInInput): Promise<void> {
         return new Promise<void>(async (resolve, reject) => {
             try {
-                const response = await auth.signIn(professional);
+                const response = await auth.signIn(input);
                 setUser(response.user);
                 setToken(response.token);
                 setIsProfessional(response.isProfessional);

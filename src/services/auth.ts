@@ -1,3 +1,9 @@
+export interface SignInInput {
+    email: string,
+    password: string,
+    isProfessional: boolean
+}
+
 interface Response {
     token: string,
     user: {
@@ -8,7 +14,7 @@ interface Response {
     isProfessional: boolean
 }
 
-export function signIn(professional: boolean) {
+export function signIn(input: SignInInput) {
     return new Promise<Response>((resolve) => {
         setTimeout(() => {
             let info = {
@@ -16,9 +22,9 @@ export function signIn(professional: boolean) {
                 user : {
                     id: 1,
                     name: 'Joao',
-                    email: 'joao@gmail.com',
+                    email: input.email,
                 },
-                isProfessional: professional
+                isProfessional: input.isProfessional
             };
             resolve(info);
         }, 1000);

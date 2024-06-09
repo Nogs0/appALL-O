@@ -1,32 +1,44 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ActivityIndicator, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import HeaderRegisterProfessional from '../../../../components/HeaderRegisterProfessional';
 import { useRegister } from '../../../../contexts/register';
-import { blackDefault, blueDefault, whiteDefault } from '../../../../shared/styleConsts';
+import { blackDefault, blueDefault, redDefault, whiteDefault } from '../../../../shared/styleConsts';
 import styleRegister from '../../style';
 import style from './style';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 export default function Register_Images({ navigation }: any) {
 
   const { endingRegister, loading } = useRegister();
+  const [images, setImages] = useState<any>({});
+  const [incorrectInformations, setIncorrectInformations] = useState<boolean>(false);
 
   const handleButtonEnd = async () => {
-    let response = await endingRegister();
-    console.log(response);
-    navigation.navigate('Register_OkEndRegister');
+    if (canGoToTheNextPage()) {
+      let response = await endingRegister();
+      console.log(response);
+      navigation.navigate('Register_OkEndRegister');
+    }
+    else setIncorrectInformations(true)
+  }
+
+  const canGoToTheNextPage = (): boolean => {
+    return (
+      true
+    )
   }
 
   const addImage = () => {
+    launchCamera({mediaType: 'photo'})
     console.log("adicionando imagem");
   }
 
   return (
     loading ?
-      <View style={{flex: 1, backgroundColor: blueDefault, alignItems: 'center', justifyContent: 'center'}}>
+      <View style={{ flex: 1, backgroundColor: blueDefault, alignItems: 'center', justifyContent: 'center' }}>
         <ActivityIndicator size={70} color={whiteDefault} />
       </View>
-
       :
 
       <SafeAreaView style={styleRegister.defaultContainer}>
@@ -45,6 +57,11 @@ export default function Register_Images({ navigation }: any) {
           <TouchableOpacity style={style.buttonAddImage} onPress={() => addImage()}>
             <Text style={style.textButtonAddImage}>Adicionar Imagem</Text>
           </TouchableOpacity>
+          {
+            incorrectInformations ?
+              <Text style={{ color: redDefault, width: '100%', textAlign: 'left' }}>*Por favor, adicione pelo menos uma imagem!</Text>
+              : <></>
+          }
           <TouchableOpacity style={styleRegister.buttonNext} onPress={() => handleButtonEnd()}>
             <Text style={styleRegister.textButtonNext}>Finalizar</Text>
           </TouchableOpacity>

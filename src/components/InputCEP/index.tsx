@@ -8,14 +8,15 @@ import { whiteDefault } from '../../shared/styleConsts'
 type InputCEPProps = {
   cep: string,
   onChangeText: any,
-  searchCEP: () => void
+  searchCEP: () => void,
+  onFocus: any
 }
 export default function InputCEP(props: InputCEPProps) {
-
 
   return (
     <View style={styles.input}>
       <TextInput
+        onFocus={props.onFocus}
         placeholder={'CEP'}
         value={props.cep}
         onChangeText={props.onChangeText}

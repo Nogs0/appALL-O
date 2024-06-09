@@ -18,12 +18,10 @@ export default StyleSheet.create({
         flexDirection: 'row'
     },
     botaoAcao: {
-        marginTop: 20,
         width: 190,
         height: 45,
         backgroundColor: orangeDefault,
         justifyContent: 'center',
-        marginBottom: 20,
         borderRadius: 10
     },
     textTrocaLogin: {
@@ -49,6 +47,13 @@ export default StyleSheet.create({
         marginTop: '10%',
         width: '80%',
         height: 200,
+        alignItems: 'center'
+    },
+    signInContainer: {
+        alignItems: 'center'
+    },
+    registerContainer: {
+        marginTop: '30%',
         alignItems: 'center'
     }
 })

@@ -6,7 +6,7 @@ import { useRegister } from '../../../../contexts/register'
 
 import InputCEP from '../../../../components/InputCEP'
 import getAddress from '../../../../services/cep'
-import { blueDefault } from '../../../../shared/styleConsts'
+import { blueDefault, redDefault } from '../../../../shared/styleConsts'
 import styleRegister from '../../style'
 import style from './style'
 
@@ -20,7 +20,8 @@ export default function Register_ServiceLocation({ navigation }: any) {
   const [neighborhood, setNeighborhood] = useState<string>(!!professional ? professional.address?.neighborhood : '');
   const [street, setStreet] = useState<string>(!!professional ? professional.address?.street : '');
   const [number, setNumber] = useState<string>(!!professional ? professional.address?.number : '');
-
+  const [incorrectInformations, setIncorrectInformations] = useState<boolean>(false);
+  
   const [loadingCEP, setLoadingCEP] = useState<boolean>(false);
   const handleButtonNext = () => {
     setAddress({
@@ -33,7 +34,7 @@ export default function Register_ServiceLocation({ navigation }: any) {
     });
     if (canGoToTheNextStep())
       navigation.navigate('Register_Contact');
-    else Alert.alert("Erro", "Por favor preencha todos os campos!")
+    else setIncorrectInformations(true)
   }
 
   const canGoToTheNextStep = (): boolean => {
@@ -70,13 +71,18 @@ export default function Register_ServiceLocation({ navigation }: any) {
       <View style={styleRegister.defaultContentContainer}>
         <Text style={styleRegister.title}>Como o cliente pode te encontrar?</Text>
         <View style={styleRegister.inputsContainer}>
-          <InputCEP searchCEP={searchCEP} cep={postalCode} onChangeText={setPostalCode} />
-          <Input editable={!loadingCEP} placeholder='Estado' text={state} onChangeText={setState} />
-          <Input editable={!loadingCEP} placeholder='Cidade' text={city} onChangeText={setCity} />
-          <Input editable={!loadingCEP} placeholder='Bairro' text={neighborhood} onChangeText={setNeighborhood} />
-          <Input editable={!loadingCEP} placeholder='Rua' text={street} onChangeText={setStreet} />
-          <Input editable={!loadingCEP} placeholder='Número' text={number} onChangeText={setNumber} />
+          <InputCEP onFocus={() => setIncorrectInformations(false)}  searchCEP={searchCEP} cep={postalCode} onChangeText={setPostalCode} />
+          <Input onFocus={() => setIncorrectInformations(false)} editable={!loadingCEP} placeholder='Estado' text={state} onChangeText={setState} />
+          <Input onFocus={() => setIncorrectInformations(false)} editable={!loadingCEP} placeholder='Cidade' text={city} onChangeText={setCity} />
+          <Input onFocus={() => setIncorrectInformations(false)} editable={!loadingCEP} placeholder='Bairro' text={neighborhood} onChangeText={setNeighborhood} />
+          <Input onFocus={() => setIncorrectInformations(false)} editable={!loadingCEP} placeholder='Rua' text={street} onChangeText={setStreet} />
+          <Input onFocus={() => setIncorrectInformations(false)} editable={!loadingCEP} placeholder='Número' text={number} onChangeText={setNumber} />
         </View>
+        {
+          incorrectInformations ?
+            <Text style={{ color: redDefault, width: '100%', textAlign: 'left' }}>*Por favor, preencha todos os campos corretamente!</Text>
+            : <></>
+        }
         <TouchableOpacity style={styleRegister.buttonNext} onPress={() => handleButtonNext()}>
           <Text style={styleRegister.textButtonNext}>Prosseguir</Text>
         </TouchableOpacity>

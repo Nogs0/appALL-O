@@ -3,6 +3,7 @@ import { TextInput, View } from 'react-native'
 
 import styles from './styles'
 import MaskInput from 'react-native-mask-input'
+import { greyDefault } from '../../shared/styleConsts'
 
 type InputProps = {
   text: string,
@@ -12,11 +13,13 @@ type InputProps = {
   onBlur?(): void,
   isMask?: boolean,
   mask?: any,
-  onFocus?: any
+  onFocus?: any,
+  borderColor?: string,
+  textColor?: string
 }
 export default function Input(props: InputProps) {
   return (
-    <View style={styles.input} >
+    <View style={[styles.input, {borderColor: !!props.borderColor ? props.borderColor : greyDefault}]} >
       {
         props.isMask ?
           <MaskInput
