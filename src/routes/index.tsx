@@ -6,7 +6,7 @@ import AppRoutes from './app.routes';
 import AuthRotes from './auth.routes';
 
 export default function Routes() {
-    const { signed, loading } = useAuth();
+    const { signed, loading, isProfessional } = useAuth();
 
     if (loading) {
         return (
@@ -15,6 +15,6 @@ export default function Routes() {
             </View>
         );
     }
-
-    return signed ? <AppRoutes />: <AuthRotes />;
+    else
+        return signed ? <AppRoutes /> : <AuthRotes />;
 }

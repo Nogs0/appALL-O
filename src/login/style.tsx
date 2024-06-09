@@ -50,5 +50,4 @@ export default StyleSheet.create({
         paddingHorizontal: 5,
         color: whiteDefault
     }
-
 })

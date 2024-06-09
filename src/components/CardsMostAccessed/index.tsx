@@ -4,7 +4,6 @@ import CardProfession from '../CardProfession'
 import style from './style'
 
 export default function CardsMostAccessed(props: any) {
-
     const goToListProfession = (profession: string) =>  {
         props.navigation.navigate("ProfessionalList", {profession})
     }
@@ -13,7 +12,7 @@ export default function CardsMostAccessed(props: any) {
         <SafeAreaView style={style.container}>
             <View style={style.row}>
                 <CardProfession profession={'Eletricista'} onPress={() => goToListProfession('Eletricista')} professionIcon={'lightning-bolt-outline'} professionId={1}/>
-                <CardProfession profession={'Jardineiro'} onPress={() => goToListProfession('Eletricista')} professionIcon={'flower'} professionId={1}/>
+                <CardProfession profession={'Jardineiro'} onPress={() => goToListProfession('Jardineiro')} professionIcon={'flower'} professionId={1}/>
                 <CardProfession profession={'Mecânico'} onPress={() => goToListProfession('Eletricista')} professionIcon={'tools'} professionId={1}/>
             </View>
             <View style={style.row}>

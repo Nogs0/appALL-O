@@ -3,6 +3,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import api from '../services/api';
 import * as auth from '../services/auth';
 import { blueDefault, orangeDefault } from "../shared/styleConsts";
+import { useRegister } from "./register";
 interface User {
     id: number, 
     name: string,
@@ -15,7 +16,10 @@ interface AuthContextData {
     isProfessional: boolean,
     signIn(professional: boolean): Promise<void>,
     signOut(): void,
-    loading: boolean
+    register(professional: boolean): void,
+    loading: boolean,
+    isRegister: boolean,
+    endRegister(): void
 }
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
@@ -25,6 +29,7 @@ function AuthProvider({ children }: any) {
     const [token, setToken] = useState<string>();
     const [user, setUser] = useState<User | null>(null);
     const [isProfessional, setIsProfessional] = useState<boolean>(false);
+    const [isRegister, setIsRegister] = useState<boolean>(false);
     const [defaultColor, setDefaultColor] = useState<string>(orangeDefault);
 
     const [loading, setLoading] = useState<boolean>(true);
@@ -72,9 +77,19 @@ function AuthProvider({ children }: any) {
         setUser(null);
     }
 
+    async function register(professional: boolean) {
+        setIsRegister(true);
+        setIsProfessional(professional);
+    }
+
+    function endRegister() {
+        setIsRegister(false);
+        setIsProfessional(false);
+    }
+
     return (
         <AuthContext.Provider
-            value={{ signed: !!user, user, isProfessional, signIn, signOut, loading }}>
+            value={{ signed: !!user, user, isProfessional, signIn, signOut, register, loading, isRegister, endRegister }}>
             {children}
         </AuthContext.Provider>
     )

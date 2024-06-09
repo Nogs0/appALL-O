@@ -41,6 +41,14 @@ export default function SignIn() {
 //  onPress={() => handleSignIn(true)} no botao de profissional
 //  onPress={() => handleSignIn(false)} no botao de cliente
 
+    const handleRegister = (professional: boolean) => {
+        register(professional);
+    }
+
+    if (isRegister) {
+        return <Register navigation={navigation}/>; 
+    }
+
     return (
         <SafeAreaView style={style.container}>
             {logo}
