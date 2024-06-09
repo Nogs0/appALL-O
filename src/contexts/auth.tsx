@@ -55,21 +55,28 @@ function AuthProvider({ children }: any) {
         loadStorageData();
     });
 
-    async function signIn(professional: boolean) {
-        const response = await auth.signIn(professional);
-        setUser(response.user);
-        setToken(response.token);
-        setIsProfessional(response.isProfessional);
-
-        if (isProfessional)
-            setDefaultColor(blueDefault);
-        
-        api.defaults.headers.Authorization = `Baerer ${response.token}`;
-
-        await AsyncStorage.setItem('@RNAuth:user', JSON.stringify(response.user));
-        await AsyncStorage.setItem('@RNAuth:token', response.token);
-        await AsyncStorage.setItem('@RNAuth:isProfessional', JSON.stringify(response.isProfessional));
-
+    async function signIn(professional: boolean): Promise<void> {
+        return new Promise<void>(async (resolve, reject) => {
+            try {
+                const response = await auth.signIn(professional);
+                setUser(response.user);
+                setToken(response.token);
+                setIsProfessional(response.isProfessional);
+                
+                if (isProfessional)
+                    setDefaultColor(blueDefault);
+                
+                api.defaults.headers.Authorization = `Baerer ${response.token}`;
+                
+                await AsyncStorage.setItem('@RNAuth:user', JSON.stringify(response.user));
+                await AsyncStorage.setItem('@RNAuth:token', response.token);
+                await AsyncStorage.setItem('@RNAuth:isProfessional', JSON.stringify(response.isProfessional));
+                resolve();
+            }
+            catch (e) {
+                reject(e);
+            }
+        })
     }
 
     async function signOut() {

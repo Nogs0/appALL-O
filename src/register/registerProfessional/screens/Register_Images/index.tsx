@@ -9,7 +9,7 @@ import style from './style';
 
 export default function Register_Images({ navigation }: any) {
 
-  const { professional, endingRegister, loading } = useRegister();
+  const { endingRegister, loading } = useRegister();
 
   const handleButtonEnd = async () => {
     let response = await endingRegister();

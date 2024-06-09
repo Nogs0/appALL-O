@@ -56,6 +56,6 @@ export default StyleSheet.create({
         fontSize: 14
     },
     inputsContainer: {
-        width: '100%'
+        width: '100%',
     }
 })

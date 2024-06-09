@@ -6,11 +6,14 @@ import { blackDefault } from '../../../../shared/styleConsts';
 import style from './style';
 import styleRegister from '../../style';
 import { useAuth } from '../../../../contexts/auth';
+import { useRegister } from '../../../../contexts/register';
 
 export default function Register_OkEndRegister({ navigation }: any) {
 
   const { endRegister } = useAuth();
+  const { clearProfessional } = useRegister();
   const handleButtonOk = () => {
+    clearProfessional();
     endRegister();
     navigation.navigate('SignIn')
   }

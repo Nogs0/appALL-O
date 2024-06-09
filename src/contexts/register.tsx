@@ -131,9 +131,9 @@ function RegisterProvider({ children }: any) {
         setLoading(true);
         return new Promise<string>((resolve) => {
             setTimeout(() => {
+                console.log(professional);
                 resolve("Cadastro finalizado -> Aqui devemos integrar com o cadastro do profissional na API")
                 setLoading(false);
-                clearProfessional();
             }, 2000)
         });
     }
