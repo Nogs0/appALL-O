@@ -1,36 +1,53 @@
 import { StyleSheet } from "react-native";
-import { blackDefault, greyDefault, orangeDefault, whiteDefault } from "../shared/styleConsts";
+import { blackDefault, greyDefault2, orangeDefault, whiteDefault, orangeDefault4 } from "../shared/styleConsts";
 
 export default StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: orangeDefault,
+        backgroundColor: "white",
         alignItems: 'center',
     },
-    botao: {
-        marginTop: 100,
-        padding: 20,
-        width: 300,
-        height: 100,
-        backgroundColor: whiteDefault,
-        borderRadius: 20
+    botaoTrocaLogin: {
+        marginTop: 40,
+        width: 150,
+        height: 30,
+        justifyContent: 'center',
+        marginBottom: 20,
+        borderRadius: 8,
+        flexDirection: 'row',
+        alignItems: 'center'
     },
-    botao2: {
-        marginVertical: 20,
-        padding: 5,
-        width: 200,
-        height: 40,
-        backgroundColor: whiteDefault,
-        borderRadius: 20
+    botaoAcao: {
+        marginTop: 20,
+        width: 190,
+        height: 45,
+        backgroundColor: 'orange',
+        justifyContent: 'center',
+        marginBottom: 20,
+        borderRadius: 8
     },
-    text: {
-        fontSize: 40,
+    textTrocaLogin: {
+        fontSize: 13,
+        color: whiteDefault,
+    },
+    textAcao:{
+        fontSize: 15,
         textAlign: 'center',
-        color: blackDefault
+        color: whiteDefault
     },
-    text2: {
-        fontSize: 20,
-        textAlign: 'center',
-        color: blackDefault
+    logo:{
+        marginTop : 40,
+        flex:1,
+        alignItems:'center'
+    },
+    input:{
+        marginVertical: 10,
+        backgroundColor: greyDefault2,
+        width: 295,
+        height: 50,
+    },
+    iconeTroca:{
+        paddingHorizontal: 5,
+        color: whiteDefault
     }
 })
