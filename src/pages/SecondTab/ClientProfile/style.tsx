@@ -4,6 +4,8 @@ import { orangeDefault } from "../../../shared/styleConsts";
 export default StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: orangeDefault
+        backgroundColor: orangeDefault,
+        alignItems: 'center',
+        justifyContent: 'center'
     }
 })

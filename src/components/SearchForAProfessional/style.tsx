@@ -5,7 +5,8 @@ export default StyleSheet.create({
     container: {
         marginHorizontal: 10,
         paddingTop: 10,
-        flex: 0.15
+        flex: 0.15,
+        backgroundColor: whiteDefault
     },
     label: {
         left: 10,
