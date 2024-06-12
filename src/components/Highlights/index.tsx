@@ -38,7 +38,7 @@ export default function Highlights() {
 
   return (
     <SafeAreaView style={style.container}>
-      <Text style={style.label}>Outstanding Professional</Text>
+      <Text style={style.label}>Profissionais em destaque</Text>
       <FlatList
         horizontal={true}
         data={DATA}

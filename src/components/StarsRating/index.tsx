@@ -9,7 +9,7 @@ export default function StarsRating({ rate, numberRate, navigation, id, defaultC
     <TouchableOpacity
       onPress={() => navigation.navigate('ProfessionalReviews', { id, defaultColor })}>
       <Stars rate={rate} />
-      <Text style={styles.label}>{`${numberRate} ratings`}</Text>
+      <Text style={styles.label}>{`${numberRate} avaliações`}</Text>
     </TouchableOpacity>
   )
 }

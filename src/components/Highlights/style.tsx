@@ -7,9 +7,9 @@ export default StyleSheet.create({
         margin: 25
     },
     label: {
-        color: blackDefault,
+        color: orangeDefault,
+        fontFamily: 'Rubik-SemiBold',
         fontSize: 18,
-        fontFamily: 'Rubik-Regular',
         justifyContent: 'flex-start'
     },
     containerImage: {

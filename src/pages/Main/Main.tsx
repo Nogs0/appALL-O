@@ -17,17 +17,18 @@ export default function Main({ navigation }: any) {
 
   return (
     <Stack.Navigator initialRouteName={"Home"} screenOptions={{
-      header: () => {
-        return (
-          <SafeAreaView style={stylesHeader.container}>
-            <TouchableOpacity
-              style={stylesHeader.menuContainer}
-              onPress={() => signOut()} >
-              <Icon color='black' name='arrow-collapse-left' size={30}></Icon>
-            </TouchableOpacity>
-          </SafeAreaView>
-        )
-      }
+      // header: () => {
+      //   return (
+      //     <SafeAreaView style={stylesHeader.container}>
+      //       <TouchableOpacity
+      //         style={stylesHeader.menuContainer}
+      //         onPress={() => signOut()} >
+      //         <Icon color='black' name='arrow-collapse-left' size={30}></Icon>
+      //       </TouchableOpacity>
+      //     </SafeAreaView>
+      //   )
+      // }
+      headerShown: false
     }}>
       <Stack.Group>
         {isProfessional ?

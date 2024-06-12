@@ -9,12 +9,12 @@ import { whiteDefault } from '../../../shared/styleConsts';
 export default function Home(props: any) {
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: whiteDefault }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: whiteDefault, paddingTop: 10 }}>
       <ScrollView stickyHeaderIndices={[0]}>
         <SearchForAProfessional />
         <MostAccessed />
         <Highlights />
-        <OtherProfessions navigation={props.navigation}/>
+        <OtherProfessions navigation={props.navigation} />
       </ScrollView>
     </SafeAreaView>
   )

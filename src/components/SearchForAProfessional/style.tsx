@@ -3,16 +3,17 @@ import { blackDefault, greyDefault, orangeDefault, whiteDefault } from "../../sh
 
 export default StyleSheet.create({
     container: {
+        marginHorizontal: 10,
         paddingTop: 10,
         flex: 0.15,
         backgroundColor: whiteDefault
     },
     label: {
         left: 10,
-        color: blackDefault,
         justifyContent: 'flex-start',
         fontSize: 25,
-        fontFamily: 'Rubik-Light'
+        color: orangeDefault,
+        fontFamily: 'Rubik-SemiBold',
     },
     containerSearch: {
         margin: '2%',

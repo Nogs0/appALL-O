@@ -9,7 +9,7 @@ export default function MostAccessed() {
   const navigation = useNavigation();
   return (
     <SafeAreaView style={style.container}>
-      <Text style={style.label}>Most Accessed In Your Neighborhood</Text>
+      <Text style={style.label}>Mais acessados na sua região</Text>
       <CardsMostAccessed navigation={navigation} ></CardsMostAccessed>
     </SafeAreaView>
   )

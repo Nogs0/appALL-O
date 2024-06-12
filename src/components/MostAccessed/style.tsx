@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { blackDefault } from "../../shared/styleConsts";
+import { orangeDefault } from "../../shared/styleConsts";
 
 export default StyleSheet.create({
     container: {
@@ -7,8 +7,8 @@ export default StyleSheet.create({
         marginHorizontal: 25
     },
     label: {
-        color: blackDefault,
         fontSize: 18,
-        fontFamily: 'Rubik-Regular'
+        color: orangeDefault,
+        fontFamily: 'Rubik-SemiBold',
     }
 })

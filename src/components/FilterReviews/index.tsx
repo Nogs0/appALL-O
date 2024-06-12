@@ -11,17 +11,17 @@ export default function FilterReviews(props: any) {
             <ButtonTab backgroundColor={props.button == ButtonFilterEnumReviews.date ? props.defaultColor : whiteDefault}
                 color={props.button == ButtonFilterEnumReviews.date ? whiteDefault : greyDefault}
                 borderColor={props.button == ButtonFilterEnumReviews.date ? whiteDefault : greyDefault}
-                width={'30%'} onPress={() => { props.onPress(ButtonFilterEnumReviews.date) }} text={'Date'} />
+                width={'30%'} onPress={() => { props.onPress(ButtonFilterEnumReviews.date) }} text={'Data'} />
 
             <ButtonTab backgroundColor={props.button == ButtonFilterEnumReviews.bestRated ? props.defaultColor : whiteDefault}
                 color={props.button == ButtonFilterEnumReviews.bestRated ? whiteDefault : greyDefault}
                 borderColor={props.button == ButtonFilterEnumReviews.bestRated ? whiteDefault : greyDefault}
-                width={'30%'} onPress={() => { props.onPress(ButtonFilterEnumReviews.bestRated) }} text={'Best rated'} />
+                width={'30%'} onPress={() => { props.onPress(ButtonFilterEnumReviews.bestRated) }} text={'Melhores'} />
 
             <ButtonTab backgroundColor={props.button == ButtonFilterEnumReviews.worseRated ? props.defaultColor : whiteDefault}
                 color={props.button == ButtonFilterEnumReviews.worseRated ? whiteDefault : greyDefault}
                 borderColor={props.button == ButtonFilterEnumReviews.worseRated ? whiteDefault : greyDefault}
-                width={'30%'} onPress={() => { props.onPress(ButtonFilterEnumReviews.worseRated) }} text={'Worse rated'} />
+                width={'30%'} onPress={() => { props.onPress(ButtonFilterEnumReviews.worseRated) }} text={'Piores'} />
         </View>
     )
 }
