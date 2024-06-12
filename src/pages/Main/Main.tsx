@@ -1,11 +1,9 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
-import { Image, SafeAreaView, TouchableOpacity } from 'react-native';
+import { SafeAreaView, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import stylesHeader from '../../components/Header/styles';
 import { useAuth } from '../../contexts/auth';
-import { blueDefault, orangeDefault, whiteDefault } from '../../shared/styleConsts';
-import ClientArea from './Client';
 import Home from './Home';
 import ProfessionalList from './Home/ProfessionalList';
 import ProfessionalProfile from './Home/ProfessionalList/ProfessionalProfile';
@@ -27,11 +25,6 @@ export default function Main({ navigation }: any) {
               onPress={() => signOut()} >
               <Icon color='black' name='arrow-collapse-left' size={30}></Icon>
             </TouchableOpacity>
-            <TouchableOpacity
-              style={stylesHeader.perfilContainer}
-              onPress={() => navigation.navigate('ClientArea', { id: 1 })}>
-              <Image style={stylesHeader.imgPerfil} source={require('../../assets/images/foto-de-perfil-homem.png')}></Image>
-            </TouchableOpacity>
           </SafeAreaView>
         )
       }
@@ -48,7 +41,6 @@ export default function Main({ navigation }: any) {
             <Stack.Screen name='ProfessionalList' component={ProfessionalList} options={{ headerShown: false }} />
             <Stack.Screen name='ProfessionalProfile' component={ProfessionalProfile} options={{ headerShown: false }} />
             <Stack.Screen name='ProfessionalReviews' component={ProfessionalReviews} options={{ headerShown: false }} />
-            <Stack.Screen name='ClientArea' component={ClientArea} options={{ headerShown: false }} />
           </>
         }
       </Stack.Group>

@@ -7,7 +7,6 @@ import style from './style';
 import LogoCliente from '../assets/images/@types/svg/LOGIN-CLIENTE.svg';
 import LogoProfissional from '../assets/images/@types/svg/LOGIN-PROF.svg';
 
-
 import { useState } from 'react';
 import { blackDefault, blueDefault, greyDefault, orangeDefault4, redDefault, whiteDefault } from "../shared/styleConsts";
 

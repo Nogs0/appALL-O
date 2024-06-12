@@ -60,15 +60,15 @@ export default function NotificationsProfessional(props: any) {
   }, [params])
 
   return (
-    <SafeAreaView style={[style.container, { backgroundColor: params?.defaultColor }]}>
+    <SafeAreaView style={style.container}>
       {notifications ? (
         <>
           <HeaderProfessional title={'Notificações'}
             defaultColor={params?.defaultColor}
-            isProfessional={params?.isProfessional} 
+            isProfessional={true} 
             signOut={signOut}/>
           <View style={style.contentContainer}>
-            <Text style={[style.nameProfessional, { color: params?.defaultColor }]}>{notifications.professionalName}</Text>
+            <Text style={style.nameProfessional}>{notifications.professionalName}</Text>
             <FlatList
               style={style.listContainer}
               data={notifications.notifications}
@@ -77,7 +77,7 @@ export default function NotificationsProfessional(props: any) {
             />
           </View>
         </>
-      ) : (<ActivityIndicator size={"large"} color={whiteDefault}></ActivityIndicator>)}
+      ) : (<ActivityIndicator size={70} color={whiteDefault}></ActivityIndicator>)}
     </SafeAreaView>
   )
 }
