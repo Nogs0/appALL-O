@@ -5,8 +5,7 @@ export default StyleSheet.create({
     container: {
         marginHorizontal: 10,
         paddingTop: 10,
-        flex: 0.15,
-        backgroundColor: whiteDefault
+        flex: 0.15
     },
     label: {
         left: 10,
@@ -18,17 +17,22 @@ export default StyleSheet.create({
     containerSearch: {
         margin: '2%',
         height: '45%',
-        backgroundColor: greyDefault,
+        backgroundColor: whiteDefault,
+        borderWidth: 2,
+        borderColor: greyDefault,
         borderRadius: 30,
         flexDirection: 'row',
     },
     iconSearch: {
         position: 'absolute',
-        paddingTop: 13,
-        paddingLeft: 15
+        paddingTop: 10,
+        paddingLeft: 15,
+        color: blackDefault
     },
     search: {
         flex: 1,
         marginLeft: 35,
+        color: blackDefault,
+        fontFamily: 'Rubik-SemiBold'
     }
 })

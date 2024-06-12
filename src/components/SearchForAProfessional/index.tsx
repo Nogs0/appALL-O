@@ -2,7 +2,7 @@ import { View, Text, TextInput, SafeAreaView } from 'react-native'
 import React from 'react'
 import style from './style'
 import Icon from 'react-native-vector-icons/AntDesign'
-import { whiteDefault } from '../../shared/styleConsts'
+import { blackDefault, whiteDefault } from '../../shared/styleConsts'
 
 export default function SearchForAProfessional() {
   return (
@@ -12,6 +12,7 @@ export default function SearchForAProfessional() {
         <TextInput
             style={style.search}
             placeholder='Pesquisar'
+            placeholderTextColor={blackDefault}
         />
         <Icon style={style.iconSearch} size={20} name='search1'></Icon>
     </View>

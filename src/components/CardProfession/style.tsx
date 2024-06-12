@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { blackDefault, greyDefault } from "../../shared/styleConsts";
+import { blackDefault, greyDefault, orangeDefault, whiteDefault } from "../../shared/styleConsts";
 
 export default StyleSheet.create({
     container: {
@@ -10,9 +10,11 @@ export default StyleSheet.create({
         alignItems: 'center',
         marginTop: 7,
         marginHorizontal: 5,
-        backgroundColor: greyDefault,
+        backgroundColor: whiteDefault,
         borderRadius: 15,
-        padding: 10
+        padding: 10,
+        borderWidth: 2,
+        borderColor: greyDefault,
     },
     professionName: {
         color: blackDefault,
