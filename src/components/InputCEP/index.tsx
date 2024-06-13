@@ -4,6 +4,7 @@ import { TextInput, TouchableOpacity, View } from 'react-native'
 import styles from './styles'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import { whiteDefault } from '../../shared/styleConsts'
+import MaskInput from 'react-native-mask-input'
 
 type InputCEPProps = {
   cep: string,
@@ -15,13 +16,16 @@ export default function InputCEP(props: InputCEPProps) {
 
   return (
     <View style={styles.input}>
-      <TextInput
+      <MaskInput
+        keyboardType={'number-pad'}
+        style={styles.textInput}
         onFocus={props.onFocus}
-        placeholder={'CEP'}
         value={props.cep}
-        onChangeText={props.onChangeText}
-        style={styles.textInput} />
-
+        onChangeText={(masked) => {
+          props.onChangeText(masked);
+        }}
+        maskAutoComplete={true}
+        mask={[/\d/, /\d/, '.', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/]} />
       <TouchableOpacity style={styles.buttonSearchContainer} onPress={() => props.searchCEP()}>
         <Icon name={'search'} size={30} color={whiteDefault} style={styles.buttonSearch}></Icon>
       </TouchableOpacity>

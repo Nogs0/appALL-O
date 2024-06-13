@@ -1,14 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import { useAuth } from "./auth";
-
-interface Address {
-    postalCode: string,
-    state: string,
-    city: string,
-    neighborhood: string,
-    street: string,
-    number: string
-}
+import { Address } from "./api";
 
 interface InitialInformations {
     document: string,

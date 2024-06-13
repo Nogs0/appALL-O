@@ -15,14 +15,16 @@ type InputProps = {
   mask?: any,
   onFocus?: any,
   borderColor?: string,
-  textColor?: string
+  textColor?: string,
+  isNumeric?: boolean
 }
 export default function Input(props: InputProps) {
   return (
-    <View style={[styles.input, {borderColor: !!props.borderColor ? props.borderColor : greyDefault}]} >
+    <View style={[styles.input, { borderColor: !!props.borderColor ? props.borderColor : greyDefault }]} >
       {
         props.isMask ?
           <MaskInput
+            keyboardType={props.isNumeric ? 'number-pad' : 'default'}
             style={styles.textInput}
             onFocus={props.onFocus}
             value={props.text}
@@ -32,6 +34,7 @@ export default function Input(props: InputProps) {
             mask={props.mask} />
           :
           <TextInput
+            keyboardType={props.isNumeric ? 'number-pad' : 'default'}
             onFocus={props.onFocus}
             onBlur={props.onBlur}
             onPointerLeave={props.onBlur}

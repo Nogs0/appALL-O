@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, Image, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
 import style from './style';
-import HeaderProfessional from '../HeaderProfessional/indext';
+import HeaderProfessional from '../HeaderProfessional';
 import { whiteDefault } from '../../shared/styleConsts';
 import { useAuth } from '../../contexts/auth';
 
@@ -65,7 +65,8 @@ export default function NotificationsProfessional(props: any) {
         <>
           <HeaderProfessional title={'Notificações'}
             defaultColor={params?.defaultColor}
-            isProfessional={true} 
+            isProfessional
+            isNotifications 
             signOut={signOut}/>
           <View style={style.contentContainer}>
             <Text style={style.nameProfessional}>{notifications.professionalName}</Text>

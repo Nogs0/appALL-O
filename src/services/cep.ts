@@ -16,12 +16,11 @@ interface CEPAPIAddress {
 export default async function getAddress(cep: string): Promise<CEPAPIAddress> {
     return new Promise<CEPAPIAddress>(async (resolve, reject) => {
         try {
-            let response = await cepAPI.get<CEPAPIAddress>(`/${cep}/json`);
+            let response = await cepAPI.get<CEPAPIAddress>(`/${cep.replace('.', '').replace('-', '')}/json`);
             resolve(response.data);
         }
         catch(e) {
             reject(e);
-            console.log(e)
         }
     })
 }

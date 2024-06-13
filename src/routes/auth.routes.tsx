@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
-import SignIn from '../login';
+import SignIn from '../auth/login';
 
 export default function AuthRotes() {
   

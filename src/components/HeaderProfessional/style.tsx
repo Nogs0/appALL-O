@@ -12,7 +12,9 @@ export default StyleSheet.create({
     goBack: {
         position: 'absolute',
         zIndex: 1,
-        left: 10
+        left: 10,
+        width: 40,
+        height: 40
     },
     label: {
         textAlign: 'center',
@@ -20,5 +22,12 @@ export default StyleSheet.create({
         color: whiteDefault,
         fontFamily: 'Rubik-SemiBold',
         fontSize: 32
-    }
+    },
+    goEdit: {
+        position: 'absolute',
+        zIndex: 1,
+        right: 10,
+        width: 40,
+        height: 40
+    },
 })
