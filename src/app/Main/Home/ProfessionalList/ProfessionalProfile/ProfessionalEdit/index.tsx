@@ -202,11 +202,11 @@ export default function ProfessinalEdit(props: any) {
                             <KeyboardAvoidingView style={style.inputsContainerAddress}>
                                 <ScrollView>
                                     <InputCEP onFocus={() => console.log('a')} searchCEP={searchCEP} cep={postalCode} onChangeText={setPostalCode} />
-                                    <Input editable={!loadingCEP || !loadingUpdate} placeholder='Estado' text={state} onChangeText={setState} />
-                                    <Input editable={!loadingCEP || !loadingUpdate} placeholder='Cidade' text={city} onChangeText={setCity} />
-                                    <Input editable={!loadingCEP || !loadingUpdate} placeholder='Bairro' text={neighborhood} onChangeText={setNeighborhood} />
-                                    <Input editable={!loadingCEP || !loadingUpdate} placeholder='Rua' text={street} onChangeText={setStreet} />
-                                    <Input editable={!loadingCEP || !loadingUpdate} placeholder='Número' text={number} onChangeText={setNumber} />
+                                    <Input editable={!loadingCEP && !loadingUpdate} placeholder='Estado' text={state} onChangeText={setState} />
+                                    <Input editable={!loadingCEP && !loadingUpdate} placeholder='Cidade' text={city} onChangeText={setCity} />
+                                    <Input editable={!loadingCEP && !loadingUpdate} placeholder='Bairro' text={neighborhood} onChangeText={setNeighborhood} />
+                                    <Input editable={!loadingCEP && !loadingUpdate} placeholder='Rua' text={street} onChangeText={setStreet} />
+                                    <Input editable={!loadingCEP && !loadingUpdate} placeholder='Número' text={number} onChangeText={setNumber} />
                                 </ScrollView>
                             </KeyboardAvoidingView> : <></>
                         }
