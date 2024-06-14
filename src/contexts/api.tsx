@@ -27,7 +27,8 @@ export interface Address {
 
 interface APIContextData {
     getClient(id: number): Promise<ClientDTO>,
-    getProfessionalToEdit(id: number): Promise<ProfessionalToEditDTO>
+    getProfessionalToEdit(id: number): Promise<ProfessionalToEditDTO>,
+    updateProfessional(dto: ProfessionalToEditDTO): Promise<void>
 }
 
 const APIContext = createContext<APIContextData>({} as APIContextData);
@@ -36,45 +37,67 @@ function APIProvider({ children }: any) {
 
     const getClient = (id: number): Promise<ClientDTO> => {
         return new Promise<ClientDTO>((resolve, reject) => {
-            setTimeout(() => {
-                resolve({
-                    name: 'João',
-                    email: 'joaoguinogueira04@gmail.com',
-                    password: 'ejw-9fí2e2n'
-                } as ClientDTO)
-            }, 1000)
+            try {
+                setTimeout(() => {
+                    resolve({
+                        name: 'João',
+                        email: 'joaoguinogueira04@gmail.com',
+                        password: 'ejw-9fí2e2n'
+                    } as ClientDTO)
+                }, 1000)
+            }
+            catch (e) {
+                reject(e);
+            }
 
         })
     }
 
     const getProfessionalToEdit = (id: number): Promise<ProfessionalToEditDTO> => {
         return new Promise<ProfessionalToEditDTO>((resolve, reject) => {
-            setTimeout(() => {
-                resolve({
-                    id: 1,
-                    name: 'João',
-                    email: 'joaoguinogueira04@gmail.com',
-                    document: '087.606.736-48',
-                    perfilImage: '',
-                    images: [],
-                    address: {
-                        postalCode: '',
-                        state: '',
-                        city: '',
-                        neighborhood: '',
-                        street: '',
-                        number: ''
-                    },
+            try {
+                setTimeout(() => {
+                    resolve({
+                        id: 1,
+                        name: 'João',
+                        email: 'joaoguinogueira04@gmail.com',
+                        document: '087.606.736-48',
+                        perfilImage: '',
+                        images: [],
+                        address: {
+                            postalCode: '37714660',
+                            state: 'MG',
+                            city: 'Poços de Caldas',
+                            neighborhood: 'Campo das Antas',
+                            street: 'Avenida Sinesio do Lago',
+                            number: '543'
+                        },
 
-                } as ProfessionalToEditDTO)
-            }, 1000)
+                    } as ProfessionalToEditDTO)
+                }, 1000)
+            }
+            catch (e) {
+                reject(e);
+            }
+        })
+    }
 
+    const updateProfessional = (dto: ProfessionalToEditDTO): Promise<void> => {
+        return new Promise<void>((resolve, reject) => {
+            try {
+                setTimeout(() => {
+                    resolve()
+                }, 2000);
+            }
+            catch (e) {
+                reject(e);
+            }
         })
     }
 
     return (
         <APIContext.Provider
-            value={{ getClient, getProfessionalToEdit }}>
+            value={{ getClient, getProfessionalToEdit, updateProfessional }}>
             {children}
         </APIContext.Provider>
     )

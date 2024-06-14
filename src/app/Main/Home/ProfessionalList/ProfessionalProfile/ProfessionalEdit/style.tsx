@@ -5,7 +5,7 @@ export default StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
-        backgroundColor: blueDefault
+        backgroundColor: blueDefault,
     },
     contentContainer: {
         flex: 1,
@@ -17,50 +17,91 @@ export default StyleSheet.create({
     },
     imageContainer: {
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     image: {
-        width: 100, 
-        height: 100,
+        width: 150, 
+        height: 150,
         borderRadius: 50,
-        marginTop: '5%'
+    },
+    imageContainerFlatList: {
+        // flexBasis: 0,
+        flexGrow: 1
+        // alignItems: 'center',
+        // justifyContent: 'center',
+    },
+    imageFlatList: {
+        width: 130, 
+        height: 130,
+    },
+    noImage: {
+        width: 150, 
+        height: 150,
+        backgroundColor: greyDefault,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 50
     },
     inputsContainer: {
-        width: '90%',
-        height: '30%',
-        padding: '5%'
+        marginTop: '20%'
     },
     inputsContainerAddress: {
         position: 'absolute',
-        top: '25%',
+        top: '15%',
         width: '90%',
-        height: 350,
-        marginTop: '10%',
-        paddingHorizontal: '5%'
+        height: '70%',
+        paddingHorizontal: '5%',
+    },
+    inputsContainerInformations: {
+        top: '15%',
+        width: '90%',
+        height: '70%',
+        paddingHorizontal: '5%',
+        position: 'absolute'
     },
     buttonUpdate: {
         backgroundColor: blueDefault,
         width: '70%',
-        height: '5%',
+        height: 30,
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 10,
-        marginBottom: '10%'
+        marginBottom: '5%',
+    },
+    buttonAddImage: {
+        backgroundColor: blueDefault,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 50,
+        marginBottom: '5%',
+        height: 70,
+        width: 70
+    },
+    imageGridContainer: {
+        width: '100%',
+        height: '80%',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     tabsContainer: {
-        position: 'absolute',
-        top: '20%',
         width: '100%',
-        height: '10%',
+        height: 70,
         backgroundColor: whiteDefault,
         borderBottomColor: blueDefault,
-        borderBottomWidth: 5,
-
+        borderTopLeftRadius: 50,
+        borderTopRightRadius: 50,
         flexDirection: 'row',
+        padding: 20,
         justifyContent: 'space-between'
     },
     tab: {
-        paddingHorizontal: 30,
+        borderRadius: 50,
+        paddingHorizontal: 20,
         justifyContent: 'center'
+    },
+    loadingUpdate: {
+        position: 'absolute',
+        top: '50%',
+        zIndex: 10
     }
 })
