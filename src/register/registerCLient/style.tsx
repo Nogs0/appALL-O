@@ -57,5 +57,13 @@ export default StyleSheet.create({
     },
     inputsContainer: {
         width: '100%',
+    },
+    subTitle:{
+        paddingTop: '2%',
+        paddingHorizontal: 10,
+        color: 'black',
+        fontSize: 14,
+        fontFamily: 'Rubik-Light',
+        textAlign: 'center'
     }
 })

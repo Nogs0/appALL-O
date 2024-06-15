@@ -58,4 +58,5 @@ export default StyleSheet.create({
     inputsContainer: {
         width: '100%',
     }
+    
 })

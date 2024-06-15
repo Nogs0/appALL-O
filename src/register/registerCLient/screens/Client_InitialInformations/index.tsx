@@ -11,15 +11,19 @@ import { useRegisterClient } from '../../../../contexts/registerClient';
 export default function Register_InitialInformations({ navigation }: any) {
   const { client, setInitialInformations, clearClient } = useRegisterClient();
 
+  console.log("Context:", { client, setInitialInformations, clearClient });
+
   const [email, setEmail] = useState<string>(client ? client.email : '');
   const [password, setPassword] = useState<string>(client ? client.password : '');
   const [incorrectInformations, setIncorrectInformations] = useState<boolean>(false);
 
   const handleButtonNext = () => {
+
+
     setInitialInformations({ email, password });
 
     if (canGoToTheNextStep()) {
-      navigation.navigate('Client_InitialInformations');
+      navigation.navigate('Register_CEP');
     } else {
       setIncorrectInformations(true);
     }

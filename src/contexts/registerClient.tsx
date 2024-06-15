@@ -59,10 +59,14 @@ function RegisterProvider({ children }: any) {
 
     function setInitialInformations(params: InitialInformations) {
         setClient((prev) => {
-            if (!prev) prev = {} as ClientCreateDto;
-            return { ...prev, email: params.email, password: params.password };
+            if (!prev)
+                prev = {} as ClientCreateDto;
+            prev.email = params.email;
+            prev.password = params.password
+            return prev;
         });
     }
+
 
     function setAddress(address: Address) {
         setClient((prev) => {
