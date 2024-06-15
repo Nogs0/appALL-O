@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Button, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import styleRegister from '../../style';
 import HeaderRegisterProfessional from '../../../../../components/HeaderRegisterProfessional';
 import Input from '../../../../../components/Input';
@@ -37,14 +37,18 @@ export default function Register_InitialInformations({ navigation }: any) {
   }
 
   return (
+    
     <ScrollView contentContainerStyle={styleRegister.defaultContainer} keyboardShouldPersistTaps='handled' scrollEnabled={false}>
+      <TouchableOpacity onPress={() => navigation.navigate('Register_CreatingProfession')}>
+        <Text style={{color: redDefault}}>AAAAAAAAAAAA</Text>
+      </TouchableOpacity>
       <HeaderRegisterProfessional navigation={navigation} goBack={handleGoBack} initialScreen />
       <View style={styleRegister.defaultContentContainer}>
         <Text style={styleRegister.title}>Seja bem-vindo!</Text>
         <Text style={styleRegister.text}>Preencha os campos para criar a sua conta...</Text>
         <View style={styleRegister.inputsContainer}>
-          <Input isNumeric onFocus={() => setIncorrectInformations(false)} placeholder='CNPJ ou CPF' text={document} onChangeText={setDocument}></Input>
-          <Input onFocus={() => setIncorrectInformations(false)} placeholder='Email' text={email} onChangeText={setEmail}></Input>
+          <Input keyboardType='number-pad' onFocus={() => setIncorrectInformations(false)} placeholder='CNPJ ou CPF' text={document} onChangeText={setDocument}></Input>
+          <Input keyboardType='email-address' onFocus={() => setIncorrectInformations(false)} placeholder='Email' text={email} onChangeText={setEmail}></Input>
           <InputPassword onFocus={() => setIncorrectInformations(false)} text={password} onChangeText={setPassword}></InputPassword>
         </View>
         {

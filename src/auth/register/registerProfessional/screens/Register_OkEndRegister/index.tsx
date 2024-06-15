@@ -1,12 +1,10 @@
 import React from 'react';
-import { SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import styleRegister from '../../style';
-import style from './style';
+import { SafeAreaView } from 'react-native';
 import HeaderRegisterProfessional from '../../../../../components/HeaderRegisterProfessional';
 import { useAuth } from '../../../../../contexts/auth';
 import { useRegister } from '../../../../../contexts/register';
-import { blackDefault } from '../../../../../shared/styleConsts';
+import styleRegister from '../../style';
+import Ok from '../../../../../components/Ok';
 
 export default function Register_OkEndRegister({ navigation }: any) {
 
@@ -20,17 +18,8 @@ export default function Register_OkEndRegister({ navigation }: any) {
 
   return (
     <SafeAreaView style={styleRegister.defaultContainer}>
-      <HeaderRegisterProfessional navigation={navigation} endingRegister/>
-      <View style={styleRegister.defaultContentContainer}>
-        <Icon name={'emoticon-happy-outline'} size={50} color={blackDefault}></Icon>
-        <Text style={styleRegister.title}>Tudo pronto!</Text>
-        <Text style={styleRegister.text}>Sua conta foi criada com sucesso!</Text>
-        <Text style={styleRegister.text}>Você será redirecionado para a tela de login...</Text>
-
-        <TouchableOpacity style={style.buttonOk} onPress={() => handleButtonOk()}>
-          <Text style={style.textButtonOk}>OK!</Text>
-        </TouchableOpacity>
-      </View>
+      <HeaderRegisterProfessional navigation={navigation} endingRegister />
+      <Ok title='Sua conta foi criada com sucesso!' text='Você será redirecionado para a tela de login!' callbackOk={() => handleButtonOk()}></Ok>
     </SafeAreaView>
   )
 }

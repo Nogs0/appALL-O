@@ -8,6 +8,8 @@ import HeaderRegisterProfessional from '../../../../../components/HeaderRegister
 import Input from '../../../../../components/Input';
 import { useRegister } from '../../../../../contexts/register';
 import { greyDefault, blackDefault, whiteDefault, redDefault } from '../../../../../shared/styleConsts';
+import { showMessage } from 'react-native-flash-message';
+import Ok from '../../../../../components/Ok';
 
 export default function Register_Services({ navigation }: any) {
 
@@ -38,122 +40,6 @@ export default function Register_Services({ navigation }: any) {
       id: 4,
       name: 'Mecânico'
     },
-    {
-      id: 1,
-      name: 'Jardineiro'
-    },
-    {
-      id: 2,
-      name: 'Eletricista'
-    },
-    {
-      id: 3,
-      name: 'Encanador'
-    },
-    {
-      id: 4,
-      name: 'Mecânico'
-    },
-    {
-      id: 1,
-      name: 'Jardineiro'
-    },
-    {
-      id: 2,
-      name: 'Eletricista'
-    },
-    {
-      id: 3,
-      name: 'Encanador'
-    },
-    {
-      id: 4,
-      name: 'Mecânico'
-    },
-    {
-      id: 2,
-      name: 'Eletricista'
-    },
-    {
-      id: 3,
-      name: 'Encanador'
-    },
-    {
-      id: 4,
-      name: 'Mecânico'
-    },
-    {
-      id: 1,
-      name: 'Jardineiro'
-    },
-    {
-      id: 2,
-      name: 'Eletricista'
-    },
-    {
-      id: 3,
-      name: 'Encanador'
-    },
-    {
-      id: 4,
-      name: 'Mecânico'
-    },
-    {
-      id: 2,
-      name: 'Eletricista'
-    },
-    {
-      id: 3,
-      name: 'Encanador'
-    },
-    {
-      id: 4,
-      name: 'Mecânico'
-    },
-    {
-      id: 1,
-      name: 'Jardineiro'
-    },
-    {
-      id: 2,
-      name: 'Eletricista'
-    },
-    {
-      id: 3,
-      name: 'Encanador'
-    },
-    {
-      id: 4,
-      name: 'Mecânico'
-    },
-    {
-      id: 2,
-      name: 'Eletricista'
-    },
-    {
-      id: 3,
-      name: 'Encanador'
-    },
-    {
-      id: 4,
-      name: 'Mecânico'
-    },
-    {
-      id: 1,
-      name: 'Jardineiro'
-    },
-    {
-      id: 2,
-      name: 'Eletricista'
-    },
-    {
-      id: 3,
-      name: 'Encanador'
-    },
-    {
-      id: 4,
-      name: 'Mecânico'
-    },
   ]
 
   const [tempServicosBase, setTempServicosBase] = useState<any[]>(servicosBase)
@@ -171,8 +57,12 @@ export default function Register_Services({ navigation }: any) {
     )
   }
 
-  const addItem = () => {
-    let servicoToAdd = servicosBase.find(x => x.name.toLowerCase() == servico.trim().toLowerCase())
+  const addItem = (name: string) => {
+    setServico(name);
+    setSearchingServico(false);
+    setTempServicosBase(servicosBase);
+
+    let servicoToAdd = servicosBase.find(x => x.name.toLowerCase() == name.trim().toLowerCase())
     if (servicoToAdd) {
       let index = listServicos.findIndex(x => x == servicoToAdd.id)
       if (index == -1) {
@@ -182,7 +72,10 @@ export default function Register_Services({ navigation }: any) {
           return [...prev];
         })
         setServico('');
-      } else Alert.alert("Item já adicionado à lista!")
+      } else showMessage({
+        message: 'Serviço já adicionado à lista!',
+        type: 'danger'
+      })
     }
   }
 
@@ -253,7 +146,9 @@ export default function Register_Services({ navigation }: any) {
                   keyExtractor={(item, index) => index.toString()}
                   renderItem={({ item }) =>
                     <TouchableOpacity
-                      onPress={() => { setServico(item.name); setSearchingServico(false); setTempServicosBase(servicosBase); }}
+                      onPress={() => {
+                        addItem(item.name);
+                      }}
                       style={{ borderBottomWidth: 1, borderBottomColor: greyDefault }}>
                       <Text style={{ color: blackDefault, fontSize: 24 }}>{item.name}</Text>
                     </TouchableOpacity>
@@ -263,9 +158,6 @@ export default function Register_Services({ navigation }: any) {
               :
               <></>
           }
-          <TouchableOpacity style={style.buttonAddContainer} onPress={() => addItem()}>
-            <Icon name={'plus'} size={30} color={whiteDefault} style={style.buttonAdd}></Icon>
-          </TouchableOpacity>
         </View>
 
         <FlatList
@@ -283,6 +175,15 @@ export default function Register_Services({ navigation }: any) {
           <Text style={styleRegister.textButtonNext}>Prosseguir</Text>
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+      <View style={style.createProfessionContainer}>
+        <Icon name={'emoticon-sad-outline'} size={50} color={blackDefault}></Icon>
+        <Text style={styleRegister.title}>Não encontrei minha profissão!</Text>
+        <TouchableOpacity style={style.buttonCreateProfession} onPress={() => console.log('criando profissão!')}>
+          <Text style={style.textButtonCreateProfession}>Criar!</Text>
+        </TouchableOpacity>
+        {/* 
+        <Ok title='Obrigado pela dica!' text='Nossa equipe irá analisar sua sugestão e se necessário vamos criar esta nova categoria! Em até 7 dias sua conta estará pronta para você!' callbackOk={() => console.log('aaaaaaa')}></Ok> */}
+      </View>
+    </SafeAreaView >
   )
 }
