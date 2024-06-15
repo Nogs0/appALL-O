@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { blackDefault, blueDefault, greyDefault, whiteDefault } from "../../shared/styleConsts";
+import { blackDefault, blueDefault, greyDefault, orangeDefault, whiteDefault } from "../../shared/styleConsts";
 
 export default StyleSheet.create({
     input: {
@@ -23,6 +23,10 @@ export default StyleSheet.create({
     },
     buttonSearch: {
         backgroundColor: blueDefault,
+        borderRadius: 50
+    },
+    buttonSearchClient: {
+        backgroundColor: orangeDefault,
         borderRadius: 50
     }
 })

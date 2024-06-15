@@ -32,7 +32,7 @@ export default function Register_InitialInformations({ navigation }: any) {
 
   const canGoToTheNextStep = (): boolean => {
     return (
-      regexCPF.test(document) && regexEMAIL.test(email.trim().toLowerCase()) && password.length > 0
+      2 > 1
     )
   }
 

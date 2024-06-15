@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { whiteDefault, blueDefault } from "../../shared/styleConsts";
+import { whiteDefault, orangeDefault } from "../../shared/styleConsts";
 
 export default StyleSheet.create({
     container: {
@@ -45,7 +45,7 @@ export default StyleSheet.create({
         width: '100%',
         marginTop: '10%',
         padding: '3%',
-        backgroundColor: blueDefault,
+        backgroundColor: orangeDefault,
         borderRadius: 5,
         justifyContent: 'center',
         alignItems: 'center'
@@ -57,6 +57,13 @@ export default StyleSheet.create({
     },
     inputsContainer: {
         width: '100%',
+    },
+    subTitle:{
+        paddingTop: '2%',
+        paddingHorizontal: 10,
+        color: 'black',
+        fontSize: 14,
+        fontFamily: 'Rubik-Light',
+        textAlign: 'center'
     }
-    
 })
