@@ -33,7 +33,7 @@ export default function Register_ServiceLocation({ navigation }: any) {
       number,
     });
     if (canGoToTheNextStep())
-      navigation.navigate('');
+      navigation.navigate('Register_AddProfilePic');
     else setIncorrectInformations(true)
   }
 

@@ -3,6 +3,7 @@ import React from 'react'
 import Register_InitialInformations from './screens/Client_InitialInformations'
 import Register_CEP from './screens/Client_CEP'
 import Register_AddProfilePic from './screens/Client_AddProfilePic'
+import Register_OkEndRegister from '../registerProfessional/screens/Register_OkEndRegister'
 
 export default function RegisterClient({goBack} : any) {
   const Stack = createNativeStackNavigator();
@@ -10,7 +11,7 @@ export default function RegisterClient({goBack} : any) {
     <Stack.Navigator initialRouteName='Register_AddProfilePic'>
       <Stack.Group>
         <Stack.Screen name="Register_AddProfilePic" component={Register_AddProfilePic} options={{ headerShown: false }} />
-        
+        <Stack.Screen name="Register_OkEndRegister" component={Register_OkEndRegister} options={{ headerShown: false }} />
       </Stack.Group>
     </Stack.Navigator>
   )

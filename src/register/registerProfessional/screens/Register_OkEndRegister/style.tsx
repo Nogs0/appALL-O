@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { blueDefault, whiteDefault } from "../../../../shared/styleConsts";
+import { blueDefault, orangeDefault, whiteDefault } from "../../../../shared/styleConsts";
 
 export default StyleSheet.create({
     buttonOk: {
@@ -15,5 +15,14 @@ export default StyleSheet.create({
         fontFamily: 'Rubik-SemiBold',
         color: whiteDefault,
         fontSize: 20
+    },
+    buttonOKClient: {
+        width: '50%',
+        marginTop: '10%',
+        padding: '3%',
+        backgroundColor: orangeDefault,
+        borderRadius: 5,
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 })

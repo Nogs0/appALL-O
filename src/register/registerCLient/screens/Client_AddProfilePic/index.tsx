@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ActivityIndicator, FlatList, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useRegister } from '../../../../contexts/register';
-import { blackDefault, blueDefault, greyDefault, redDefault, whiteDefault } from '../../../../shared/styleConsts';
+import { blackDefault, orangeDefault, greyDefault, redDefault, whiteDefault } from '../../../../shared/styleConsts';
 import styleRegister from '../../style';
 import style from './style';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
@@ -16,7 +16,6 @@ export default function Register_Images({ navigation }: any) {
   const [incorrectInformations, setIncorrectInformations] = useState<boolean>(false);
 
   const handleButtonEnd = async () => {
-    console.log(image)
     if (canGoToTheNextPage()) {
       let response = await endingRegister();
       console.log(response);
@@ -39,17 +38,9 @@ export default function Register_Images({ navigation }: any) {
     })
   }
 
-  const renderImage = (item: any) => {
-    return(
-        <TouchableOpacity style={{ paddingHorizontal: 4 }}>
-        <Image style={{ width: 100, height: 100 }} source={{ uri: item.uri }}></Image>
-      </TouchableOpacity>
-    )
-  }
-
   return (
     loading ?
-      <View style={{ flex: 1, backgroundColor: blueDefault, alignItems: 'center', justifyContent: 'center' }}>
+      <View style={{ flex: 1, backgroundColor: orangeDefault, alignItems: 'center', justifyContent: 'center' }}>
         <ActivityIndicator size={70} color={whiteDefault} />
       </View>
       :
