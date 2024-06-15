@@ -21,6 +21,7 @@ export default function Register_CreatingProfession({ navigation }: any) {
       desc.length > 0
     )
   }
+  
   return (
     <SafeAreaView style={styleRegister.defaultContainer}>
       <HeaderRegisterProfessional navigation={navigation} />
