@@ -24,6 +24,7 @@ export default function CardProfessional({ props }: any) {
         //onde sera feito o update
         console.log(`${id} atualizou Favorito -> `, favorite);
     }
+    
     const getFavorite = (favorite: boolean) => {
         return favorite ? <Icon name='heart' size={20} color={orangeDefault}></Icon> :
             <Icon name='heart-outline' size={20} color={greyDefault}></Icon>;

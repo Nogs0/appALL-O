@@ -1,26 +1,8 @@
 import { StyleSheet } from "react-native";
-import { whiteDefault, greyDefault, blackDefault, blueDefault } from "../../shared/styleConsts";
+import { blackDefault, greyDefault } from "../../shared/styleConsts";
 
 export default StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        backgroundColor: blueDefault
-    },
-    contentContainer: {
-        flex: 1,
-        backgroundColor: whiteDefault,
-        borderTopLeftRadius: 50,
-        borderTopRightRadius: 50,
-    },
-    nameProfessional: {
-        paddingBottom: 10,
-        textAlign: 'center',
-        fontSize: 32,
-        fontFamily: 'Rubik-SemiBold',
-        color: blueDefault
-    },
-    cardReview : {
+    cardReview: {
         flex: 1,
         flexDirection: 'row',
         borderBottomWidth: 1,
@@ -44,7 +26,7 @@ export default StyleSheet.create({
         textAlign: 'left',
         fontSize: 16
     },
-    message:{
+    rateNote: {
         color: blackDefault,
         fontSize: 14
     },
@@ -56,11 +38,13 @@ export default StyleSheet.create({
         color: blackDefault,
         fontFamily: 'Rubik-Light',
     },
-    listContainer: {
-        flex: 0.8
-    },
     imageReview: {
         width: 30,
         height: 30,
-    }
+    },
+    favoriteContainer: {
+        flex: 0.1,
+        alignItems: 'flex-end',
+        justifyContent: 'center',
+    },
 })

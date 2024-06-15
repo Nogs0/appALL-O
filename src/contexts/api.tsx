@@ -1,4 +1,5 @@
 import React, { createContext, useContext } from 'react';
+import api from '../services/api';
 
 export interface ClientDTO {
     name: string,
@@ -28,7 +29,11 @@ export interface Address {
 interface APIContextData {
     getClient(id: number): Promise<ClientDTO>,
     getProfessionalToEdit(id: number): Promise<ProfessionalToEditDTO>,
-    updateProfessional(dto: ProfessionalToEditDTO): Promise<void>
+    updateProfessional(dto: ProfessionalToEditDTO): Promise<void>,
+    updateImage(image: any): Promise<any>,
+    updateFavoriteReview(id: number): Promise<boolean>,
+    getReviewsByProfessional(id: number): Promise<any>,
+    updateSeenNotification(id: number): Promise<boolean>,
 }
 
 const APIContext = createContext<APIContextData>({} as APIContextData);
@@ -95,9 +100,153 @@ function APIProvider({ children }: any) {
         })
     }
 
+    const updateImage = (image: any): Promise<any> => {
+        return new Promise<any>((resolve, reject) => {
+            try {
+                setTimeout(() => {
+                    resolve(image)
+                }, 2000);
+            }
+            catch (e) {
+                reject(e);
+            }
+        })
+    }
+
+    const updateFavoriteReview = (id: number): Promise<boolean> => {
+        return new Promise<boolean>((resolve, reject) => {
+            try {
+                setTimeout(() => {
+                    resolve(true)
+                }, 2000);
+            }
+            catch (e) {
+                reject(e);
+            }
+        })
+    }
+
+    const updateSeenNotification = (id: number): Promise<boolean> => {
+        return new Promise<boolean>((resolve, reject) => {
+            try {
+                setTimeout(() => {
+                    resolve(true)
+                }, 2000);
+            }
+            catch (e) {
+                reject(e);
+            }
+        })
+    }
+    const getReviewsByProfessional = (id: number): Promise<any> => {
+
+        return new Promise<any>((resolve, reject) => {
+            setTimeout(() => {
+
+
+                resolve({
+                    professionalName: 'Marcio DME',
+                    revs: [
+                        {
+                            client: 'Guilherme Customer',
+                            rate: 3,
+                            rateNote: 'aaaaaaaaaaaaaaaa',
+                            date: '04/05/2024',
+                            image: require('../assets/images/encanador.jpg'),
+                            images: [
+                                require('../assets/images/eletricista.jpg'),
+                                require('../assets/images/eletricista.jpg'),
+                                require('../assets/images/eletricista.jpg'),
+                                require('../assets/images/eletricista.jpg'),
+                            ]
+                        },
+                        {
+                            client: 'Andrew Customer',
+                            rate: 5,
+                            rateNote: 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
+                            date: '09/05/2024',
+                            image: require('../assets/images/encanador.jpg'),
+                            images: [
+                                require('../assets/images/eletricista.jpg'),
+                                require('../assets/images/eletricista.jpg'),
+                                require('../assets/images/eletricista.jpg'),
+                                require('../assets/images/eletricista.jpg')
+                            ]
+                        },
+                        {
+                            client: 'Andrew Customer',
+                            rate: 5,
+                            rateNote: 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
+                            date: '09/05/2024',
+                            image: require('../assets/images/encanador.jpg'),
+                            images: [
+                                require('../assets/images/eletricista.jpg'),
+                                require('../assets/images/eletricista.jpg'),
+                                require('../assets/images/eletricista.jpg'),
+                                require('../assets/images/eletricista.jpg')
+                            ]
+                        },
+                        {
+                            client: 'Andrew Customer',
+                            rate: 5,
+                            rateNote: 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
+                            date: '09/05/2024',
+                            image: require('../assets/images/encanador.jpg'),
+                            images: [
+                                require('../assets/images/eletricista.jpg'),
+                                require('../assets/images/eletricista.jpg'),
+                                require('../assets/images/eletricista.jpg'),
+                                require('../assets/images/eletricista.jpg'),
+                            ]
+                        },
+                        {
+                            client: 'Andrew Customer',
+                            rate: 5,
+                            rateNote: 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
+                            date: '09/05/2024',
+                            image: require('../assets/images/encanador.jpg'),
+                            images: [
+                                require('../assets/images/eletricista.jpg'),
+                                require('../assets/images/eletricista.jpg'),
+                                require('../assets/images/eletricista.jpg'),
+                                require('../assets/images/eletricista.jpg')
+                            ]
+                        },
+                        {
+                            client: 'Andrew Customer',
+                            rate: 5,
+                            rateNote: 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
+                            date: '09/05/2024',
+                            image: require('../assets/images/encanador.jpg'),
+                            images: [
+                                require('../assets/images/encanador.jpg'),
+                                require('../assets/images/encanador.jpg'),
+                                require('../assets/images/encanador.jpg'),
+                                require('../assets/images/encanador.jpg')
+                            ]
+                        },
+                        {
+                            client: 'Andrew Customer',
+                            rate: 5,
+                            rateNote: 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
+                            date: '09/05/2024',
+                            image: require('../assets/images/encanador.jpg'),
+                            images: [
+                                require('../assets/images/encanador.jpg'),
+                                require('../assets/images/encanador.jpg'),
+                                require('../assets/images/encanador.jpg'),
+                                require('../assets/images/encanador.jpg')
+                            ]
+                        },
+                    ]
+                })
+            }, 2000);
+        })
+    }
+
     return (
         <APIContext.Provider
-            value={{ getClient, getProfessionalToEdit, updateProfessional }}>
+            value={{ getClient, getProfessionalToEdit, updateProfessional, updateImage, updateFavoriteReview, getReviewsByProfessional, updateSeenNotification }}>
             {children}
         </APIContext.Provider>
     )

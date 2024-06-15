@@ -4,7 +4,7 @@ import ButtonTabBar from '../components/ButtonTabBar';
 import { useAuth } from '../contexts/auth';
 import { blueDefault, orangeDefault, whiteDefault } from '../shared/styleConsts';
 import Main from './Main/Main';
-import Notifications from './SecondTab';
+import SecondTab from './SecondTab';
 
 const Tab = createBottomTabNavigator();
 export default function Pages() {
@@ -21,7 +21,7 @@ export default function Pages() {
         <Tab.Screen name="Main" component={Main} options={{
           tabBarIcon: ({ color, focused }) => <ButtonTabBar defaultColor={isProfessional ? blueDefault : orangeDefault} color={color} focused={focused} icon={"home"} />
         }} />
-        <Tab.Screen name="Notifications" component={Notifications} options={{
+        <Tab.Screen name="SecondTab" component={SecondTab} options={{
           tabBarIcon: ({ color, focused }) => <ButtonTabBar defaultColor={isProfessional ? blueDefault : orangeDefault} color={color} focused={focused} icon={isProfessional ? "bell" : "account"} />
         }} />
       </Tab.Navigator>

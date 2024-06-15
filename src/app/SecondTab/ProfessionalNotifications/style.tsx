@@ -1,10 +1,11 @@
 import { StyleSheet } from "react-native";
-import { greyLoadingDefault, whiteDefault } from "../../../../../../shared/styleConsts";
+import { whiteDefault, greyDefault, blackDefault, blueDefault, greyLoadingDefault } from "../../../shared/styleConsts";
 
 export default StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center'
+        justifyContent: 'center',
+        backgroundColor: blueDefault
     },
     contentContainer: {
         flex: 1,
@@ -16,7 +17,8 @@ export default StyleSheet.create({
         paddingBottom: 10,
         textAlign: 'center',
         fontSize: 32,
-        fontFamily: 'Rubik-SemiBold'
+        fontFamily: 'Rubik-SemiBold',
+        color: blueDefault
     },
     listContainer: {
         flex: 0.8

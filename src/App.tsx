@@ -4,6 +4,7 @@ import Routes from './routes';
 import { AuthProvider } from './contexts/auth';
 import { RegisterProvider } from './contexts/register';
 import { APIProvider } from './contexts/api';
+import FlashMessage from 'react-native-flash-message';
 
 export default function App() {
   return (
@@ -15,6 +16,7 @@ export default function App() {
           </APIProvider>
         </RegisterProvider>
       </AuthProvider>
+      <FlashMessage position={'top'}/>
     </NavigationContainer>
   );
 }

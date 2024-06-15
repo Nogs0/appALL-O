@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { blueDefault, greyDefault, whiteDefault } from "../../../../../../shared/styleConsts";
+import { blueDefault, greyDefault, greyLoadingDefault, whiteDefault } from "../../../../../../shared/styleConsts";
 
 export default StyleSheet.create({
     container: {
@@ -20,9 +20,17 @@ export default StyleSheet.create({
         justifyContent: 'center',
     },
     image: {
-        width: 150, 
+        width: 150,
         height: 150,
         borderRadius: 50,
+    },
+    loadingImage: {
+        width: 150,
+        height: 150,
+        borderRadius: 50,
+        backgroundColor: greyLoadingDefault,
+        position: 'absolute',
+        zIndex: 1
     },
     imageContainerFlatList: {
         // flexBasis: 0,
@@ -31,11 +39,11 @@ export default StyleSheet.create({
         // justifyContent: 'center',
     },
     imageFlatList: {
-        width: 130, 
+        width: 130,
         height: 130,
     },
     noImage: {
-        width: 150, 
+        width: 150,
         height: 150,
         backgroundColor: greyDefault,
         alignItems: 'center',
@@ -100,8 +108,10 @@ export default StyleSheet.create({
         justifyContent: 'center'
     },
     loadingUpdate: {
+        width: '100%',
+        height: '100%',
         position: 'absolute',
-        top: '50%',
-        zIndex: 10
+        zIndex: 1,
+        backgroundColor: greyLoadingDefault 
     }
 })

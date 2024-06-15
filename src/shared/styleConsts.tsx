@@ -6,6 +6,7 @@ export const orangeDefault3 = "#ffd5a9"
 export const orangeDefault4 = "#FD644F"; 
 export const redDefault = "#FF0000"
 export const greyDefault = "#d4d4d4";
+export const greyLoadingDefault = "#d4d4d499";
 export const greyDefault2 = "#d9d9d9";
 export const whiteDefault = "white";
 export const blackDefault = "black";

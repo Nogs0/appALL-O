@@ -2,17 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, FlatList, Image, KeyboardAvoidingView, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import HeaderProfessional from '../../../../../../components/HeaderProfessional';
 import { ProfessionalToEditDTO, useAPI } from '../../../../../../contexts/api';
-import { blackDefault, blueDefault, greyDefault, whiteDefault } from '../../../../../../shared/styleConsts';
+import { blackDefault, blueDefault, greyDefault, greyLoadingDefault, whiteDefault } from '../../../../../../shared/styleConsts';
 import style from './style';
 import InputCEP from '../../../../../../components/InputCEP';
 import getAddress from '../../../../../../services/cep';
 import { launchImageLibrary } from 'react-native-image-picker';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Input from '../../../../../../components/Input';
+import { showMessage } from 'react-native-flash-message';
 
 export default function ProfessinalEdit(props: any) {
 
-    const { getProfessionalToEdit, updateProfessional } = useAPI();
+    const { getProfessionalToEdit, updateProfessional, updateImage } = useAPI();
 
     const [params] = useState<any>(props.route.params);
     const [professional, setProfessional] = useState<ProfessionalToEditDTO | undefined>(undefined);
@@ -32,6 +33,7 @@ export default function ProfessinalEdit(props: any) {
 
     const [loadingCEP, setLoadingCEP] = useState<boolean>(false);
     const [loadingUpdate, setLoadingUpdate] = useState<boolean>(false);
+    const [loadingImage, setLoadingImage] = useState<boolean>(false);
 
     const [tab, setTab] = useState<number>(0);
 
@@ -39,7 +41,6 @@ export default function ProfessinalEdit(props: any) {
         getProfessionalToEdit(id)
             .then((resolve) => {
                 setProfessional(resolve)
-                console.log(resolve)
             })
             .catch((error) => {
                 throw new Error(error)
@@ -61,8 +62,21 @@ export default function ProfessinalEdit(props: any) {
     const changeImage = () => {
         launchImageLibrary({ mediaType: 'photo' }, (response) => {
             if (response.assets && response.assets.length > 0) {
-                console.log(response.assets[0])
-                setPerfilImage(response.assets[0])
+                setLoadingImage(true);
+                updateImage(response.assets[0])
+                    .then((newImage) => {
+                        setPerfilImage(newImage)
+                        showMessage({
+                            message: 'Imagem de perfil alterada!',
+                            type: 'success'
+                        })
+                    }).catch((e) => {
+                        showMessage({
+                            message: e,
+                            type: 'danger'
+                        })
+                    })
+                    .finally(() => setLoadingImage(false))
             }
         })
     }
@@ -85,6 +99,17 @@ export default function ProfessinalEdit(props: any) {
                 number
             }
         } as ProfessionalToEditDTO)
+            .then(() => {
+                showMessage({
+                    message: 'Informações atualizadas!',
+                    type: 'success'
+                })
+            }).catch((e) => {
+                showMessage({
+                    message: e,
+                    type: 'danger'
+                })
+            })
             .finally(() => setLoadingUpdate(false))
     }
 
@@ -144,12 +169,16 @@ export default function ProfessinalEdit(props: any) {
                 <ActivityIndicator size={70} color={whiteDefault}></ActivityIndicator>
                 :
                 <>
+                    {loadingUpdate ?
+                        <ActivityIndicator style={style.loadingUpdate} size={70} color={blueDefault} />
+                        :
+                        <></>
+                    }
                     <HeaderProfessional title={professional?.name}
                         navigation={props.navigation}
                         id={professional?.id}
                         defaultColor={blueDefault} />
                     <View style={style.contentContainer}>
-                        {loadingUpdate ? <ActivityIndicator style={style.loadingUpdate} size={70} color={blueDefault}></ActivityIndicator> : <></>}
                         <View style={style.tabsContainer}>
                             <TouchableOpacity disabled={loadingUpdate} style={[style.tab, { backgroundColor: tab == 0 ? blueDefault : whiteDefault }]}
                                 onPress={() => setTab(0)}>
@@ -171,22 +200,40 @@ export default function ProfessinalEdit(props: any) {
                         {tab == 0 ?
                             <KeyboardAvoidingView style={style.inputsContainerInformations}>
                                 <ScrollView>
-                                    <TouchableOpacity disabled={loadingUpdate} style={style.imageContainer}
-                                        onPress={() => Alert.alert("Atenção!", "Você realmente deseja alterar sua foto de perfil?", [
-                                            {
-                                                text: 'Cancelar',
-                                                onPress: () => console.log('Cancelou')
-                                            },
-                                            {
-                                                text: 'Sim',
-                                                onPress: () => changeImage()
-                                            }
-                                        ])}>
-                                        {
-                                            perfilImage ?
+                                    <TouchableOpacity disabled={loadingUpdate || loadingImage} style={style.imageContainer}
+                                        onPress={() => {
+                                            if (perfilImage)
+                                                Alert.alert("Atenção!", "Você realmente deseja alterar sua foto de perfil?", [
+                                                    {
+                                                        text: 'Cancelar',
+                                                        onPress: () => console.log('Cancelou')
+                                                    },
+                                                    {
+                                                        text: 'Sim',
+                                                        onPress: () => changeImage()
+                                                    }
+                                                ])
+                                            else changeImage();
+                                        }}>
+                                        {perfilImage ?
+                                            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                                                {loadingImage ?
+                                                    <ActivityIndicator style={style.loadingImage} size={35} color={blueDefault} />
+                                                    :
+                                                    <></>
+                                                }
                                                 <Image style={style.image} source={{ uri: perfilImage.uri }}></Image>
-                                                :
-                                                <View style={style.noImage}><Icon name={'camera'} size={50} color={blackDefault}></Icon></View>
+                                            </View>
+                                            :
+                                            <View style={style.noImage}>
+                                                <Icon name={'camera'} size={50} color={blackDefault}></Icon>
+                                                <Text style={{ color: blackDefault, fontFamily: 'Rubik-SemiBold' }}>Adicionar foto de perfil</Text>
+                                                {loadingImage ?
+                                                    <ActivityIndicator style={style.loadingImage} size={35} color={blueDefault} />
+                                                    :
+                                                    <></>
+                                                }
+                                            </View>
                                         }
                                     </TouchableOpacity>
                                     <View style={style.inputsContainer}>
