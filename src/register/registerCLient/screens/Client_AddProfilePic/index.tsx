@@ -1,40 +1,40 @@
 import React, { useState } from 'react';
 import { ActivityIndicator, FlatList, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useRegister } from '../../../../contexts/register';
+
 import { blackDefault, orangeDefault, greyDefault, redDefault, whiteDefault } from '../../../../shared/styleConsts';
 import styleRegister from '../../style';
 import style from './style';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { Image } from 'react-native';
 import HeaderRegisterClient from '../../../../components/HeaderRegisterClient';
+import { useRegisterClient } from '../../../../contexts/registerClient';
 
 export default function Register_Images({ navigation }: any) {
 
-  const { endingRegister, loading } = useRegister();
+  const { endingRegister, loading } = useRegisterClient();
   const [image, setImage] = useState<any>(require('../../../../assets/images/default-profile-pic.png'));
   const [incorrectInformations, setIncorrectInformations] = useState<boolean>(false);
 
   const handleButtonEnd = async () => {
+    console.log(image)
     if (canGoToTheNextPage()) {
       let response = await endingRegister();
       console.log(response);
       navigation.navigate('Register_OkEndRegister');
     }
     else setIncorrectInformations(true)
-  }
+  } 
 
   const canGoToTheNextPage = (): boolean => {
-    return (
-        1 > 0
-    )
+    return true;
   }
 
   const addImage = () => {
-    console.log(image)
+    
     launchImageLibrary({ mediaType: 'photo' }, (response) => {
-      if (response.assets && response.assets.length > 0)
-        setImage(response.assets[0]);
+      if (response.assets && response.assets.length > 0){
+        setImage(response.assets[0]);}
     })
   }
 

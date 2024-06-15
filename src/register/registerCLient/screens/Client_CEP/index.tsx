@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { ActivityIndicator, Alert, SafeAreaView, Text, TouchableOpacity, View } from 'react-native'
 import Input from '../../../../components/Input'
-import { useRegister } from '../../../../contexts/register'
 
 import InputCEP from '../../../../components/InputCEP'
 import getAddress from '../../../../services/cep'
@@ -9,17 +8,18 @@ import { blueDefault, redDefault } from '../../../../shared/styleConsts'
 import styleRegister from '../../style'
 import style from '../Client_CEP/style'
 import HeaderRegisterClient from '../../../../components/HeaderRegisterClient'
+import { useRegisterClient } from '../../../../contexts/registerClient'
 
 export default function Register_ServiceLocation({ navigation }: any) {
 
-  const { professional, setAddress } = useRegister();
+  const { client, setAddress } = useRegisterClient();
 
-  const [postalCode, setPostalCode] = useState<string>(!!professional ? professional.address?.postalCode : '');
-  const [city, setCity] = useState<string>(!!professional ? professional.address?.city : '');
-  const [state, setState] = useState<string>(!!professional ? professional.address?.state : '');
-  const [neighborhood, setNeighborhood] = useState<string>(!!professional ? professional.address?.neighborhood : '');
-  const [street, setStreet] = useState<string>(!!professional ? professional.address?.street : '');
-  const [number, setNumber] = useState<string>(!!professional ? professional.address?.number : '');
+  const [postalCode, setPostalCode] = useState<string>(!!client ? client.address?.postalCode : '');
+  const [city, setCity] = useState<string>(!!client ? client.address?.city : '');
+  const [state, setState] = useState<string>(!!client ? client.address?.state : '');
+  const [neighborhood, setNeighborhood] = useState<string>(!!client ? client.address?.neighborhood : '');
+  const [street, setStreet] = useState<string>(!!client ? client.address?.street : '');
+  const [number, setNumber] = useState<string>(!!client ? client.address?.number : '');
   const [incorrectInformations, setIncorrectInformations] = useState<boolean>(false);
   
   const [loadingCEP, setLoadingCEP] = useState<boolean>(false);

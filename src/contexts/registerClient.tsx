@@ -11,11 +11,13 @@ interface Address {
 }
 
 interface InitialInformations {
+    name: string,
     email: string,
     password: string,
 }
 
 interface ClientCreateDto {
+    name: string,
     document: string,
     email: string,
     password: string,
@@ -37,10 +39,11 @@ interface RegisterContextData {
 
 const RegisterContext = createContext<RegisterContextData>({} as RegisterContextData)
 
-function RegisterProvider({ children }: any) {
+function RegisterClient({ children }: any) {
     const { endRegister } = useAuth();
 
     const [client, setClient] = useState<ClientCreateDto | null>({
+        name: '',
         document: '',
         email: '',
         password: '',
@@ -61,6 +64,7 @@ function RegisterProvider({ children }: any) {
         setClient((prev) => {
             if (!prev)
                 prev = {} as ClientCreateDto;
+            prev.name = params.name;
             prev.email = params.email;
             prev.password = params.password
             return prev;
@@ -102,6 +106,7 @@ function RegisterProvider({ children }: any) {
 
     function clearClient(): void {
         setClient({
+            name: '',
             document: '',
             email: '',
             password: '',
@@ -137,4 +142,4 @@ function useRegisterClient() {
 }
 
 
-export { RegisterProvider, useRegisterClient };
+export { RegisterClient, useRegisterClient };

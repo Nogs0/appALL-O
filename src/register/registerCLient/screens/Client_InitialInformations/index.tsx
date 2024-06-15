@@ -12,7 +12,7 @@ export default function Register_InitialInformations({ navigation }: any) {
   const { client, setInitialInformations, clearClient } = useRegisterClient();
 
   console.log("Context:", { client, setInitialInformations, clearClient });
-
+  const [name, setName] = useState<string>(client ? client.email : '');
   const [email, setEmail] = useState<string>(client ? client.email : '');
   const [password, setPassword] = useState<string>(client ? client.password : '');
   const [incorrectInformations, setIncorrectInformations] = useState<boolean>(false);
@@ -20,7 +20,7 @@ export default function Register_InitialInformations({ navigation }: any) {
   const handleButtonNext = () => {
 
 
-    setInitialInformations({ email, password });
+    setInitialInformations({ name, email, password });
 
     if (canGoToTheNextStep()) {
       navigation.navigate('Register_CEP');
@@ -47,6 +47,7 @@ export default function Register_InitialInformations({ navigation }: any) {
         <Text style={styleRegister.text}>Preencha os campos para criar a sua conta...</Text>
         <View style={styleRegister.inputsContainer}>
           <Input onFocus={() => setIncorrectInformations(false)} placeholder='Email' text={email} onChangeText={setEmail} />
+          <Input onFocus={() => setIncorrectInformations(false)} placeholder='Nome' text={name} onChangeText={setName} />
           <InputPassword onFocus={() => setIncorrectInformations(false)} text={password} onChangeText={setPassword} />
         </View>
         {
