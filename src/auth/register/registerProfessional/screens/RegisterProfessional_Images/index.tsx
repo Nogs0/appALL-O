@@ -8,7 +8,7 @@ import HeaderRegisterProfessional from '../../../../../components/HeaderRegister
 import { useRegisterProfessional } from '../../../../../contexts/registerProfessional';
 import { blueDefault, whiteDefault, blackDefault, greyDefault, redDefault } from '../../../../../shared/styleConsts';
 
-export default function Register_Images({ navigation }: any) {
+export default function RegisterProfessional_Images({ navigation }: any) {
 
   const { endingRegister, loading, setImages } = useRegisterProfessional();
   const [imagesTela, setImagesTela] = useState<any[]>([]);
@@ -19,7 +19,7 @@ export default function Register_Images({ navigation }: any) {
       setImages(imagesTela)
       let response = await endingRegister();
       console.log(response);
-      navigation.navigate('Register_OkEndRegister');
+      navigation.navigate('RegisterProfessional_OkEndRegister');
     }
     else setIncorrectInformations(true)
   }

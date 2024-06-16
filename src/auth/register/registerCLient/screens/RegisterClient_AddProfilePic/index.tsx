@@ -10,7 +10,7 @@ import { blackDefault, orangeDefault, redDefault, whiteDefault } from '../../../
 import styleRegister from '../../style';
 import style from './style';
 
-export default function Register_Images({ navigation }: any) {
+export default function RegisterProfessional_Images({ navigation }: any) {
 
   const { endingRegister, loading } = useRegisterClient();
   const [image, setImage] = useState<any>(require('../../../../../assets/images/default-profile-pic.png'));
@@ -18,23 +18,18 @@ export default function Register_Images({ navigation }: any) {
 
   const handleButtonEnd = async () => {
     console.log(image)
-    if (canGoToTheNextPage()) {
-      let response = await endingRegister();
-      console.log(response);
-      navigation.navigate('Register_OkEndRegister');
-    }
-    else setIncorrectInformations(true)
-  } 
 
-  const canGoToTheNextPage = (): boolean => {
-    return true;
+    let response = await endingRegister();
+    console.log(response);
+    navigation.navigate('RegisterClient_OkEndRegister');
   }
 
   const addImage = () => {
-    
+
     launchImageLibrary({ mediaType: 'photo' }, (response) => {
-      if (response.assets && response.assets.length > 0){
-        setImage(response.assets[0]);}
+      if (response.assets && response.assets.length > 0) {
+        setImage(response.assets[0]);
+      }
     })
   }
 
@@ -55,7 +50,6 @@ export default function Register_Images({ navigation }: any) {
           </Text>
           <TouchableOpacity style={style.buttonAddImage} onPress={() => addImage()}>
             <Text style={style.textButtonAddImage}>Adicionar Imagem</Text>
-         
           </TouchableOpacity>
           <Image source={image} style={style.profilePicture}></Image>
           {

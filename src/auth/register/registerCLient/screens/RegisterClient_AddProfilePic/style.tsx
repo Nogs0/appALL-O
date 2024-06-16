@@ -5,7 +5,7 @@ export default StyleSheet.create({
     buttonAddImage: {
         backgroundColor: orangeDefault,
         padding: 10,
-        marginVertical: 10,
+        marginVertical: '10%',
         borderRadius: 5
     },
     textButtonAddImage: {
@@ -21,8 +21,8 @@ export default StyleSheet.create({
         width: '100%'
     },
     profilePicture:{
-        width: 70,
-        height: 70,
+        width: 80,
+        height: 80,
         borderRadius: 50
     }
 })

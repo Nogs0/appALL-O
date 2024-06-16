@@ -7,6 +7,7 @@ import { blackDefault } from '../../shared/styleConsts'
 interface OkProps {
     title: string,
     text: string,
+    buttonColor: string,
     callbackOk(): void
 }
 
@@ -18,7 +19,7 @@ export default function Ok(props: OkProps) {
             <Text style={style.text}>{props.title}</Text>
             <Text style={style.text}>{props.text}</Text>
 
-            <TouchableOpacity style={style.buttonOk} onPress={props.callbackOk}>
+            <TouchableOpacity style={[style.buttonOk, {backgroundColor: props.buttonColor}]} onPress={props.callbackOk}>
                 <Text style={style.textButtonOk}>OK!</Text>
             </TouchableOpacity>
         </View>

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { ActivityIndicator, Alert, SafeAreaView, Text, TouchableOpacity, View } from 'react-native'
 
 import styleRegister from '../../style'
-import style from '../Client_CEP/style'
+import style from './style'
 import HeaderRegisterClient from '../../../../../components/HeaderRegisterClient';
 import Input from '../../../../../components/Input';
 import InputCEP from '../../../../../components/InputCEP';
@@ -10,7 +10,7 @@ import { useRegisterClient } from '../../../../../contexts/registerClient';
 import getAddress from '../../../../../services/cep';
 import { blueDefault, redDefault } from '../../../../../shared/styleConsts';
 
-export default function Register_ServiceLocation({ navigation }: any) {
+export default function RegisterProfessional_ServiceLocation({ navigation }: any) {
 
   const { client, setAddress } = useRegisterClient();
 
@@ -33,7 +33,7 @@ export default function Register_ServiceLocation({ navigation }: any) {
       number,
     });
     if (canGoToTheNextStep())
-      navigation.navigate('Register_AddProfilePic');
+      navigation.navigate('RegisterClient_AddProfilePic');
     else setIncorrectInformations(true)
   }
 
@@ -68,7 +68,7 @@ export default function Register_ServiceLocation({ navigation }: any) {
       <View style={styleRegister.defaultContentContainer}>
         <Text style={styleRegister.title}>Informe sua cidade</Text>
         <View style={styleRegister.inputsContainer}>
-          <InputCEP onFocus={() => setIncorrectInformations(false)} type='client' searchCEP={searchCEP} cep={postalCode} onChangeText={setPostalCode} />
+          <InputCEP onFocus={() => setIncorrectInformations(false)} isClient searchCEP={searchCEP} cep={postalCode} onChangeText={setPostalCode} />
           <Input onFocus={() => setIncorrectInformations(false)} editable={!loadingCEP} placeholder='Estado' text={state} onChangeText={setState} />
           <Input onFocus={() => setIncorrectInformations(false)} editable={!loadingCEP} placeholder='Cidade' text={city} onChangeText={setCity} />
         </View>

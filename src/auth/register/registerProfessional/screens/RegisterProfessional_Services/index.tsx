@@ -11,7 +11,7 @@ import { greyDefault, blackDefault, whiteDefault, redDefault } from '../../../..
 import { showMessage } from 'react-native-flash-message';
 import Ok from '../../../../../components/Ok';
 
-export default function Register_Services({ navigation }: any) {
+export default function RegisterProfessional_Services({ navigation }: any) {
 
   const { setServices } = useRegisterProfessional();
   const [servico, setServico] = useState<string>('');
@@ -47,7 +47,7 @@ export default function Register_Services({ navigation }: any) {
   const handleButtonNext = () => {
     setServices(listServicos);
     if (canGoToTheNextPage())
-      navigation.navigate('Register_Description');
+      navigation.navigate('RegisterProfessional_Description');
     else setIncorrectInformations(true)
   }
 
@@ -174,15 +174,9 @@ export default function Register_Services({ navigation }: any) {
           onPress={() => handleButtonNext()}>
           <Text style={styleRegister.textButtonNext}>Prosseguir</Text>
         </TouchableOpacity>
-      </View>
-      <View style={style.createProfessionContainer}>
-        <Icon name={'emoticon-sad-outline'} size={50} color={blackDefault}></Icon>
-        <Text style={styleRegister.title}>Não encontrei minha profissão!</Text>
-        <TouchableOpacity style={style.buttonCreateProfession} onPress={() => console.log('criando profissão!')}>
-          <Text style={style.textButtonCreateProfession}>Criar!</Text>
+        <TouchableOpacity style={style.buttonCreateProfession} onPress={() => navigation.navigate('RegisterProfessional_CreatingProfession')}>
+          <Text style={style.textButtonCreateProfession}>Não encontrou sua profissão? Clique aqui!</Text>
         </TouchableOpacity>
-        {/* 
-        <Ok title='Obrigado pela dica!' text='Nossa equipe irá analisar sua sugestão e se necessário vamos criar esta nova categoria! Em até 7 dias sua conta estará pronta para você!' callbackOk={() => console.log('aaaaaaa')}></Ok> */}
       </View>
     </SafeAreaView >
   )

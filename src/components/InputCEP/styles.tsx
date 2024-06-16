@@ -22,11 +22,6 @@ export default StyleSheet.create({
         marginLeft: '5%',
     },
     buttonSearch: {
-        backgroundColor: blueDefault,
         borderRadius: 50
     },
-    buttonSearchClient: {
-        backgroundColor: orangeDefault,
-        borderRadius: 50
-    }
 })

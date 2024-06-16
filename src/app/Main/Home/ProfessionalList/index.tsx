@@ -9,7 +9,6 @@ import { useNavigation } from '@react-navigation/native';
 
 export default function ProfessionalList(props: any) {
   const [params, setParams] = useState<any>(props.route.params)
-  console.log(props)
   const navigation = useNavigation();
   const DATA: CardProps[] = [
     {

@@ -1,38 +1,33 @@
+import { View, Text, SafeAreaView, TextInput, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
-import { Alert, SafeAreaView, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import HeaderRegisterProfessional from '../../../../../components/HeaderRegisterProfessional'
+import { greyDefault, redDefault } from '../../../../../shared/styleConsts'
 import style from './style'
 import styleRegister from '../../style';
-import { useRegisterProfessional } from '../../../../../contexts/registerProfessional';
-import HeaderRegisterProfessional from '../../../../../components/HeaderRegisterProfessional';
-import { greyDefault, redDefault } from '../../../../../shared/styleConsts';
 
-export default function Register_Description({ navigation }: any) {
-  const { professional, setDescription } = useRegisterProfessional();
-
-  const [desc, setDesc] = useState<string>(!!professional ? professional?.description : '');
+export default function RegisterProfessional_CreatingProfession({ navigation }: any) {
+  const [desc, setDesc] = useState<string>('');
   const [incorrectInformations, setIncorrectInformations] = useState<boolean>(false);
-  const handleButtonNext = () => {
-    setDescription(desc);
 
+  const handleButtonNext = () => {
     if (canGoToTheNextStep())
-      navigation.navigate('Register_ServiceLocation');
+      navigation.navigate('RegisterProfessional_OkProfession')
     else setIncorrectInformations(true)
   }
 
   const canGoToTheNextStep = (): boolean => {
-    console.log(desc)
     return (
       desc.length > 0
     )
   }
-
+  
   return (
     <SafeAreaView style={styleRegister.defaultContainer}>
       <HeaderRegisterProfessional navigation={navigation} />
       <View style={styleRegister.defaultContentContainer}>
-        <Text style={styleRegister.title}>Fale um pouco sobre seu modo de trabalho...</Text>
+        <Text style={styleRegister.title}>Fale um pouco sobre sua profissão...</Text>
 
-        <TextInput placeholder={'Sou um profissional pontual e que gosta de que tudo esteja bem feito!'}
+        <TextInput placeholder={'Domador de leões...'}
           onFocus={() => setIncorrectInformations(false)}
           style={style.textArea}
           value={desc}
@@ -43,7 +38,7 @@ export default function Register_Description({ navigation }: any) {
           textAlignVertical='top' />
         {
           incorrectInformations ?
-            <Text style={{ color: redDefault, width: '100%', textAlign: 'left' }}>*Por favor, coloque alguma descrição sobre seu trabalho!</Text>
+            <Text style={{ color: redDefault, width: '100%', textAlign: 'left' }}>*Por favor, coloque alguma descrição sobre sua profissão!</Text>
             : <></>
         }
         <TouchableOpacity style={styleRegister.buttonNext} onPress={() => handleButtonNext()}>

@@ -9,6 +9,7 @@ interface InitialInformations {
 }
 
 interface ProfessionalCreateDto {
+    name: string,
     document: string,
     email: string,
     password: string,
@@ -39,6 +40,7 @@ function RegisterProfessionalProvider({ children }: any) {
     const { endRegister } = useAuth();
 
     const [professional, setProfessional] = useState<ProfessionalCreateDto | null>({
+        name: '',
         document: '',
         email: '',
         password: '',
@@ -132,6 +134,7 @@ function RegisterProfessionalProvider({ children }: any) {
 
     function clearProfessional(): void {
         setProfessional({
+            name: '',
             document: '',
             email: '',
             password: '',

@@ -5,7 +5,7 @@ import styleRegister from '../../style';
 import HeaderRegisterProfessional from '../../../../../components/HeaderRegisterProfessional';
 import Input from '../../../../../components/Input';
 
-export default function Register_Contact({ navigation }: any) {
+export default function RegisterProfessional_Contact({ navigation }: any) {
 
   const { professional, setContacts } = useRegisterProfessional();
   const [phoneNumber, setPhoneNumber] = useState<string>(!!professional ? professional.phoneNumber : '');
@@ -14,7 +14,7 @@ export default function Register_Contact({ navigation }: any) {
     setContacts(phoneNumber);
 
     if (canGoToTheNextStep())
-      navigation.navigate('Register_Images');
+      navigation.navigate('RegisterProfessional_Images');
     else Alert.alert("Erro", "Preencha os campos corretamente!")
   }
 
@@ -32,7 +32,7 @@ export default function Register_Contact({ navigation }: any) {
       <View style={styleRegister.defaultContentContainer}>
         <Text style={styleRegister.title}>Como o cliente pode entrar em contato?</Text>
         <View style={styleRegister.inputsContainer}>
-          <Input isMask mask={maskPhone} placeholder='Celular' text={phoneNumber} onChangeText={setPhoneNumber} />
+          <Input keyboardType='number-pad' isMask mask={maskPhone} placeholder='Celular' text={phoneNumber} onChangeText={setPhoneNumber} />
         </View>
         <TouchableOpacity style={styleRegister.buttonNext} onPress={() => handleButtonNext()}>
           <Text style={styleRegister.textButtonNext}>Prosseguir</Text>

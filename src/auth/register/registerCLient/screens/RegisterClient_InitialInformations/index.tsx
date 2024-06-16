@@ -8,7 +8,7 @@ import { regexEMAIL } from '../../../../../shared/helpers';
 import { redDefault } from '../../../../../shared/styleConsts';
 import styleRegister from '../../style';
 
-export default function Register_InitialInformations({ navigation }: any) {
+export default function RegisterProfessional_InitialInformations({ navigation }: any) {
   const { client, setInitialInformations, clearClient } = useRegisterClient();
 
   console.log("Context:", { client, setInitialInformations, clearClient });
@@ -23,7 +23,7 @@ export default function Register_InitialInformations({ navigation }: any) {
     setInitialInformations({ name, email, password });
 
     if (canGoToTheNextStep()) {
-      navigation.navigate('Register_CEP');
+      navigation.navigate('RegisterClient_CEP');
     } else {
       setIncorrectInformations(true);
     }
@@ -46,8 +46,8 @@ export default function Register_InitialInformations({ navigation }: any) {
         <Text style={styleRegister.title}>Seja bem-vindo!</Text>
         <Text style={styleRegister.text}>Preencha os campos para criar a sua conta...</Text>
         <View style={styleRegister.inputsContainer}>
-          <Input onFocus={() => setIncorrectInformations(false)} placeholder='Email' text={email} onChangeText={setEmail} />
           <Input onFocus={() => setIncorrectInformations(false)} placeholder='Nome' text={name} onChangeText={setName} />
+          <Input keyboardType='email-address' onFocus={() => setIncorrectInformations(false)} placeholder='Email' text={email} onChangeText={setEmail} />
           <InputPassword onFocus={() => setIncorrectInformations(false)} text={password} onChangeText={setPassword} />
         </View>
         {

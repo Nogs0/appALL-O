@@ -49,7 +49,6 @@ export default function ProfessinalEdit(props: any) {
 
     const searchCEP = () => {
         setLoadingCEP(true);
-        console.log(postalCode)
         getAddress(postalCode).then((result) => {
             setCity(result.localidade);
             setState(result.uf);
@@ -247,8 +246,13 @@ export default function ProfessinalEdit(props: any) {
                         }
                         {tab == 1 ?
                             <KeyboardAvoidingView style={style.inputsContainerAddress}>
+                                {
+                                    loadingCEP ?
+                                        <ActivityIndicator style={style.loadingCEP} size={70} color={blueDefault} />
+                                        : <></>
+                                }
                                 <ScrollView>
-                                    <InputCEP onFocus={() => console.log('a')} searchCEP={searchCEP} cep={postalCode} onChangeText={setPostalCode} />
+                                    <InputCEP searchCEP={searchCEP} cep={postalCode} onChangeText={setPostalCode} />
                                     <Input editable={!loadingCEP && !loadingUpdate} placeholder='Estado' text={state} onChangeText={setState} />
                                     <Input editable={!loadingCEP && !loadingUpdate} placeholder='Cidade' text={city} onChangeText={setCity} />
                                     <Input editable={!loadingCEP && !loadingUpdate} placeholder='Bairro' text={neighborhood} onChangeText={setNeighborhood} />

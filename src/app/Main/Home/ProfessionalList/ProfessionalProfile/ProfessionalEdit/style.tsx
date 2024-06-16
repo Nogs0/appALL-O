@@ -113,5 +113,11 @@ export default StyleSheet.create({
         position: 'absolute',
         zIndex: 1,
         backgroundColor: greyLoadingDefault 
-    }
+    },
+    loadingCEP: {
+        position: 'absolute',
+        zIndex: 10,
+        top: '30%',
+        left: '40%'
+    },
 })

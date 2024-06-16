@@ -9,7 +9,7 @@ import Input from '../../../../../components/Input';
 import InputCEP from '../../../../../components/InputCEP';
 import { blueDefault, redDefault } from '../../../../../shared/styleConsts';
 
-export default function Register_ServiceLocation({ navigation }: any) {
+export default function RegisterProfessional_ServiceLocation({ navigation }: any) {
 
   const { professional, setAddress } = useRegisterProfessional();
 
@@ -32,7 +32,7 @@ export default function Register_ServiceLocation({ navigation }: any) {
       number,
     });
     if (canGoToTheNextStep())
-      navigation.navigate('Register_Contact');
+      navigation.navigate('RegisterProfessional_Contact');
     else setIncorrectInformations(true)
   }
 

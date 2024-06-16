@@ -76,7 +76,7 @@ export default function ProfessionalReviews(props: any) {
 
     return (
         <SafeAreaView style={[style.container, { backgroundColor: params?.defaultColor }]}>
-            {!loading && reviews ? (
+            {!loading && reviews? (
                 <>
                     <HeaderProfessional title={'Reviews'} navigation={props?.navigation}
                         defaultColor={params?.defaultColor} />
