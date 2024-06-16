@@ -104,7 +104,7 @@ export default StyleSheet.create({
     },
     tab: {
         borderRadius: 50,
-        paddingHorizontal: 20,
+        paddingHorizontal: '5%',
         justifyContent: 'center'
     },
     loadingUpdate: {

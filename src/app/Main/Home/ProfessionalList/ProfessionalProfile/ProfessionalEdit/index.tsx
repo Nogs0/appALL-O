@@ -11,12 +11,13 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Input from '../../../../../../components/Input';
 import { showMessage } from 'react-native-flash-message';
 
-export default function ProfessinalEdit(props: any) {
+export default function ProfessionalEdit(props: any) {
 
     const { getProfessionalToEdit, updateProfessional, updateImage } = useAPI();
 
     const [params] = useState<any>(props.route.params);
     const [professional, setProfessional] = useState<ProfessionalToEditDTO | undefined>(undefined);
+
     const [name, setName] = useState<string>(professional ? professional.name : '');
     const [email, setEmail] = useState<string>(professional ? professional.email : '');
     const [document, setDocument] = useState<string>(professional ? professional.document : '');

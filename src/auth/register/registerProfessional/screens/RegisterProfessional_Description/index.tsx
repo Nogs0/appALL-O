@@ -20,7 +20,6 @@ export default function RegisterProfessional_Description({ navigation }: any) {
   }
 
   const canGoToTheNextStep = (): boolean => {
-    console.log(desc)
     return (
       desc.length > 0
     )
