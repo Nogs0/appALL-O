@@ -8,6 +8,7 @@ import HeaderRegisterProfessional from '../../../../../components/HeaderRegister
 import Input from '../../../../../components/Input';
 import InputCEP from '../../../../../components/InputCEP';
 import { blueDefault, redDefault } from '../../../../../shared/styleConsts';
+import { showMessage } from 'react-native-flash-message';
 
 export default function RegisterProfessional_ServiceLocation({ navigation }: any) {
 
@@ -55,8 +56,11 @@ export default function RegisterProfessional_ServiceLocation({ navigation }: any
       setState(result.uf);
       setNeighborhood(result.bairro);
       setStreet(result.logradouro);
-    }).catch(() => Alert.alert("Erro", "CEP Inválido!"))
-      .finally(() => setLoadingCEP(false));
+    }).catch(() => showMessage({
+      message: 'CEP inválido!',
+      type: 'danger'
+    }))
+    .finally(() => setLoadingCEP(false));
   }
 
   return (
