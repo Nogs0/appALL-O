@@ -2,12 +2,12 @@ import React, { useState } from 'react'
 import { Alert, SafeAreaView, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import style from './style'
 import styleRegister from '../../style';
-import { useRegister } from '../../../../../contexts/register';
+import { useRegisterProfessional } from '../../../../../contexts/registerProfessional';
 import HeaderRegisterProfessional from '../../../../../components/HeaderRegisterProfessional';
 import { greyDefault, redDefault } from '../../../../../shared/styleConsts';
 
 export default function Register_Description({ navigation }: any) {
-  const { professional, setDescription } = useRegister();
+  const { professional, setDescription } = useRegisterProfessional();
 
   const [desc, setDesc] = useState<string>(!!professional ? professional?.description : '');
   const [incorrectInformations, setIncorrectInformations] = useState<boolean>(false);

@@ -5,12 +5,12 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import styleRegister from '../../style';
 import style from './style';
 import HeaderRegisterProfessional from '../../../../../components/HeaderRegisterProfessional';
-import { useRegister } from '../../../../../contexts/register';
+import { useRegisterProfessional } from '../../../../../contexts/registerProfessional';
 import { blueDefault, whiteDefault, blackDefault, greyDefault, redDefault } from '../../../../../shared/styleConsts';
 
 export default function Register_Images({ navigation }: any) {
 
-  const { endingRegister, loading, setImages } = useRegister();
+  const { endingRegister, loading, setImages } = useRegisterProfessional();
   const [imagesTela, setImagesTela] = useState<any[]>([]);
   const [incorrectInformations, setIncorrectInformations] = useState<boolean>(false);
 

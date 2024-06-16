@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { Alert, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
-import { useRegister } from '../../../../../contexts/register';
+import { useRegisterProfessional } from '../../../../../contexts/registerProfessional';
 import styleRegister from '../../style';
 import HeaderRegisterProfessional from '../../../../../components/HeaderRegisterProfessional';
 import Input from '../../../../../components/Input';
 
 export default function Register_Contact({ navigation }: any) {
 
-  const { professional, setContacts } = useRegister();
+  const { professional, setContacts } = useRegisterProfessional();
   const [phoneNumber, setPhoneNumber] = useState<string>(!!professional ? professional.phoneNumber : '');
 
   const handleButtonNext = () => {

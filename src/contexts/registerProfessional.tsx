@@ -19,7 +19,7 @@ interface ProfessionalCreateDto {
     images: any
 }
 
-interface RegisterContextData {
+interface RegisterProfessionalContextData {
     professional: ProfessionalCreateDto | null,
     loading: boolean,
     setInitialInformations(params: InitialInformations): void,
@@ -32,9 +32,9 @@ interface RegisterContextData {
     clearProfessional(): void
 }
 
-const RegisterContext = createContext<RegisterContextData>({} as RegisterContextData)
+const RegisterProfessionalContext = createContext<RegisterProfessionalContextData>({} as RegisterProfessionalContextData)
 
-function RegisterProvider({ children }: any) {
+function RegisterProfessionalProvider({ children }: any) {
 
     const { endRegister } = useAuth();
 
@@ -152,20 +152,20 @@ function RegisterProvider({ children }: any) {
     }
 
     return (
-        <RegisterContext.Provider
+        <RegisterProfessionalContext.Provider
             value={{ professional, setInitialInformations, setDescription, setServices, setAddress, setContacts, setImages, endingRegister, loading, clearProfessional }}>
             {children}
-        </RegisterContext.Provider>
+        </RegisterProfessionalContext.Provider>
     )
 }
 
-function useRegister() {
-    const context = useContext(RegisterContext);
+function useRegisterProfessional() {
+    const context = useContext(RegisterProfessionalContext);
 
     if (!context)
-        throw new Error('useRegister must be used with in RegisterProvider.');
+        throw new Error('useRegisterProfessional must be used with in RegisterProfessionalProvider.');
 
     return context;
 }
 
-export { RegisterProvider, useRegister };
+export { RegisterProfessionalProvider, useRegisterProfessional };
