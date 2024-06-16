@@ -2,9 +2,12 @@ import React, { createContext, useContext } from 'react';
 import api from '../services/api';
 
 export interface ClientDTO {
+    id: number,
     name: string,
     email: string,
-    password: string
+    password: string,
+    address: Address,
+    perfilImage: any
 }
 
 export interface ProfessionalToEditDTO {
@@ -27,9 +30,10 @@ export interface Address {
 }
 
 interface APIContextData {
-    getClient(id: number): Promise<ClientDTO>,
+    getClientToEdit(id: number): Promise<ClientDTO>,
     getProfessionalToEdit(id: number): Promise<ProfessionalToEditDTO>,
     updateProfessional(dto: ProfessionalToEditDTO): Promise<void>,
+    updateClient(dto: ClientDTO): Promise<void>,
     updateImage(image: any): Promise<any>,
     updateFavoriteReview(id: number): Promise<boolean>,
     getReviewsByProfessional(id: number): Promise<any>,
@@ -40,14 +44,23 @@ const APIContext = createContext<APIContextData>({} as APIContextData);
 
 function APIProvider({ children }: any) {
 
-    const getClient = (id: number): Promise<ClientDTO> => {
+    const getClientToEdit = (id: number): Promise<ClientDTO> => {
         return new Promise<ClientDTO>((resolve, reject) => {
             try {
                 setTimeout(() => {
                     resolve({
-                        name: 'João',
-                        email: 'joaoguinogueira04@gmail.com',
-                        password: 'ejw-9fí2e2n'
+                        id: 1,
+                        name: 'Matheus',
+                        email: 'matheus_jonnas@proton.me',
+                        password: 'ejw-9fí2e2n',
+                        address: {
+                            postalCode: '37730000',
+                            state: 'MG',
+                            city: 'Campestre',
+                            neighborhood: 'Campo das Antas',
+                            street: 'Avenida Sinesio do Lago',
+                            number: '543'
+                        },
                     } as ClientDTO)
                 }, 1000)
             }
@@ -88,6 +101,19 @@ function APIProvider({ children }: any) {
     }
 
     const updateProfessional = (dto: ProfessionalToEditDTO): Promise<void> => {
+        return new Promise<void>((resolve, reject) => {
+            try {
+                setTimeout(() => {
+                    resolve()
+                }, 2000);
+            }
+            catch (e) {
+                reject(e);
+            }
+        })
+    }
+
+    const updateClient = (dto: ClientDTO) : Promise<void> => {
         return new Promise<void>((resolve, reject) => {
             try {
                 setTimeout(() => {
@@ -246,7 +272,7 @@ function APIProvider({ children }: any) {
 
     return (
         <APIContext.Provider
-            value={{ getClient, getProfessionalToEdit, updateProfessional, updateImage, updateFavoriteReview, getReviewsByProfessional, updateSeenNotification }}>
+            value={{ getClientToEdit, getProfessionalToEdit, updateProfessional, updateImage, updateFavoriteReview, getReviewsByProfessional, updateSeenNotification, updateClient }}>
             {children}
         </APIContext.Provider>
     )
