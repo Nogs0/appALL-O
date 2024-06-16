@@ -2,14 +2,14 @@ import React from 'react';
 import { SafeAreaView } from 'react-native';
 import HeaderRegisterProfessional from '../../../../../components/HeaderRegisterProfessional';
 import { useAuth } from '../../../../../contexts/auth';
-import { useRegister } from '../../../../../contexts/register';
+import { useRegisterProfessional } from '../../../../../contexts/registerProfessional';
 import styleRegister from '../../style';
 import Ok from '../../../../../components/Ok';
 
 export default function Register_OkEndRegister({ navigation }: any) {
 
   const { endRegister } = useAuth();
-  const { clearProfessional } = useRegister();
+  const { clearProfessional } = useRegisterProfessional();
   const handleButtonOk = () => {
     clearProfessional();
     endRegister();

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { ActivityIndicator, Alert, KeyboardAvoidingView, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from 'react-native'
 import styleRegister from '../../style'
 import style from './style'
-import { useRegister } from '../../../../../contexts/register';
+import { useRegisterProfessional } from '../../../../../contexts/registerProfessional';
 import getAddress from '../../../../../services/cep';
 import HeaderRegisterProfessional from '../../../../../components/HeaderRegisterProfessional';
 import Input from '../../../../../components/Input';
@@ -11,7 +11,7 @@ import { blueDefault, redDefault } from '../../../../../shared/styleConsts';
 
 export default function Register_ServiceLocation({ navigation }: any) {
 
-  const { professional, setAddress } = useRegister();
+  const { professional, setAddress } = useRegisterProfessional();
 
   const [postalCode, setPostalCode] = useState<string>(!!professional ? professional.address?.postalCode : '');
   const [city, setCity] = useState<string>(!!professional ? professional.address?.city : '');

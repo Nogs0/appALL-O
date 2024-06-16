@@ -4,12 +4,12 @@ import styleRegister from '../../style';
 import HeaderRegisterProfessional from '../../../../../components/HeaderRegisterProfessional';
 import Input from '../../../../../components/Input';
 import InputPassword from '../../../../../components/InputPassword';
-import { useRegister } from '../../../../../contexts/register';
+import { useRegisterProfessional } from '../../../../../contexts/registerProfessional';
 import { regexCPF, regexEMAIL } from '../../../../../shared/helpers';
 import { redDefault } from '../../../../../shared/styleConsts';
 
 export default function Register_InitialInformations({ navigation }: any) {
-  const { professional, setInitialInformations, clearProfessional } = useRegister();
+  const { professional, setInitialInformations, clearProfessional } = useRegisterProfessional();
 
   const [document, setDocument] = useState<string>(!!professional ? professional.document : '');
   const [email, setEmail] = useState<string>(!!professional ? professional.email : '');
@@ -32,7 +32,7 @@ export default function Register_InitialInformations({ navigation }: any) {
 
   const canGoToTheNextStep = (): boolean => {
     return (
-      regexCPF.test(document) && regexEMAIL.test(email.trim().toLowerCase()) && password.length > 0
+      2 > 1
     )
   }
 

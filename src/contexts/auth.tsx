@@ -3,7 +3,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import api from '../services/api';
 import * as auth from '../services/auth';
 import { blueDefault, orangeDefault } from "../shared/styleConsts";
-import { useRegister } from "./register";
+import { useRegisterProfessional } from "./registerProfessional";
 import { SignInInput } from "../services/auth";
 interface User {
     id: number, 

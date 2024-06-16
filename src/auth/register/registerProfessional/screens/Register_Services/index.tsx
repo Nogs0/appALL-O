@@ -6,14 +6,14 @@ import style from './style'
 import styleRegister from '../../style';
 import HeaderRegisterProfessional from '../../../../../components/HeaderRegisterProfessional';
 import Input from '../../../../../components/Input';
-import { useRegister } from '../../../../../contexts/register';
+import { useRegisterProfessional } from '../../../../../contexts/registerProfessional';
 import { greyDefault, blackDefault, whiteDefault, redDefault } from '../../../../../shared/styleConsts';
 import { showMessage } from 'react-native-flash-message';
 import Ok from '../../../../../components/Ok';
 
 export default function Register_Services({ navigation }: any) {
 
-  const { setServices } = useRegister();
+  const { setServices } = useRegisterProfessional();
   const [servico, setServico] = useState<string>('');
   const [searchingServico, setSearchingServico] = useState<boolean>(false);
   const [listServicos, setListServicos] = useState<number[]>([]);
