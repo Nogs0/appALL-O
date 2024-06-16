@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { showMessage } from 'react-native-flash-message';
 import { ClientDTO, useAPI } from '../../../contexts/api';
 import getAddress from '../../../services/cep';
-import { blackDefault,  orangeDefault,  whiteDefault } from '../../../shared/styleConsts';
+import { blackDefault, orangeDefault, whiteDefault } from '../../../shared/styleConsts';
 import HeaderClient from '../../../components/HeaderClient/indext';
 import Input from '../../../components/Input';
 import InputCEP from '../../../components/InputCEP';
@@ -22,7 +22,7 @@ export default function ClientProfile(props: any) {
     const [name, setName] = useState<string>(client ? client.name : '');
     const [email, setEmail] = useState<string>(client ? client.email : '');
     const [perfilImage, setPerfilImage] = useState<any>(client?.perfilImage);
-    
+
     const [postalCode, setPostalCode] = useState<string>(client ? client.address.postalCode : '');
     const [state, setState] = useState<string>(client ? client.address.state : '');
     const [city, setCity] = useState<string>(client ? client.address.city : '');
@@ -51,16 +51,16 @@ export default function ClientProfile(props: any) {
         setLoadingCEP(true);
         console.log(postalCode)
         getAddress(postalCode).then((result) => {
-          setCity(result.localidade);
-          setState(result.uf);
-          setNeighborhood(result.bairro);
-          setStreet(result.logradouro);
+            setCity(result.localidade);
+            setState(result.uf);
+            setNeighborhood(result.bairro);
+            setStreet(result.logradouro);
         }).catch(() => showMessage({
-          message: 'CEP inválido!',
-          type: 'danger'
+            message: 'CEP inválido!',
+            type: 'danger'
         }))
-        .finally(() => setLoadingCEP(false));
-      }
+            .finally(() => setLoadingCEP(false));
+    }
 
     const changeImage = () => {
         launchImageLibrary({ mediaType: 'photo' }, (response) => {
@@ -114,8 +114,6 @@ export default function ClientProfile(props: any) {
             .finally(() => setLoadingUpdate(false))
     }
 
-  
-
     useEffect(() => {
         getClient(params?.id);
     }, [params])
@@ -162,7 +160,7 @@ export default function ClientProfile(props: any) {
                                 <Text style={{ color: tab == 1 ? whiteDefault : blackDefault, fontSize: 20, fontFamily: 'Rubik-SemiBold' }}>Endereço
                                 </Text>
                             </TouchableOpacity>
-                          
+
                         </View>
 
                         {tab == 0 ?
@@ -195,7 +193,7 @@ export default function ClientProfile(props: any) {
                                             :
                                             <View style={style.noImage}>
                                                 <Icon name={'camera'} size={50} color={blackDefault}></Icon>
-                                                <Text style={ style.noImageText}>Adicionar foto de perfil</Text>
+                                                <Text style={style.noImageText}>Adicionar foto de perfil</Text>
                                                 {loadingImage ?
                                                     <ActivityIndicator style={style.loadingImage} size={35} color={orangeDefault} />
                                                     :
@@ -220,9 +218,12 @@ export default function ClientProfile(props: any) {
                                         : <></>
                                 }
                                 <ScrollView>
-                                    <InputCEP isClient={true}searchCEP={searchCEP} cep={postalCode} onChangeText={setPostalCode} />
+                                    <InputCEP isClient={true} searchCEP={searchCEP} cep={postalCode} onChangeText={setPostalCode} />
                                     <Input editable={!loadingCEP && !loadingUpdate} placeholder='Estado' text={state} onChangeText={setState} />
                                     <Input editable={!loadingCEP && !loadingUpdate} placeholder='Cidade' text={city} onChangeText={setCity} />
+                                    <Input editable={!loadingCEP && !loadingUpdate} placeholder='Bairro' text={neighborhood} onChangeText={setNeighborhood} />
+                                    <Input editable={!loadingCEP && !loadingUpdate} placeholder='Rua' text={street} onChangeText={setStreet} />
+                                    <Input editable={!loadingCEP && !loadingUpdate} placeholder='Número' text={number} onChangeText={setNumber} />
                                 </ScrollView>
                             </KeyboardAvoidingView> : <></>
                         }

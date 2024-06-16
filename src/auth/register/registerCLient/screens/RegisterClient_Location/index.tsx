@@ -22,7 +22,7 @@ export default function RegisterProfessional_ServiceLocation({ navigation }: any
   const [street, setStreet] = useState<string>(!!client ? client.address?.street : '');
   const [number, setNumber] = useState<string>(!!client ? client.address?.number : '');
   const [incorrectInformations, setIncorrectInformations] = useState<boolean>(false);
-  
+
   const [loadingCEP, setLoadingCEP] = useState<boolean>(false);
   const handleButtonNext = () => {
     setAddress({
@@ -42,13 +42,17 @@ export default function RegisterProfessional_ServiceLocation({ navigation }: any
     return (
       postalCode.length > 0 &&
       state.length > 0 &&
-      city.length > 0 
+      city.length > 0
     )
   }
 
   const searchCEP = () => {
     setLoadingCEP(true);
-    console.log(postalCode)
+    setCity('');
+    setState('');
+    setNeighborhood('');
+    setStreet('');
+    setNumber('')
     getAddress(postalCode).then((result) => {
       setCity(result.localidade);
       setState(result.uf);
@@ -58,7 +62,7 @@ export default function RegisterProfessional_ServiceLocation({ navigation }: any
       message: 'CEP inválido!',
       type: 'danger'
     }))
-    .finally(() => setLoadingCEP(false));
+      .finally(() => setLoadingCEP(false));
   }
 
   return (
@@ -75,6 +79,9 @@ export default function RegisterProfessional_ServiceLocation({ navigation }: any
           <InputCEP onFocus={() => setIncorrectInformations(false)} isClient searchCEP={searchCEP} cep={postalCode} onChangeText={setPostalCode} />
           <Input onFocus={() => setIncorrectInformations(false)} editable={!loadingCEP} placeholder='Estado' text={state} onChangeText={setState} />
           <Input onFocus={() => setIncorrectInformations(false)} editable={!loadingCEP} placeholder='Cidade' text={city} onChangeText={setCity} />
+          <Input onFocus={() => setIncorrectInformations(false)} editable={!loadingCEP} placeholder='Bairro' text={neighborhood} onChangeText={setNeighborhood} />
+          <Input onFocus={() => setIncorrectInformations(false)} editable={!loadingCEP} placeholder='Rua' text={street} onChangeText={setStreet} />
+          <Input onFocus={() => setIncorrectInformations(false)} editable={!loadingCEP} placeholder='Número' text={number} onChangeText={setNumber} />
         </View>
         {
           incorrectInformations ?

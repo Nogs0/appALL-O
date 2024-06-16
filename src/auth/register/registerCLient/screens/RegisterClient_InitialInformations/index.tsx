@@ -10,16 +10,12 @@ import styleRegister from '../../style';
 
 export default function RegisterProfessional_InitialInformations({ navigation }: any) {
   const { client, setInitialInformations, clearClient } = useRegisterClient();
-
-  console.log("Context:", { client, setInitialInformations, clearClient });
   const [name, setName] = useState<string>(client ? client.email : '');
   const [email, setEmail] = useState<string>(client ? client.email : '');
   const [password, setPassword] = useState<string>(client ? client.password : '');
   const [incorrectInformations, setIncorrectInformations] = useState<boolean>(false);
 
   const handleButtonNext = () => {
-
-
     setInitialInformations({ name, email, password });
 
     if (canGoToTheNextStep()) {

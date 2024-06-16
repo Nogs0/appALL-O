@@ -1,7 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import React from 'react'
 import RegisterClient_AddProfilePic from './screens/RegisterClient_AddProfilePic'
-import RegisterClient_CEP from './screens/RegisterClient_CEP'
+import RegisterClient_CEP from './screens/RegisterClient_Location'
 import RegisterClient_OkEndRegister from './screens/RegisterClient_EndRegister'
 import RegisterClient_InitialInformations from './screens/RegisterClient_InitialInformations'
 

@@ -54,6 +54,7 @@ export default function RegisterProfessional_ServiceLocation({ navigation }: any
     setState('');
     setNeighborhood('');
     setStreet('');
+    setNumber('')
     getAddress(postalCode)
       .then((result) => {
         setCity(result.localidade);
