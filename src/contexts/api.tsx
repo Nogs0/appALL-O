@@ -1,43 +1,55 @@
 import React, { createContext, useContext } from 'react';
-import api from '../services/api';
+import ALLORequestBase, { api, verbosAPI } from '../services/api';
+import { TipoPessoaEnum } from '../shared/Enums/enums';
 
 export interface ClientDTO {
     id: number,
-    name: string,
+    nome: string,
     email: string,
-    password: string,
-    address: Address,
-    perfilImage: any
+    senha: string,
+    endereco: Endereco,
+    imagemDoPerfil: any
 }
 
-export interface ProfessionalToEditDTO {
+export interface ProvedorInput {
     id: number,
-    name: string,
     email: string,
-    document: string,
-    perfilImage: any,
-    images: any[],
-    address: Address,
+    senha: string,
+    telefone: string,
+    cpfCnpj: string,
+    razaoSocial: string,
+    tipoPessoa: TipoPessoaEnum,
+    profissaoId: number[]
+    endereco: Endereco,
+    imagemDoPerfil: any,
+    images: []
 }
 
-export interface Address {
-    postalCode: string,
-    state: string,
-    city: string,
-    neighborhood: string,
-    street: string,
-    number: string
+export interface Endereco {
+    cep: string,
+    estado: string,
+    cidade: string,
+    bairro: string,
+    logradouro: string,
+    numero: string
+}
+
+export interface ProfissaoOutput {
+    id: number,
+    nomeIcone: string | undefined,
+    nome: string
 }
 
 interface APIContextData {
     getClientToEdit(id: number): Promise<ClientDTO>,
-    getProfessionalToEdit(id: number): Promise<ProfessionalToEditDTO>,
-    updateProfessional(dto: ProfessionalToEditDTO): Promise<void>,
+    getProfessionalToEdit(id: number): Promise<ProvedorInput>,
+    updateProfessional(dto: ProvedorInput): Promise<void>,
     updateClient(dto: ClientDTO): Promise<void>,
     updateImage(image: any): Promise<any>,
     updateFavoriteReview(id: number): Promise<boolean>,
     getReviewsByProfessional(id: number): Promise<any>,
     updateSeenNotification(id: number): Promise<boolean>,
+    getProfessions(): Promise<ProfissaoOutput[]>
 }
 
 const APIContext = createContext<APIContextData>({} as APIContextData);
@@ -50,16 +62,16 @@ function APIProvider({ children }: any) {
                 setTimeout(() => {
                     resolve({
                         id: 1,
-                        name: 'Matheus',
+                        nome: 'Matheus',
                         email: 'matheus_jonnas@proton.me',
-                        password: 'ejw-9fí2e2n',
-                        address: {
-                            postalCode: '37730000',
-                            state: 'MG',
-                            city: 'Campestre',
-                            neighborhood: 'Campo das Antas',
-                            street: 'Avenida Sinesio do Lago',
-                            number: '543'
+                        senha: 'ejw-9fí2e2n',
+                        endereco: {
+                            cep: '37730000',
+                            estado: 'MG',
+                            cidade: 'Campestre',
+                            bairro: 'Campo das Antas',
+                            logradouro: 'Avenida Sinesio do Lago',
+                            numero: '543'
                         },
                     } as ClientDTO)
                 }, 1000)
@@ -71,27 +83,30 @@ function APIProvider({ children }: any) {
         })
     }
 
-    const getProfessionalToEdit = (id: number): Promise<ProfessionalToEditDTO> => {
-        return new Promise<ProfessionalToEditDTO>((resolve, reject) => {
+    const getProfessionalToEdit = (id: number): Promise<ProvedorInput> => {
+        return new Promise<ProvedorInput>((resolve, reject) => {
             try {
                 setTimeout(() => {
                     resolve({
                         id: 1,
-                        name: 'João',
+                        razaoSocial: 'João',
                         email: 'joaoguinogueira04@gmail.com',
-                        document: '087.606.736-48',
-                        perfilImage: '',
+                        senha: 'ejw-9fí2e2n',
+                        cpfCnpj: '087.606.736-48',
+                        telefone: '(35) 99826-5445',
+                        tipoPessoa: TipoPessoaEnum.FISICA,
+                        profissaoId: [1, 2, 3],
+                        imagemDoPerfil: undefined,
                         images: [],
-                        address: {
-                            postalCode: '37714660',
-                            state: 'MG',
-                            city: 'Poços de Caldas',
-                            neighborhood: 'Campo das Antas',
-                            street: 'Avenida Sinesio do Lago',
-                            number: '543'
+                        endereco: {
+                            cep: '37714660',
+                            estado: 'MG',
+                            cidade: 'Poços de Caldas',
+                            bairro: 'Campo das Antas',
+                            logradouro: 'Avenida Sinesio do Lago',
+                            numero: '543'
                         },
-
-                    } as ProfessionalToEditDTO)
+                    } as ProvedorInput)
                 }, 1000)
             }
             catch (e) {
@@ -100,7 +115,7 @@ function APIProvider({ children }: any) {
         })
     }
 
-    const updateProfessional = (dto: ProfessionalToEditDTO): Promise<void> => {
+    const updateProfessional = (dto: ProvedorInput): Promise<void> => {
         return new Promise<void>((resolve, reject) => {
             try {
                 setTimeout(() => {
@@ -113,7 +128,7 @@ function APIProvider({ children }: any) {
         })
     }
 
-    const updateClient = (dto: ClientDTO) : Promise<void> => {
+    const updateClient = (dto: ClientDTO): Promise<void> => {
         return new Promise<void>((resolve, reject) => {
             try {
                 setTimeout(() => {
@@ -164,6 +179,7 @@ function APIProvider({ children }: any) {
             }
         })
     }
+    
     const getReviewsByProfessional = (id: number): Promise<any> => {
 
         return new Promise<any>((resolve, reject) => {
@@ -270,9 +286,22 @@ function APIProvider({ children }: any) {
         })
     }
 
+    const getProfessions = (): Promise<ProfissaoOutput[]> => {
+        return new Promise<ProfissaoOutput[]>(async (resolve, reject) => {
+            ALLORequestBase<ProfissaoOutput[]>(verbosAPI.GET, 'profissao')
+                .then((result) => {
+                    resolve(result);
+                })
+                .catch((e) => {
+                    console.log(e)
+                    reject(e);
+                })
+        })
+    }
+
     return (
         <APIContext.Provider
-            value={{ getClientToEdit, getProfessionalToEdit, updateProfessional, updateImage, updateFavoriteReview, getReviewsByProfessional, updateSeenNotification, updateClient }}>
+            value={{ getClientToEdit, getProfessionalToEdit, updateProfessional, updateImage, updateFavoriteReview, getReviewsByProfessional, updateSeenNotification, updateClient, getProfessions }}>
             {children}
         </APIContext.Provider>
     )

@@ -14,6 +14,7 @@ interface CardReviewProps {
     rateNote: string,
     images: any[],
     favorite: boolean,
+    isProfessional: boolean,
     setFavoriteCallback(): void
 }
 
@@ -54,7 +55,7 @@ export default function CardReview(props: CardReviewProps) {
             <TouchableOpacity
                 style={style.favoriteContainer}
                 onPress={props.setFavoriteCallback}>
-                {getFavorite(props.favorite)}
+                {props.isProfessional ? getFavorite(props.favorite) : <></>}
             </TouchableOpacity>
         </View>
     )

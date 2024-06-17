@@ -1,17 +1,18 @@
-import React, { useEffect, useState } from 'react'
-import { ActivityIndicator, FlatList, Image, Modal, SafeAreaView, Text, Touchable, TouchableOpacity, View, VirtualizedList } from 'react-native'
-import style from './style'
-import HeaderProfessional from '../../../../../../components/HeaderProfessional'
-import FilterReviews from '../../../../../../components/FilterReviews';
-import Stars from '../../../../../../components/Stars';
-import { ButtonFilterEnumReviews } from '../../../../../../shared/Enums/enums';
-import { blueDefault, whiteDefault } from '../../../../../../shared/styleConsts';
-import CardReview from '../../../../../../components/CardReview';
-import { useAPI } from '../../../../../../contexts/api';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, FlatList, SafeAreaView, Text, View } from 'react-native';
 import { showMessage } from 'react-native-flash-message';
+import CardReview from '../../../../../../components/CardReview';
+import FilterReviews from '../../../../../../components/FilterReviews';
+import HeaderProfessional from '../../../../../../components/HeaderProfessional';
+import { useAPI } from '../../../../../../contexts/api';
+import { ButtonFilterEnumReviews } from '../../../../../../shared/Enums/enums';
+import { whiteDefault } from '../../../../../../shared/styleConsts';
+import style from './style';
+import { useAuth } from '../../../../../../contexts/auth';
 
 export default function ProfessionalReviews(props: any) {
 
+    const { isProfessional } = useAuth();
     const { updateFavoriteReview, getReviewsByProfessional } = useAPI();
 
     const [params, setParams] = useState<any>(props.route?.params);
@@ -34,6 +35,7 @@ export default function ProfessionalReviews(props: any) {
             images={review.images}
             date={review.date}
             favorite={review.favorite}
+            isProfessional={isProfessional}
             setFavoriteCallback={() => handleUpdateFavoriteReview(review.id)} />)
     }
 

@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Alert, FlatList, Image, KeyboardAvoidingView, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import style from './style';
+import { ActivityIndicator, Alert, Image, KeyboardAvoidingView, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { showMessage } from 'react-native-flash-message';
 import { launchImageLibrary } from 'react-native-image-picker';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { showMessage } from 'react-native-flash-message';
-import { ClientDTO, useAPI } from '../../../contexts/api';
-import getAddress from '../../../services/cep';
-import { blackDefault, orangeDefault, whiteDefault } from '../../../shared/styleConsts';
 import HeaderClient from '../../../components/HeaderClient/indext';
 import Input from '../../../components/Input';
 import InputCEP from '../../../components/InputCEP';
+import { ClientDTO, useAPI } from '../../../contexts/api';
 import { useAuth } from '../../../contexts/auth';
+import getAddress from '../../../services/cep';
+import { blackDefault, orangeDefault, whiteDefault } from '../../../shared/styleConsts';
+import style from './style';
 
 
 export default function ClientProfile(props: any) {
@@ -19,16 +19,16 @@ export default function ClientProfile(props: any) {
     const { signOut } = useAuth();
     const [params, setParams] = useState<any>(props);
     const [client, setClient] = useState<ClientDTO | undefined>(undefined);
-    const [name, setName] = useState<string>(client ? client.name : '');
+    const [nome, setNome] = useState<string>(client ? client.nome : '');
     const [email, setEmail] = useState<string>(client ? client.email : '');
-    const [perfilImage, setPerfilImage] = useState<any>(client?.perfilImage);
+    const [imagemDoPerfil, setImagemDoPerfil] = useState<any>(client?.imagemDoPerfil);
 
-    const [postalCode, setPostalCode] = useState<string>(client ? client.address.postalCode : '');
-    const [state, setState] = useState<string>(client ? client.address.state : '');
-    const [city, setCity] = useState<string>(client ? client.address.city : '');
-    const [neighborhood, setNeighborhood] = useState<string>(client ? client.address.neighborhood : '');
-    const [street, setStreet] = useState<string>(client ? client.address.street : '');
-    const [number, setNumber] = useState<string>(client ? client.address.number : '');
+    const [cep, setCep] = useState<string>(client ? client.endereco.cep : '');
+    const [estado, setEstado] = useState<string>(client ? client.endereco.estado : '');
+    const [cidade, setCidade] = useState<string>(client ? client.endereco.cidade : '');
+    const [bairro, setBairro] = useState<string>(client ? client.endereco.bairro : '');
+    const [logradouro, setLogradouro] = useState<string>(client ? client.endereco.logradouro : '');
+    const [numero, setNumero] = useState<string>(client ? client.endereco.numero : '');
 
 
     const [loadingCEP, setLoadingCEP] = useState<boolean>(false);
@@ -49,12 +49,11 @@ export default function ClientProfile(props: any) {
 
     const searchCEP = () => {
         setLoadingCEP(true);
-        console.log(postalCode)
-        getAddress(postalCode).then((result) => {
-            setCity(result.localidade);
-            setState(result.uf);
-            setNeighborhood(result.bairro);
-            setStreet(result.logradouro);
+        getAddress(cep).then((result) => {
+            setCidade(result.localidade);
+            setEstado(result.uf);
+            setBairro(result.bairro);
+            setLogradouro(result.logradouro);
         }).catch(() => showMessage({
             message: 'CEP inválido!',
             type: 'danger'
@@ -68,7 +67,7 @@ export default function ClientProfile(props: any) {
                 setLoadingImage(true);
                 updateImage(response.assets[0])
                     .then((newImage) => {
-                        setPerfilImage(newImage)
+                        setImagemDoPerfil(newImage)
                         showMessage({
                             message: 'Imagem de perfil alterada!',
                             type: 'success'
@@ -88,16 +87,16 @@ export default function ClientProfile(props: any) {
         setLoadingUpdate(true)
         updateClient({
             id: params.id,
-            name,
+            nome,
             email,
-            perfilImage,
-            address: {
-                postalCode,
-                state,
-                city,
-                neighborhood,
-                street,
-                number
+            imagemDoPerfil,
+            endereco: {
+                cep,
+                estado,
+                cidade,
+                bairro,
+                logradouro,
+                numero
             }
         } as ClientDTO)
             .then(() => {
@@ -120,15 +119,15 @@ export default function ClientProfile(props: any) {
 
     useEffect(() => {
         if (client) {
-            setName(client.name);
+            setNome(client.nome);
             setEmail(client.email);
-            setPerfilImage(client.perfilImage);
-            setPostalCode(client.address.postalCode);
-            setState(client.address.state);
-            setCity(client.address.city);
-            setNeighborhood(client.address.neighborhood);
-            setStreet(client.address.street);
-            setNumber(client.address.number);
+            setImagemDoPerfil(client.imagemDoPerfil);
+            setCep(client.endereco.cep);
+            setEstado(client.endereco.estado);
+            setCidade(client.endereco.cidade);
+            setBairro(client.endereco.bairro);
+            setLogradouro(client.endereco.logradouro);
+            setNumero(client.endereco.numero);
         }
     }, [client])
 
@@ -144,7 +143,7 @@ export default function ClientProfile(props: any) {
                         :
                         <></>
                     }
-                    <HeaderClient title={client?.name}
+                    <HeaderClient title={client?.nome}
                         navigation={props.navigation}
                         id={client?.id}
                         hasButton={false} />
@@ -168,7 +167,7 @@ export default function ClientProfile(props: any) {
                                 <ScrollView>
                                     <TouchableOpacity disabled={loadingUpdate || loadingImage} style={style.imageContainer}
                                         onPress={() => {
-                                            if (perfilImage)
+                                            if (imagemDoPerfil)
                                                 Alert.alert("Atenção!", "Você realmente deseja alterar sua foto de perfil?", [
                                                     {
                                                         text: 'Cancelar',
@@ -181,14 +180,14 @@ export default function ClientProfile(props: any) {
                                                 ])
                                             else changeImage();
                                         }}>
-                                        {perfilImage ?
+                                        {imagemDoPerfil ?
                                             <View style={{ alignItems: 'center', justifyContent: 'center' }}>
                                                 {loadingImage ?
                                                     <ActivityIndicator style={style.loadingImage} size={35} color={orangeDefault} />
                                                     :
                                                     <></>
                                                 }
-                                                <Image style={style.image} source={{ uri: perfilImage.uri }}></Image>
+                                                <Image style={style.image} source={{ uri: imagemDoPerfil.uri }}></Image>
                                             </View>
                                             :
                                             <View style={style.noImage}>
@@ -203,7 +202,7 @@ export default function ClientProfile(props: any) {
                                         }
                                     </TouchableOpacity>
                                     <View style={style.inputsContainer}>
-                                        <Input editable={!loadingUpdate} text={name} onChangeText={setName} placeholder='Nome' />
+                                        <Input editable={!loadingUpdate} text={nome} onChangeText={setNome} placeholder='Nome' />
                                         <Input editable={!loadingUpdate} text={email} onChangeText={setEmail} placeholder='Email' />
                                     </View>
                                 </ScrollView>
@@ -218,12 +217,12 @@ export default function ClientProfile(props: any) {
                                         : <></>
                                 }
                                 <ScrollView>
-                                    <InputCEP isClient={true} searchCEP={searchCEP} cep={postalCode} onChangeText={setPostalCode} />
-                                    <Input editable={!loadingCEP && !loadingUpdate} placeholder='Estado' text={state} onChangeText={setState} />
-                                    <Input editable={!loadingCEP && !loadingUpdate} placeholder='Cidade' text={city} onChangeText={setCity} />
-                                    <Input editable={!loadingCEP && !loadingUpdate} placeholder='Bairro' text={neighborhood} onChangeText={setNeighborhood} />
-                                    <Input editable={!loadingCEP && !loadingUpdate} placeholder='Rua' text={street} onChangeText={setStreet} />
-                                    <Input editable={!loadingCEP && !loadingUpdate} placeholder='Número' text={number} onChangeText={setNumber} />
+                                    <InputCEP isClient={true} searchCEP={searchCEP} cep={cep} onChangeText={setCep} />
+                                    <Input editable={!loadingCEP && !loadingUpdate} placeholder='Estado' text={estado} onChangeText={setEstado} />
+                                    <Input editable={!loadingCEP && !loadingUpdate} placeholder='Cidade' text={cidade} onChangeText={setCidade} />
+                                    <Input editable={!loadingCEP && !loadingUpdate} placeholder='Bairro' text={bairro} onChangeText={setBairro} />
+                                    <Input editable={!loadingCEP && !loadingUpdate} placeholder='Rua' text={logradouro} onChangeText={setLogradouro} />
+                                    <Input editable={!loadingCEP && !loadingUpdate} placeholder='Número' text={numero} onChangeText={setNumero} />
                                 </ScrollView>
                             </KeyboardAvoidingView> : <></>
                         }

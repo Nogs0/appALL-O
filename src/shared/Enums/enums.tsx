@@ -14,3 +14,8 @@ export enum TabProfessionalEnum {
     apresentation = 1,
     comments
 }
+export enum TipoPessoaEnum {
+    FISICA = 1,
+    JURIDICA,
+    FISICA_JURIDICA
+}

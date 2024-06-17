@@ -1,53 +1,34 @@
-import React, { useEffect, useState } from 'react'
-import { Alert, FlatList, SafeAreaView, Text, TouchableOpacity, View } from 'react-native'
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import style from './style'
+import React, { useEffect, useState } from 'react';
+import { FlatList, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import style from './style';
 
-import styleRegister from '../../style';
+import { showMessage } from 'react-native-flash-message';
 import HeaderRegisterProfessional from '../../../../../components/HeaderRegisterProfessional';
 import Input from '../../../../../components/Input';
 import { useRegisterProfessional } from '../../../../../contexts/registerProfessional';
-import { greyDefault, blackDefault, whiteDefault, redDefault } from '../../../../../shared/styleConsts';
-import { showMessage } from 'react-native-flash-message';
-import Ok from '../../../../../components/Ok';
+import { blackDefault, greyDefault, redDefault, whiteDefault } from '../../../../../shared/styleConsts';
+import styleRegister from '../../style';
+import { ProfissaoOutput, useAPI } from '../../../../../contexts/api';
 
-export default function RegisterProfessional_Services({ navigation }: any) {
+export default function RegisterProfessional_Services(props: any) {
 
+  const { getProfessions } = useAPI();
   const { setServices } = useRegisterProfessional();
+
   const [servico, setServico] = useState<string>('');
   const [searchingServico, setSearchingServico] = useState<boolean>(false);
   const [listServicos, setListServicos] = useState<number[]>([]);
   const [incorrectInformations, setIncorrectInformations] = useState<boolean>(false);
 
-  const servicosBase = [
-    {
-      id: 1,
-      name: 'Jardineiro'
-    },
-    {
-      id: 7,
-      name: 'Jovem'
-    },
-    {
-      id: 2,
-      name: 'Eletricista'
-    },
-    {
-      id: 3,
-      name: 'Encanador'
-    },
-    {
-      id: 4,
-      name: 'Mecânico'
-    },
-  ]
+  const [servicosBase, setServicosBase] = useState<ProfissaoOutput[]>([]);
 
   const [tempServicosBase, setTempServicosBase] = useState<any[]>(servicosBase)
 
   const handleButtonNext = () => {
     setServices(listServicos);
     if (canGoToTheNextPage())
-      navigation.navigate('RegisterProfessional_Description');
+      props.navigation.navigate('RegisterProfessional_Description');
     else setIncorrectInformations(true)
   }
 
@@ -58,11 +39,10 @@ export default function RegisterProfessional_Services({ navigation }: any) {
   }
 
   const addItem = (name: string) => {
-    setServico(name);
     setSearchingServico(false);
     setTempServicosBase(servicosBase);
 
-    let servicoToAdd = servicosBase.find(x => x.name.toLowerCase() == name.trim().toLowerCase())
+    let servicoToAdd = servicosBase.find(x => x.nome.toLowerCase() == name.trim().toLowerCase())
     if (servicoToAdd) {
       let index = listServicos.findIndex(x => x == servicoToAdd.id)
       if (index == -1) {
@@ -83,10 +63,23 @@ export default function RegisterProfessional_Services({ navigation }: any) {
     setServico(value);
     setSearchingServico(value.length > 0);
     setTempServicosBase((prev) => {
-      prev = servicosBase.filter(x => x.name.toLowerCase().includes(value.toLowerCase()))
+      prev = servicosBase.filter(x => x.nome.toLowerCase().includes(value.toLowerCase()))
       return [...prev]
     })
   }
+
+  useEffect(() => {
+    getProfessions()
+      .then((result: ProfissaoOutput[]) => {
+        setServicosBase(result)
+      })
+      .catch(() => {
+        showMessage({
+          message: 'Erro ao carregar profissoes',
+          type: 'danger'
+        })
+      })
+  }, [props])
 
   const renderItem = (id: number) => {
 
@@ -100,7 +93,7 @@ export default function RegisterProfessional_Services({ navigation }: any) {
           flexDirection: 'row',
           justifyContent: 'space-between'
         }}>
-        <Text style={{ color: blackDefault }}>{serv?.name}</Text>
+        <Text style={{ color: blackDefault }}>{serv?.nome}</Text>
         <TouchableOpacity
           onPress={() => {
             let index = listServicos.findIndex(x => x == id);
@@ -118,7 +111,7 @@ export default function RegisterProfessional_Services({ navigation }: any) {
 
   return (
     <SafeAreaView style={styleRegister.defaultContainer}>
-      <HeaderRegisterProfessional navigation={navigation} />
+      <HeaderRegisterProfessional navigation={props.navigation} />
       <View style={styleRegister.defaultContentContainer}>
         <Text style={styleRegister.title}>Quais serviços você faz?</Text>
         <View style={style.addProfessionContainer}>
@@ -147,10 +140,10 @@ export default function RegisterProfessional_Services({ navigation }: any) {
                   renderItem={({ item }) =>
                     <TouchableOpacity
                       onPress={() => {
-                        addItem(item.name);
+                        addItem(item.nome);
                       }}
                       style={{ borderBottomWidth: 1, borderBottomColor: greyDefault }}>
-                      <Text style={{ color: blackDefault, fontSize: 24 }}>{item.name}</Text>
+                      <Text style={{ color: blackDefault, fontSize: 24 }}>{item.nome}</Text>
                     </TouchableOpacity>
                   }
                 />
@@ -174,7 +167,7 @@ export default function RegisterProfessional_Services({ navigation }: any) {
           onPress={() => handleButtonNext()}>
           <Text style={styleRegister.textButtonNext}>Prosseguir</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={style.buttonCreateProfession} onPress={() => navigation.navigate('RegisterProfessional_CreatingProfession')}>
+        <TouchableOpacity style={style.buttonCreateProfession} onPress={() => props.navigation.navigate('RegisterProfessional_CreatingProfession')}>
           <Text style={style.textButtonCreateProfession}>Não encontrou sua profissão? Clique aqui!</Text>
         </TouchableOpacity>
       </View>

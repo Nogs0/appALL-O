@@ -9,6 +9,7 @@ import RegisterProfessional_OkProfession from './screens/RegisterProfessional_Ok
 import RegisterProfessional_ServiceLocation from './screens/RegisterProfessional_ServiceLocation'
 import RegisterProfessional_Services from './screens/RegisterProfessional_Services'
 import RegisterProfessional_InitialInformations from './screens/RegisterProfessional_InitialInformations'
+import { blueDefault } from '../../../shared/styleConsts'
 
 export default function RegisterProfessional({goBack} : any) {
   const Stack = createNativeStackNavigator();

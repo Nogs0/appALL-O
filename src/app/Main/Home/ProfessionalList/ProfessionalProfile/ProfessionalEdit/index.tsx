@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, FlatList, Image, KeyboardAvoidingView, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import HeaderProfessional from '../../../../../../components/HeaderProfessional';
-import { ProfessionalToEditDTO, useAPI } from '../../../../../../contexts/api';
+import { ProvedorInput, useAPI } from '../../../../../../contexts/api';
 import { blackDefault, blueDefault, greyDefault, greyLoadingDefault, whiteDefault } from '../../../../../../shared/styleConsts';
 import style from './style';
 import InputCEP from '../../../../../../components/InputCEP';
@@ -16,19 +16,19 @@ export default function ProfessionalEdit(props: any) {
     const { getProfessionalToEdit, updateProfessional, updateImage } = useAPI();
 
     const [params] = useState<any>(props.route.params);
-    const [professional, setProfessional] = useState<ProfessionalToEditDTO | undefined>(undefined);
+    const [professional, setProfessional] = useState<ProvedorInput | undefined>(undefined);
 
-    const [name, setName] = useState<string>(professional ? professional.name : '');
+    const [razaoSocial, setRazaoSocial] = useState<string>(professional ? professional.razaoSocial : '');
     const [email, setEmail] = useState<string>(professional ? professional.email : '');
-    const [document, setDocument] = useState<string>(professional ? professional.document : '');
-    const [perfilImage, setPerfilImage] = useState<any>(professional?.perfilImage);
+    const [cpfCnpj, setCpfCnpj] = useState<string>(professional ? professional.cpfCnpj : '');
+    const [imagemDoPerfil, setImagemDoPerfil] = useState<any>(professional ? professional.imagemDoPerfil : undefined );
 
-    const [postalCode, setPostalCode] = useState<string>(professional ? professional.address.postalCode : '');
-    const [state, setState] = useState<string>(professional ? professional.address.state : '');
-    const [city, setCity] = useState<string>(professional ? professional.address.city : '');
-    const [neighborhood, setNeighborhood] = useState<string>(professional ? professional.address.neighborhood : '');
-    const [street, setStreet] = useState<string>(professional ? professional.address.street : '');
-    const [number, setNumber] = useState<string>(professional ? professional.address.number : '');
+    const [cep, setCep] = useState<string>(professional ? professional.endereco.cep : '');
+    const [estado, setEstado] = useState<string>(professional ? professional.endereco.estado : '');
+    const [cidade, setCidade] = useState<string>(professional ? professional.endereco.cidade : '');
+    const [bairro, setBairro] = useState<string>(professional ? professional.endereco.bairro : '');
+    const [logradouro, setLogradouro] = useState<string>(professional ? professional.endereco.logradouro : '');
+    const [numero, setNumero] = useState<string>(professional ? professional.endereco.numero : '');
 
     const [images, setImages] = useState<any[]>(professional ? professional.images : []);
 
@@ -50,11 +50,11 @@ export default function ProfessionalEdit(props: any) {
 
     const searchCEP = () => {
         setLoadingCEP(true);
-        getAddress(postalCode).then((result) => {
-            setCity(result.localidade);
-            setState(result.uf);
-            setNeighborhood(result.bairro);
-            setStreet(result.logradouro);
+        getAddress(cep).then((result) => {
+            setCidade(result.localidade);
+            setEstado(result.uf);
+            setBairro(result.bairro);
+            setLogradouro(result.logradouro);
         }).catch(() => Alert.alert("Erro", "CEP Inválido!"))
             .finally(() => setLoadingCEP(false));
     }
@@ -65,7 +65,7 @@ export default function ProfessionalEdit(props: any) {
                 setLoadingImage(true);
                 updateImage(response.assets[0])
                     .then((newImage) => {
-                        setPerfilImage(newImage)
+                        setImagemDoPerfil(newImage)
                         showMessage({
                             message: 'Imagem de perfil alterada!',
                             type: 'success'
@@ -85,20 +85,20 @@ export default function ProfessionalEdit(props: any) {
         setLoadingUpdate(true)
         updateProfessional({
             id: params.id,
-            name,
+            razaoSocial,
             email,
-            document,
-            perfilImage,
+            cpfCnpj,
+            imagemDoPerfil,
             images,
-            address: {
-                postalCode,
-                state,
-                city,
-                neighborhood,
-                street,
-                number
+            endereco: {
+                cep,
+                estado,
+                cidade,
+                bairro,
+                logradouro,
+                numero
             }
-        } as ProfessionalToEditDTO)
+        } as ProvedorInput)
             .then(() => {
                 showMessage({
                     message: 'Informações atualizadas!',
@@ -149,16 +149,16 @@ export default function ProfessionalEdit(props: any) {
 
     useEffect(() => {
         if (professional) {
-            setName(professional.name);
+            setRazaoSocial(professional.razaoSocial);
             setEmail(professional.email);
-            setDocument(professional.document);
-            setPerfilImage(professional.perfilImage);
-            setPostalCode(professional.address.postalCode);
-            setState(professional.address.state);
-            setCity(professional.address.city);
-            setNeighborhood(professional.address.neighborhood);
-            setStreet(professional.address.street);
-            setNumber(professional.address.number);
+            setCpfCnpj(professional.cpfCnpj);
+            setImagemDoPerfil(professional.imagemDoPerfil);
+            setCep(professional.endereco.cep);
+            setEstado(professional.endereco.estado);
+            setCidade(professional.endereco.cidade);
+            setBairro(professional.endereco.bairro);
+            setLogradouro(professional.endereco.logradouro);
+            setNumero(professional.endereco.numero);
         }
     }, [professional])
 
@@ -174,7 +174,7 @@ export default function ProfessionalEdit(props: any) {
                         :
                         <></>
                     }
-                    <HeaderProfessional title={professional?.name}
+                    <HeaderProfessional title={professional?.razaoSocial}
                         navigation={props.navigation}
                         id={professional?.id}
                         defaultColor={blueDefault} />
@@ -202,7 +202,7 @@ export default function ProfessionalEdit(props: any) {
                                 <ScrollView>
                                     <TouchableOpacity disabled={loadingUpdate || loadingImage} style={style.imageContainer}
                                         onPress={() => {
-                                            if (perfilImage)
+                                            if (imagemDoPerfil)
                                                 Alert.alert("Atenção!", "Você realmente deseja alterar sua foto de perfil?", [
                                                     {
                                                         text: 'Cancelar',
@@ -215,14 +215,14 @@ export default function ProfessionalEdit(props: any) {
                                                 ])
                                             else changeImage();
                                         }}>
-                                        {perfilImage ?
+                                        {imagemDoPerfil ?
                                             <View style={{ alignItems: 'center', justifyContent: 'center' }}>
                                                 {loadingImage ?
                                                     <ActivityIndicator style={style.loadingImage} size={35} color={blueDefault} />
                                                     :
                                                     <></>
                                                 }
-                                                <Image style={style.image} source={{ uri: perfilImage.uri }}></Image>
+                                                <Image style={style.image} source={{ uri: imagemDoPerfil.uri }}></Image>
                                             </View>
                                             :
                                             <View style={style.noImage}>
@@ -237,9 +237,9 @@ export default function ProfessionalEdit(props: any) {
                                         }
                                     </TouchableOpacity>
                                     <View style={style.inputsContainer}>
-                                        <Input editable={!loadingUpdate} text={name} onChangeText={setName} placeholder='Nome' />
+                                        <Input editable={!loadingUpdate} text={razaoSocial} onChangeText={setRazaoSocial} placeholder='Nome' />
                                         <Input editable={!loadingUpdate} text={email} onChangeText={setEmail} placeholder='Email' />
-                                        <Input editable={!loadingUpdate} text={document} onChangeText={setDocument} placeholder='Documento' />
+                                        <Input editable={!loadingUpdate} text={cpfCnpj} onChangeText={setCpfCnpj} placeholder='Documento' />
                                     </View>
                                 </ScrollView>
                             </KeyboardAvoidingView>
@@ -253,12 +253,12 @@ export default function ProfessionalEdit(props: any) {
                                         : <></>
                                 }
                                 <ScrollView>
-                                    <InputCEP searchCEP={searchCEP} cep={postalCode} onChangeText={setPostalCode} />
-                                    <Input editable={!loadingCEP && !loadingUpdate} placeholder='Estado' text={state} onChangeText={setState} />
-                                    <Input editable={!loadingCEP && !loadingUpdate} placeholder='Cidade' text={city} onChangeText={setCity} />
-                                    <Input editable={!loadingCEP && !loadingUpdate} placeholder='Bairro' text={neighborhood} onChangeText={setNeighborhood} />
-                                    <Input editable={!loadingCEP && !loadingUpdate} placeholder='Rua' text={street} onChangeText={setStreet} />
-                                    <Input editable={!loadingCEP && !loadingUpdate} placeholder='Número' text={number} onChangeText={setNumber} />
+                                    <InputCEP searchCEP={searchCEP} cep={cep} onChangeText={setCep} />
+                                    <Input editable={!loadingCEP && !loadingUpdate} placeholder='Estado' text={estado} onChangeText={setEstado} />
+                                    <Input editable={!loadingCEP && !loadingUpdate} placeholder='Cidade' text={cidade} onChangeText={setCidade} />
+                                    <Input editable={!loadingCEP && !loadingUpdate} placeholder='Bairro' text={bairro} onChangeText={setBairro} />
+                                    <Input editable={!loadingCEP && !loadingUpdate} placeholder='Rua' text={logradouro} onChangeText={setLogradouro} />
+                                    <Input editable={!loadingCEP && !loadingUpdate} placeholder='Número' text={numero} onChangeText={setNumero} />
                                 </ScrollView>
                             </KeyboardAvoidingView> : <></>
                         }

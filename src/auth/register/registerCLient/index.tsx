@@ -4,11 +4,12 @@ import RegisterClient_AddProfilePic from './screens/RegisterClient_AddProfilePic
 import RegisterClient_CEP from './screens/RegisterClient_Location'
 import RegisterClient_OkEndRegister from './screens/RegisterClient_EndRegister'
 import RegisterClient_InitialInformations from './screens/RegisterClient_InitialInformations'
+import { orangeDefault } from '../../../shared/styleConsts'
 
 export default function RegisterClient({goBack} : any) {
   const Stack = createNativeStackNavigator();
 return (
-  <Stack.Navigator initialRouteName='RegisterClient_InitialInformations'>
+  <Stack.Navigator initialRouteName='RegisterClient_InitialInformations' >
     <Stack.Group>
        <Stack.Screen name="RegisterClient_InitialInformations" component={RegisterClient_InitialInformations} options={{ headerShown: false }} />
        <Stack.Screen name="RegisterClient_CEP" component={RegisterClient_CEP} options={{ headerShown: false }} />
