@@ -45,7 +45,7 @@ function AuthProvider({ children }: any) {
                 setUser(JSON.parse(storagedUser));
                 isprofessional = JSON.parse(storagedIsProfessional);
                 setIsProfessional(isprofessional);
-                api.defaults.headers.Authorization = `Baerer ${storagedToken}`;
+                // api.defaults.headers.Authorization = `Baerer ${storagedToken}`;
             }
             if (isprofessional)
                 setDefaultColor(blueDefault);
@@ -67,7 +67,7 @@ function AuthProvider({ children }: any) {
                 if (isProfessional)
                     setDefaultColor(blueDefault);
                 
-                api.defaults.headers.Authorization = `Baerer ${response.token}`;
+                // api.defaults.headers.Authorization = `Baerer ${response.token}`;
                 
                 await AsyncStorage.setItem('@RNAuth:user', JSON.stringify(response.user));
                 await AsyncStorage.setItem('@RNAuth:token', response.token);

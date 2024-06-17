@@ -12,25 +12,25 @@ import { showMessage } from 'react-native-flash-message';
 
 export default function RegisterProfessional_ServiceLocation({ navigation }: any) {
 
-  const { professional, setAddress } = useRegisterProfessional();
+  const { profissional, setEndereco } = useRegisterProfessional();
 
-  const [postalCode, setPostalCode] = useState<string>(!!professional ? professional.address?.postalCode : '');
-  const [city, setCity] = useState<string>(!!professional ? professional.address?.city : '');
-  const [state, setState] = useState<string>(!!professional ? professional.address?.state : '');
-  const [neighborhood, setNeighborhood] = useState<string>(!!professional ? professional.address?.neighborhood : '');
-  const [street, setStreet] = useState<string>(!!professional ? professional.address?.street : '');
-  const [number, setNumber] = useState<string>(!!professional ? professional.address?.number : '');
+  const [cep, setCep] = useState<string>(!!profissional ? profissional.endereco?.cep : '');
+  const [cidade, setCidade] = useState<string>(!!profissional ? profissional.endereco?.cidade : '');
+  const [estado, setEstado] = useState<string>(!!profissional ? profissional.endereco?.estado : '');
+  const [bairro, setBairro] = useState<string>(!!profissional ? profissional.endereco?.bairro : '');
+  const [logradouro, setLogradouro] = useState<string>(!!profissional ? profissional.endereco?.logradouro : '');
+  const [numero, setNumero] = useState<string>(!!profissional ? profissional.endereco?.numero : '');
   const [incorrectInformations, setIncorrectInformations] = useState<boolean>(false);
 
   const [loadingCEP, setLoadingCEP] = useState<boolean>(false);
   const handleButtonNext = () => {
-    setAddress({
-      postalCode,
-      state,
-      city,
-      neighborhood,
-      street,
-      number,
+    setEndereco({
+      cep,
+      estado,
+      cidade,
+      bairro,
+      logradouro,
+      numero,
     });
     if (canGoToTheNextStep())
       navigation.navigate('RegisterProfessional_Contact');
@@ -39,28 +39,28 @@ export default function RegisterProfessional_ServiceLocation({ navigation }: any
 
   const canGoToTheNextStep = (): boolean => {
     return (
-      postalCode.length > 0 &&
-      state.length > 0 &&
-      city.length > 0 &&
-      neighborhood.length > 0 &&
-      street.length > 0 &&
-      number.length > 0
+      cep.length > 0 &&
+            estado.length > 0 &&
+            cidade.length > 0 &&
+            bairro.length > 0 &&
+            logradouro.length > 0 &&
+            numero.length > 0
     )
   }
 
   const searchCEP = () => {
     setLoadingCEP(true);
-    setCity('');
-    setState('');
-    setNeighborhood('');
-    setStreet('');
-    setNumber('')
-    getAddress(postalCode)
+    setCidade('');
+    setEstado('');
+    setBairro('');
+    setLogradouro('');
+    setNumero('')
+    getAddress(cep)
       .then((result) => {
-        setCity(result.localidade);
-        setState(result.uf);
-        setNeighborhood(result.bairro);
-        setStreet(result.logradouro);
+        setCidade(result.localidade);
+        setEstado(result.uf);
+        setBairro(result.bairro);
+        setLogradouro(result.logradouro);
       }).catch(() => showMessage({
         message: 'CEP inválido!',
         type: 'danger'
@@ -80,12 +80,12 @@ export default function RegisterProfessional_ServiceLocation({ navigation }: any
         <ScrollView>
           <Text style={styleRegister.title}>Como o cliente pode te encontrar?</Text>
           <View style={styleRegister.inputsContainer}>
-            <InputCEP onFocus={() => setIncorrectInformations(false)} searchCEP={searchCEP} cep={postalCode} onChangeText={setPostalCode} />
-            <Input onFocus={() => setIncorrectInformations(false)} editable={!loadingCEP} placeholder='Estado' text={state} onChangeText={setState} />
-            <Input onFocus={() => setIncorrectInformations(false)} editable={!loadingCEP} placeholder='Cidade' text={city} onChangeText={setCity} />
-            <Input onFocus={() => setIncorrectInformations(false)} editable={!loadingCEP} placeholder='Bairro' text={neighborhood} onChangeText={setNeighborhood} />
-            <Input onFocus={() => setIncorrectInformations(false)} editable={!loadingCEP} placeholder='Rua' text={street} onChangeText={setStreet} />
-            <Input onFocus={() => setIncorrectInformations(false)} editable={!loadingCEP} placeholder='Número' text={number} onChangeText={setNumber} />
+            <InputCEP onFocus={() => setIncorrectInformations(false)} searchCEP={searchCEP} cep={cep} onChangeText={setCep} />
+            <Input onFocus={() => setIncorrectInformations(false)} editable={!loadingCEP} placeholder='Estado' text={estado} onChangeText={setEstado} />
+            <Input onFocus={() => setIncorrectInformations(false)} editable={!loadingCEP} placeholder='Cidade' text={cidade} onChangeText={setCidade} />
+            <Input onFocus={() => setIncorrectInformations(false)} editable={!loadingCEP} placeholder='Bairro' text={bairro} onChangeText={setBairro} />
+            <Input onFocus={() => setIncorrectInformations(false)} editable={!loadingCEP} placeholder='Rua' text={logradouro} onChangeText={setLogradouro} />
+            <Input onFocus={() => setIncorrectInformations(false)} editable={!loadingCEP} placeholder='Número' text={numero} onChangeText={setNumero} />
           </View>
           {
             incorrectInformations ?

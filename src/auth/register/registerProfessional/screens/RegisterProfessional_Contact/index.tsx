@@ -7,11 +7,11 @@ import Input from '../../../../../components/Input';
 
 export default function RegisterProfessional_Contact({ navigation }: any) {
 
-  const { professional, setContacts } = useRegisterProfessional();
-  const [phoneNumber, setPhoneNumber] = useState<string>(!!professional ? professional.phoneNumber : '');
+  const { profissional, setContacts } = useRegisterProfessional();
+  const [telefone, setTelefone] = useState<string>(!!profissional ? profissional.telefone : '');
 
   const handleButtonNext = () => {
-    setContacts(phoneNumber);
+    setContacts(telefone);
 
     if (canGoToTheNextStep())
       navigation.navigate('RegisterProfessional_Images');
@@ -20,7 +20,7 @@ export default function RegisterProfessional_Contact({ navigation }: any) {
 
   const canGoToTheNextStep = (): boolean => {
     return (
-      phoneNumber.length == 15
+      telefone.length == 15
     )
   }
 
@@ -32,7 +32,7 @@ export default function RegisterProfessional_Contact({ navigation }: any) {
       <View style={styleRegister.defaultContentContainer}>
         <Text style={styleRegister.title}>Como o cliente pode entrar em contato?</Text>
         <View style={styleRegister.inputsContainer}>
-          <Input keyboardType='number-pad' isMask mask={maskPhone} placeholder='Celular' text={phoneNumber} onChangeText={setPhoneNumber} />
+          <Input keyboardType='number-pad' isMask mask={maskPhone} placeholder='Celular' text={telefone} onChangeText={setTelefone} />
         </View>
         <TouchableOpacity style={styleRegister.buttonNext} onPress={() => handleButtonNext()}>
           <Text style={styleRegister.textButtonNext}>Prosseguir</Text>

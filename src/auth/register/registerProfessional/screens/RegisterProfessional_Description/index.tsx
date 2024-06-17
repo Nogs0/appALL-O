@@ -7,9 +7,9 @@ import HeaderRegisterProfessional from '../../../../../components/HeaderRegister
 import { greyDefault, redDefault } from '../../../../../shared/styleConsts';
 
 export default function RegisterProfessional_Description({ navigation }: any) {
-  const { professional, setDescription } = useRegisterProfessional();
+  const { profissional, setDescription } = useRegisterProfessional();
 
-  const [desc, setDesc] = useState<string>(!!professional ? professional?.description : '');
+  const [desc, setDesc] = useState<string>(profissional ? profissional.descricao : '');
   const [incorrectInformations, setIncorrectInformations] = useState<boolean>(false);
   const handleButtonNext = () => {
     setDescription(desc);

@@ -11,17 +11,17 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import style from './style'
 
 export default function RegisterProfessional_InitialInformations({ navigation }: any) {
-  const { professional, setInitialInformations, clearProfessional } = useRegisterProfessional();
+  const { profissional, setInitialInformations, clearProfessional } = useRegisterProfessional();
 
-  const [document, setDocument] = useState<string>(!!professional ? professional.document : '');
-  const [name, setName] = useState<string>(!!professional ? professional.name : '');
-  const [email, setEmail] = useState<string>(!!professional ? professional.email : '');
-  const [password, setPassword] = useState<string>(!!professional ? professional.password : '');
+  const [cpfCnpj, setCpfCnpj] = useState<string>(!!profissional ? profissional.cpfCnpj : '');
+  const [name, setName] = useState<string>(!!profissional ? profissional.razaoSocial : '');
+  const [email, setEmail] = useState<string>(!!profissional ? profissional.email : '');
+  const [senha, setSenha] = useState<string>(!!profissional ? profissional.senha : '');
   const [incorrectInformations, setIncorrectInformations] = useState<boolean>(false);
 
   const handleButtonNext = () => {
     setInitialInformations({
-      document, email, password
+      cpfCnpj, email, senha
     });
 
     if (canGoToTheNextStep())
@@ -35,7 +35,7 @@ export default function RegisterProfessional_InitialInformations({ navigation }:
 
   const canGoToTheNextStep = (): boolean => {
     return (
-      regexDocumento.test(document) && regexEMAIL.test(email) && password.length > 0 && name.length > 0
+      regexDocumento.test(cpfCnpj) && regexEMAIL.test(email) && senha.length > 0 && name.length > 0
     )
   }
 
@@ -49,9 +49,9 @@ export default function RegisterProfessional_InitialInformations({ navigation }:
           <Text style={styleRegister.text}>Preencha os campos para criar a sua conta...</Text>
           <View style={styleRegister.inputsContainer}>
             <Input onFocus={() => setIncorrectInformations(false)} placeholder='Nome' text={name} onChangeText={setName}></Input>
-            <Input keyboardType='number-pad' onFocus={() => setIncorrectInformations(false)} placeholder='CNPJ ou CPF' text={document} onChangeText={setDocument}></Input>
+            <Input keyboardType='number-pad' onFocus={() => setIncorrectInformations(false)} placeholder='CNPJ ou CPF' text={cpfCnpj} onChangeText={setCpfCnpj}></Input>
             <Input keyboardType='email-address' onFocus={() => setIncorrectInformations(false)} placeholder='Email' text={email} onChangeText={setEmail}></Input>
-            <InputPassword onFocus={() => setIncorrectInformations(false)} text={password} onChangeText={setPassword}></InputPassword>
+            <InputPassword onFocus={() => setIncorrectInformations(false)} text={senha} onChangeText={setSenha}></InputPassword>
           </View>
           {
             incorrectInformations ?

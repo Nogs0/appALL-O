@@ -4,14 +4,26 @@ import HeaderRegisterProfessional from '../../../../../components/HeaderRegister
 import { greyDefault, redDefault } from '../../../../../shared/styleConsts'
 import style from './style'
 import styleRegister from '../../style';
+import { useAPI } from '../../../../../contexts/api'
+import { showMessage } from 'react-native-flash-message'
 
 export default function RegisterProfessional_CreatingProfession({ navigation }: any) {
+
+  const { sugerirProfissao } = useAPI();
   const [desc, setDesc] = useState<string>('');
   const [incorrectInformations, setIncorrectInformations] = useState<boolean>(false);
 
   const handleButtonNext = () => {
-    if (canGoToTheNextStep())
-      navigation.navigate('RegisterProfessional_OkProfession')
+    if (canGoToTheNextStep()) {
+      sugerirProfissao(desc)
+        .then(() => {
+          navigation.navigate('RegisterProfessional_OkProfession')
+        })
+        .catch(() => showMessage({
+          message: 'Falha ao enviar sugestão!',
+          type: 'danger'
+        }))
+    }
     else setIncorrectInformations(true)
   }
 
@@ -20,7 +32,7 @@ export default function RegisterProfessional_CreatingProfession({ navigation }: 
       desc.length > 0
     )
   }
-  
+
   return (
     <SafeAreaView style={styleRegister.defaultContainer}>
       <HeaderRegisterProfessional navigation={navigation} />

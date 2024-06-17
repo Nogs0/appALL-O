@@ -43,6 +43,7 @@ export default function ALLORequestBase<T>(method: verbosAPI, url: string, param
                         resolve(result.data.content)
                     })
                     .catch((e) => {
+                        console.log(e.request)
                         reject(e);
                     })
                 }

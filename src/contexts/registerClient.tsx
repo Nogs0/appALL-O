@@ -1,6 +1,5 @@
 import { createContext, useContext, useState } from "react";
 import { useAuth } from "./auth";
-
 interface Address {
     postalCode: string,
     state: string,

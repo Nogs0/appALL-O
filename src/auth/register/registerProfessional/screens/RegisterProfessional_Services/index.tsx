@@ -14,11 +14,11 @@ import { ProfissaoOutput, useAPI } from '../../../../../contexts/api';
 export default function RegisterProfessional_Services(props: any) {
 
   const { getProfessions } = useAPI();
-  const { setServices } = useRegisterProfessional();
+  const { profissional,  setServices } = useRegisterProfessional();
 
   const [servico, setServico] = useState<string>('');
   const [searchingServico, setSearchingServico] = useState<boolean>(false);
-  const [listServicos, setListServicos] = useState<number[]>([]);
+  const [listServicos, setListServicos] = useState<number[]>(profissional ? profissional.profissoesId : []);
   const [incorrectInformations, setIncorrectInformations] = useState<boolean>(false);
 
   const [servicosBase, setServicosBase] = useState<ProfissaoOutput[]>([]);

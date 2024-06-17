@@ -12,17 +12,19 @@ export interface ClientDTO {
 }
 
 export interface ProvedorInput {
-    id: number,
+    id: number | undefined,
     email: string,
     senha: string,
     telefone: string,
     cpfCnpj: string,
     razaoSocial: string,
     tipoPessoa: TipoPessoaEnum,
-    profissaoId: number[]
+    profissoesId: number[]
     endereco: Endereco,
     imagemDoPerfil: any,
-    images: []
+    images: [],
+    servicos: number[],
+    descricao: string
 }
 
 export interface Endereco {
@@ -49,7 +51,9 @@ interface APIContextData {
     updateFavoriteReview(id: number): Promise<boolean>,
     getReviewsByProfessional(id: number): Promise<any>,
     updateSeenNotification(id: number): Promise<boolean>,
-    getProfessions(): Promise<ProfissaoOutput[]>
+    getProfessions(): Promise<ProfissaoOutput[]>,
+    sugerirProfissao(sugestao: string): Promise<void>,
+    createProvider(profissional: ProvedorInput): Promise<void>
 }
 
 const APIContext = createContext<APIContextData>({} as APIContextData);
@@ -95,7 +99,7 @@ function APIProvider({ children }: any) {
                         cpfCnpj: '087.606.736-48',
                         telefone: '(35) 99826-5445',
                         tipoPessoa: TipoPessoaEnum.FISICA,
-                        profissaoId: [1, 2, 3],
+                        profissoesId: [1, 2, 3],
                         imagemDoPerfil: undefined,
                         images: [],
                         endereco: {
@@ -179,7 +183,7 @@ function APIProvider({ children }: any) {
             }
         })
     }
-    
+
     const getReviewsByProfessional = (id: number): Promise<any> => {
 
         return new Promise<any>((resolve, reject) => {
@@ -299,9 +303,34 @@ function APIProvider({ children }: any) {
         })
     }
 
+    const sugerirProfissao = (sugestao: string): Promise<void> => {
+        return new Promise<void>(async (resolve, reject) => {
+            ALLORequestBase(verbosAPI.POST, 'profissao/sugerir', { sugestao })
+                .then(() => {
+                    resolve();
+                })
+                .catch(() => {
+                    reject();
+                })
+        })
+    }
+
+    const createProvider = (profissional: ProvedorInput): Promise<void> => {
+        return new Promise<void> ((resolve, reject) => {
+            ALLORequestBase(verbosAPI.POST, 'provedor', profissional)
+            .then((result) => {
+                resolve();
+            })
+            .catch((e) => {
+                console.log(e);
+                reject();
+            })
+        })
+    }
+
     return (
         <APIContext.Provider
-            value={{ getClientToEdit, getProfessionalToEdit, updateProfessional, updateImage, updateFavoriteReview, getReviewsByProfessional, updateSeenNotification, updateClient, getProfessions }}>
+            value={{ getClientToEdit, getProfessionalToEdit, updateProfessional, updateImage, updateFavoriteReview, getReviewsByProfessional, updateSeenNotification, updateClient, getProfessions, sugerirProfissao, createProvider }}>
             {children}
         </APIContext.Provider>
     )

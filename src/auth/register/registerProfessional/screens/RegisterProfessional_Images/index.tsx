@@ -7,19 +7,25 @@ import style from './style';
 import HeaderRegisterProfessional from '../../../../../components/HeaderRegisterProfessional';
 import { useRegisterProfessional } from '../../../../../contexts/registerProfessional';
 import { blueDefault, whiteDefault, blackDefault, greyDefault, redDefault } from '../../../../../shared/styleConsts';
+import { showMessage } from 'react-native-flash-message';
 
 export default function RegisterProfessional_Images({ navigation }: any) {
 
-  const { endingRegister, loading, setImages } = useRegisterProfessional();
-  const [imagesTela, setImagesTela] = useState<any[]>([]);
+  const { endingRegister, loading, setImages, profissional } = useRegisterProfessional();
+  const [imagesTela, setImagesTela] = useState<any[]>(profissional ? profissional.images : []);
   const [incorrectInformations, setIncorrectInformations] = useState<boolean>(false);
 
   const handleButtonEnd = async () => {
     if (canGoToTheNextPage()) {
       setImages(imagesTela)
-      let response = await endingRegister();
-      console.log(response);
-      navigation.navigate('RegisterProfessional_OkEndRegister');
+      endingRegister().then(() => {
+        navigation.navigate('RegisterProfessional_OkEndRegister');
+      }).catch(() => {
+        showMessage({
+          message: 'Falha ao criar profissional!',
+          type: 'danger'
+        })
+      });
     }
     else setIncorrectInformations(true)
   }
