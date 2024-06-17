@@ -11,7 +11,7 @@ import styleRegister from '../../style';
 export default function RegisterProfessional_InitialInformations({ navigation }: any) {
 
   const { client, setInitialInformations, clearClient } = useRegisterClient();
-  const [nome, setNome] = useState<string>(client ? client.email : '');
+  const [nome, setNome] = useState<string>(client ? client.nome : '');
   const [email, setEmail] = useState<string>(client ? client.email : '');
   const [senha, setSenha] = useState<string>(client ? client.senha : '');
   const [incorrectInformations, setIncorrectInformations] = useState<boolean>(false);
@@ -54,6 +54,9 @@ export default function RegisterProfessional_InitialInformations({ navigation }:
         }
         <TouchableOpacity style={styleRegister.buttonNext} onPress={handleButtonNext}>
           <Text style={styleRegister.textButtonNext}>Prosseguir</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styleRegister.buttonNext} onPress={(()=>{setInitialInformations({ email, nome, senha }); console.log(client)})}>
+          <Text style={styleRegister.textButtonNext}>Printar</Text>
         </TouchableOpacity>
 
       </View>

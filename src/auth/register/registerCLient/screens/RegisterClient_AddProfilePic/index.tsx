@@ -19,9 +19,14 @@ export default function RegisterProfessional_Images({ navigation }: any) {
   const handleButtonEnd = async () => {
     console.log(image)
 
-    let response = await endingRegister();
-    console.log(response);
-    navigation.navigate('RegisterClient_OkEndRegister');
+    endingRegister().then(() => {
+            navigation.navigate('RegisterClient_OkEndRegister');
+        })
+        .catch(() => {
+          console.log("NAOOOOOOOOOOOOOOOO")
+        })
+ 
+    
   }
 
   const addImage = () => {

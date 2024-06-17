@@ -15,23 +15,23 @@ export default function RegisterProfessional_ServiceLocation({ navigation }: any
 
   const { client, setAddress } = useRegisterClient();
 
-  const [postalCode, setPostalCode] = useState<string>(!!client ? client.address?.postalCode : '');
-  const [city, setCity] = useState<string>(!!client ? client.address?.city : '');
-  const [state, setState] = useState<string>(!!client ? client.address?.state : '');
-  const [neighborhood, setNeighborhood] = useState<string>(!!client ? client.address?.neighborhood : '');
-  const [street, setStreet] = useState<string>(!!client ? client.address?.street : '');
-  const [number, setNumber] = useState<string>(!!client ? client.address?.number : '');
+  const [cep, setCep] = useState<string>(!!client ? client.endereco?.cep : '');
+  const [cidade, setCidade] = useState<string>(!!client ? client.endereco?.cidade : '');
+  const [estado, setEstado] = useState<string>(!!client ? client.endereco?.estado : '');
+  const [bairro, setBairro] = useState<string>(!!client ? client.endereco?.bairro : '');
+  const [logradouro, setLogradouro] = useState<string>(!!client ? client.endereco?.logradouro : '');
+  const [numero, setNumero] = useState<string>(!!client ? client.endereco?.numero : '');
   const [incorrectInformations, setIncorrectInformations] = useState<boolean>(false);
 
   const [loadingCEP, setLoadingCEP] = useState<boolean>(false);
   const handleButtonNext = () => {
     setAddress({
-      postalCode,
-      state,
-      city,
-      neighborhood,
-      street,
-      number,
+      cep,
+      estado,
+      cidade,
+      bairro,
+      logradouro,
+      numero,
     });
     if (canGoToTheNextStep())
       navigation.navigate('RegisterClient_AddProfilePic');
@@ -40,24 +40,24 @@ export default function RegisterProfessional_ServiceLocation({ navigation }: any
 
   const canGoToTheNextStep = (): boolean => {
     return (
-      postalCode.length > 0 &&
-      state.length > 0 &&
-      city.length > 0
+      cep.length > 0 &&
+      estado.length > 0 &&
+      cidade.length > 0
     )
   }
 
   const searchCEP = () => {
     setLoadingCEP(true);
-    setCity('');
-    setState('');
-    setNeighborhood('');
-    setStreet('');
-    setNumber('')
-    getAddress(postalCode).then((result) => {
-      setCity(result.localidade);
-      setState(result.uf);
-      setNeighborhood(result.bairro);
-      setStreet(result.logradouro);
+    setCidade('');
+    setEstado('');
+    setBairro('');
+    setLogradouro('');
+    setNumero('')
+    getAddress(cep).then((result) => {
+      setCidade(result.localidade);
+      setEstado(result.uf);
+      setBairro(result.bairro);
+      setLogradouro(result.logradouro);
     }).catch(() => showMessage({
       message: 'CEP inválido!',
       type: 'danger'
@@ -76,12 +76,12 @@ export default function RegisterProfessional_ServiceLocation({ navigation }: any
       <View style={styleRegister.defaultContentContainer}>
         <Text style={styleRegister.title}>Informe sua cidade</Text>
         <View style={styleRegister.inputsContainer}>
-          <InputCEP onFocus={() => setIncorrectInformations(false)} isClient searchCEP={searchCEP} cep={postalCode} onChangeText={setPostalCode} />
-          <Input onFocus={() => setIncorrectInformations(false)} editable={!loadingCEP} placeholder='Estado' text={state} onChangeText={setState} />
-          <Input onFocus={() => setIncorrectInformations(false)} editable={!loadingCEP} placeholder='Cidade' text={city} onChangeText={setCity} />
-          <Input onFocus={() => setIncorrectInformations(false)} editable={!loadingCEP} placeholder='Bairro' text={neighborhood} onChangeText={setNeighborhood} />
-          <Input onFocus={() => setIncorrectInformations(false)} editable={!loadingCEP} placeholder='Rua' text={street} onChangeText={setStreet} />
-          <Input onFocus={() => setIncorrectInformations(false)} editable={!loadingCEP} placeholder='Número' text={number} onChangeText={setNumber} />
+          <InputCEP onFocus={() => setIncorrectInformations(false)} isClient searchCEP={searchCEP} cep={cep} onChangeText={setCep} />
+          <Input onFocus={() => setIncorrectInformations(false)} editable={!loadingCEP} placeholder='Estado' text={estado} onChangeText={setEstado} />
+          <Input onFocus={() => setIncorrectInformations(false)} editable={!loadingCEP} placeholder='Cidade' text={cidade} onChangeText={setCidade} />
+          <Input onFocus={() => setIncorrectInformations(false)} editable={!loadingCEP} placeholder='Bairro' text={bairro} onChangeText={setBairro} />
+          <Input onFocus={() => setIncorrectInformations(false)} editable={!loadingCEP} placeholder='Logradouro' text={logradouro} onChangeText={setLogradouro} />
+          <Input onFocus={() => setIncorrectInformations(false)} editable={!loadingCEP} placeholder='Número' text={numero} onChangeText={setNumero} />
         </View>
         {
           incorrectInformations ?
@@ -90,6 +90,10 @@ export default function RegisterProfessional_ServiceLocation({ navigation }: any
         }
         <TouchableOpacity style={styleRegister.buttonNext} onPress={() => handleButtonNext()}>
           <Text style={styleRegister.textButtonNext}>Prosseguir</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styleRegister.buttonNext} onPress={() => {setAddress({cep,estado,cidade,bairro, logradouro,numero,});console.log(client)}}>
+          <Text style={styleRegister.textButtonNext}>print</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
