@@ -2,32 +2,32 @@ import { createContext, useContext, useState } from "react";
 import { useAuth } from "./auth";
 
 interface Address {
-    postalCode: string,
-    state: string,
-    city: string,
-    neighborhood: string,
-    street: string,
-    number: string
+    cep: string,
+    estado: string,
+    cidade: string,
+    bairro: string,
+    logradouro: string,
+    numero: string
 }
 
 interface InitialInformations {
-    name: string,
+    nome: string,
     email: string,
-    password: string,
+    senha: string,
 }
 
-interface ClientCreateDto {
-    name: string,
-    document: string,
+interface ClienteInput {
+    id: number | undefined,
+    senha: string,
     email: string,
-    password: string,
-    address: Address,
-    phoneNumber: string,
-    profilePic: any
+    telefone: string,
+    cpfCnpj: string,
+    nome: string
+    imagem: string
 }
 
 interface RegisterClientContextData {
-    client: ClientCreateDto | null,
+    client: ClienteInput | null,
     loading: boolean,
     setInitialInformations(params: InitialInformations): void,
     setAddress(address: Address): void,
@@ -42,31 +42,24 @@ const RegisterClientContext = createContext<RegisterClientContextData>({} as Reg
 function RegisterClientProvider({ children }: any) {
     const { endRegister } = useAuth();
 
-    const [client, setClient] = useState<ClientCreateDto | null>({
-        name: '',
-        document: '',
+    const [client, setClient] = useState<ClienteInput | null>({
+        id: undefined,
         email: '',
-        password: '',
-        address: {
-            postalCode: '',
-            state: '',
-            city: '',
-            neighborhood: '',
-            street: '',
-            number: ''
-        },
-        phoneNumber: '',
-        profilePic: []
+        senha: '',
+        telefone: '',
+        cpfCnpj: '',
+        nome: '',
+        imagem: ''
     });
     const [loading, setLoading] = useState<boolean>(false);
 
     function setInitialInformations(params: InitialInformations) {
         setClient((prev) => {
             if (!prev)
-                prev = {} as ClientCreateDto;
-            prev.name = params.name;
+                prev = {} as ClienteInput;
             prev.email = params.email;
-            prev.password = params.password
+            prev.nome = params.nome;
+            prev.senha = params.senha
             return prev;
         });
     }
@@ -74,21 +67,21 @@ function RegisterClientProvider({ children }: any) {
 
     function setAddress(address: Address) {
         setClient((prev) => {
-            if (!prev) prev = {} as ClientCreateDto;
+            if (!prev) prev = {} as ClienteInput;
             return { ...prev, address };
         });
     }
 
     function setContacts(phoneNumber: string) {
         setClient((prev) => {
-            if (!prev) prev = {} as ClientCreateDto;
+            if (!prev) prev = {} as ClienteInput;
             return { ...prev, phoneNumber };
         });
     }
 
     function setProfilePic(profilePic: any) {
         setClient((prev) => {
-            if (!prev) prev = {} as ClientCreateDto;
+            if (!prev) prev = {} as ClienteInput;
             return { ...prev, profilePic };
         });
     }
@@ -106,20 +99,13 @@ function RegisterClientProvider({ children }: any) {
 
     function clearClient(): void {
         setClient({
-            name: '',
-            document: '',
+            id: undefined,
             email: '',
-            password: '',
-            address: {
-                postalCode: '',
-                state: '',
-                city: '',
-                neighborhood: '',
-                street: '',
-                number: ''
-            },
-            phoneNumber: '',
-            profilePic: []
+            senha: '',
+            telefone: '',
+            cpfCnpj: '',
+            nome: '',
+            imagem: ''
         });
         endRegister();
     }
