@@ -14,15 +14,14 @@ export interface ClientDTO {
 export interface ProvedorInput {
     id: number | undefined,
     email: string,
-    senha: string,
     telefone: string,
     cpfCnpj: string,
     razaoSocial: string,
-    tipoPessoa: TipoPessoaEnum,
+    tipoPessoa: TipoPessoaEnum | undefined,
     idProfissoes: number[]
     enderecoInput: Endereco,
     perfilImagem: any,
-    servicoImagens: [],
+    servicoImagens: string[],
     descricao: string
 }
 
@@ -41,9 +40,36 @@ export interface ProfissaoOutput {
     nome: string
 }
 
+export interface ProvedorOutput {
+    id: number,
+    razaoSocial: string,
+    endereco: Endereco,
+    profissoes: ProfissaoOutput[],
+    tipoPessoa: TipoPessoaEnum,
+    cpfCnpj: string,
+    email: string,
+    telefone: string,
+    ativo: boolean,
+    favorito: boolean
+}
+
+export interface PerfilProvedorOutput {
+    id: number,
+    provedor: ProvedorOutput,
+    avaliacao: any,
+    servicosConcluidos: number,
+    mediaAvaliacao: number,
+    tempoCadastro: number,
+    pathToImage: any,
+    nome: string,
+    email: string,
+    descricao: string,
+    quantidadeAvaliacoes: number | undefined
+}
+
 interface APIContextData {
     getClientToEdit(id: number): Promise<ClientDTO>,
-    getProfessionalToEdit(id: number): Promise<ProvedorInput>,
+    getPerfilProfissional(id: number): Promise<PerfilProvedorOutput>,
     updateProfessional(dto: ProvedorInput): Promise<void>,
     updateClient(dto: ClientDTO): Promise<void>,
     updateImage(image: any): Promise<any>,
@@ -86,29 +112,28 @@ function APIProvider({ children }: any) {
         })
     }
 
-    const getProfessionalToEdit = (id: number): Promise<ProvedorInput> => {
-        return new Promise<ProvedorInput>((resolve, reject) => {
-            try {
-                setTimeout(() => {
-                    
-                }, 1000)
-            }
-            catch (e) {
-                reject(e);
-            }
+    const getPerfilProfissional = (id: number): Promise<PerfilProvedorOutput> => {
+        return new Promise<PerfilProvedorOutput>((resolve, reject) => {
+            ALLORequestBase<PerfilProvedorOutput>(verbosAPI.GET, 'provedor/perfil', `idProvedor=${id}`)
+                .then((result) => {
+                    resolve(result);
+                })
+                .catch((e) => {
+                    reject(e);
+                })
         })
     }
 
-    const updateProfessional = (dto: ProvedorInput): Promise<void> => {
+    const updateProfessional = (input: ProvedorInput): Promise<void> => {
         return new Promise<void>((resolve, reject) => {
-            try {
-                setTimeout(() => {
-                    resolve()
-                }, 2000);
-            }
-            catch (e) {
-                reject(e);
-            }
+            ALLORequestBase<void>(verbosAPI.PUT, 'provedor', input)
+            .then(() => {
+                resolve();
+            })
+            .catch((e) => {
+                console.log(e.request)
+                reject();
+            })
         })
     }
 
@@ -272,9 +297,9 @@ function APIProvider({ children }: any) {
 
     const getProfessions = (): Promise<ProfissaoOutput[]> => {
         return new Promise<ProfissaoOutput[]>(async (resolve, reject) => {
-            ALLORequestBase<ProfissaoOutput[]>(verbosAPI.GET, 'profissao')
+            ALLORequestBase<any>(verbosAPI.GET, 'profissao')
                 .then((result) => {
-                    resolve(result);
+                    resolve(result.content as ProfissaoOutput[]);
                 })
                 .catch((e) => {
                     console.log(e)
@@ -296,21 +321,21 @@ function APIProvider({ children }: any) {
     }
 
     const createProvider = (profissional: ProvedorInput): Promise<void> => {
-        return new Promise<void> ((resolve, reject) => {
+        return new Promise<void>((resolve, reject) => {
             ALLORequestBase(verbosAPI.POST, 'provedor', profissional)
-            .then((result) => {
-                resolve();
-            })
-            .catch((e) => {
-                console.log(e);
-                reject();
-            })
+                .then((result) => {
+                    resolve();
+                })
+                .catch((e) => {
+                    console.log(e);
+                    reject();
+                })
         })
     }
 
     return (
         <APIContext.Provider
-            value={{ getClientToEdit, getProfessionalToEdit, updateProfessional, updateImage, updateFavoriteReview, getReviewsByProfessional, updateSeenNotification, updateClient, getProfessions, sugerirProfissao, createProvider }}>
+            value={{ getClientToEdit, getPerfilProfissional, updateProfessional, updateImage, updateFavoriteReview, getReviewsByProfessional, updateSeenNotification, updateClient, getProfessions, sugerirProfissao, createProvider }}>
             {children}
         </APIContext.Provider>
     )

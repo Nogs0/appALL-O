@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { blueDefault, greyDefault, greyLoadingDefault, whiteDefault } from "../../../../../../shared/styleConsts";
+import { blackDefault, blueDefault, greyDefault, greyLoadingDefault, whiteDefault } from "../../../../../../shared/styleConsts";
 
 export default StyleSheet.create({
     container: {
@@ -51,7 +51,7 @@ export default StyleSheet.create({
         borderRadius: 50
     },
     inputsContainer: {
-        marginTop: '20%'
+        marginTop: '5%'
     },
     inputsContainerAddress: {
         position: 'absolute',
@@ -120,4 +120,12 @@ export default StyleSheet.create({
         top: '30%',
         left: '40%'
     },
+    textArea: {
+        borderWidth: 3,
+        borderRadius: 10,
+        borderColor: greyDefault,
+        width: '100%',
+        color: blackDefault,
+        fontFamily: 'Rubik-Light'
+    }
 })

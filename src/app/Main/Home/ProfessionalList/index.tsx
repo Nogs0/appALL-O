@@ -11,126 +11,7 @@ export default function ProfessionalList(props: any) {
   const [params, setParams] = useState<any>(props.route.params)
   const navigation = useNavigation();
   const DATA: CardProps[] = [
-    {
-      id: 1,
-      name: 'Marcio DME',
-      rate: 4.5,
-      obs: 'Melhor avaliado',
-      priceAvg: 70,
-      image: require('../../../../assets/images/eletricista.jpg'),
-      favorite: true,
-      timeDistance: 30,
-      navigation: navigation,
-      numberRate: 30
-    },
-    {
-      id: 1,
-      name: 'Davi CEMIG',
-      rate: 4,
-      obs: '4 serviços essa semana',
-      priceAvg: 30,
-      image: require('../../../../assets/images/encanador.jpg'),
-      favorite: false,
-      timeDistance: 20,
-      navigation: navigation,
-      numberRate: 30
-    },
-    {
-      id: 1,
-      name: 'Marcio DME',
-      rate: 4.5,
-      obs: 'Melhor avaliado',
-      priceAvg: 70,
-      image: require('../../../../assets/images/eletricista.jpg'),
-      favorite: true,
-      timeDistance: 30,
-      navigation: navigation,
-      numberRate: 30
-    },
-    {
-      id: 1,
-      name: 'Davi CEMIG',
-      rate: 4,
-      obs: '4 serviços essa semana',
-      priceAvg: 30,
-      image: require('../../../../assets/images/encanador.jpg'),
-      favorite: false,
-      timeDistance: 20,
-      navigation: navigation,
-      numberRate: 30
-    },
-    {
-      id: 1,
-      name: 'Marcio DME',
-      rate: 4.5,
-      obs: 'Melhor avaliado',
-      priceAvg: 70,
-      image: require('../../../../assets/images/eletricista.jpg'),
-      favorite: true,
-      timeDistance: 30,
-      navigation: navigation,
-      numberRate: 30
-    },
-    {
-      id: 1,
-      name: 'Davi CEMIG',
-      rate: 4,
-      obs: '4 serviços essa semana',
-      priceAvg: 30,
-      image: require('../../../../assets/images/encanador.jpg'),
-      favorite: false,
-      timeDistance: 20,
-      navigation: navigation,
-      numberRate: 30
-    },
-    {
-      id: 1,
-      name: 'Marcio DME',
-      rate: 4.5,
-      obs: 'Melhor avaliado',
-      priceAvg: 70,
-      image: require('../../../../assets/images/eletricista.jpg'),
-      favorite: true,
-      timeDistance: 30,
-      navigation: navigation,
-      numberRate: 30
-    },
-    {
-      id: 1,
-      name: 'Davi CEMIG',
-      rate: 4,
-      obs: '4 serviços essa semana',
-      priceAvg: 30,
-      image: require('../../../../assets/images/encanador.jpg'),
-      favorite: false,
-      timeDistance: 20,
-      navigation: navigation,
-      numberRate: 30
-    },
-    {
-      id: 1,
-      name: 'Marcio DME',
-      rate: 4.5,
-      obs: 'Melhor avaliado',
-      priceAvg: 70,
-      image: require('../../../../assets/images/eletricista.jpg'),
-      favorite: true,
-      timeDistance: 30,
-      navigation: navigation,
-      numberRate: 30
-    },
-    {
-      id: 1,
-      name: 'Davi CEMIG',
-      rate: 4,
-      obs: '4 serviços essa semana',
-      priceAvg: 30,
-      image: require('../../../../assets/images/encanador.jpg'),
-      favorite: false,
-      timeDistance: 20,
-      navigation: navigation,
-      numberRate: 30
-    }
+
   ]
 
   const [buttonSelected, setButtonSelected] = useState<ButtonFilterEnumProfessions>(ButtonFilterEnumProfessions.nextToYou);
@@ -141,7 +22,7 @@ export default function ProfessionalList(props: any) {
 
   const renderItem = (item: CardProps) => {
     return (
-      <CardProfessional props={item}></CardProfessional>
+      <CardProfessional props={item} profissao={params.profession}></CardProfessional>
     )
   }
 

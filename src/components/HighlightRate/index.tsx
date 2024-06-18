@@ -4,39 +4,29 @@ import style from './style';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { whiteDefault } from '../../shared/styleConsts';
 
-export default function HighlightRate({ id, defaultColor }: any) {
-
-    const [rate, setRate] = useState<any>();
-
-    useEffect(() => {
-        setRate({
-            client: 'Fernando Clientela',
-            rateGrade: 5,
-            rateNote: 'Esse cara foi fera, profissaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaional muito bom!',
-            image: require('../../assets/images/foto-de-perfil-homem.png')
-        });
-    }, [id])
+export default function HighlightRate({ avaliacao, defaultColor }: any) {
 
     return (
         <SafeAreaView style={style.container}>
-            {rate ? (
+            {avaliacao ?
                 <View style={style.rateContent}>
-                    <View style={[style.infoContainer, {backgroundColor: defaultColor}]}>
-                        <View style={style.rate}>
-                            <Text style={style.name}>{rate.client}</Text>
-                            <Text ellipsizeMode='tail' numberOfLines={4} style={style.rateNote}>{`"${rate.rateNote}"`}</Text>
+                    <View style={[style.infoContainer, { backgroundColor: defaultColor }]}>
+                        <View style={style.avaliacao}>
+                            <Text style={style.name}>{avaliacao.client}</Text>
+                            <Text ellipsizeMode='tail' numberOfLines={4} style={style.rateNote}>{`"${avaliacao.rateNote}"`}</Text>
                         </View>
                         <View style={style.rateStars}>
-                            <Icon name={'star'} color={whiteDefault} size={13}>{`${rate.rateGrade.toFixed(1)}`}</Icon>
+                            <Icon name={'star'} color={whiteDefault} size={13}>{`${avaliacao.rateGrade?.toFixed(1)}`}</Icon>
                         </View>
                     </View>
                     <View style={style.imageContainer}>
-                        <Image style={style.image} source={rate.image}></Image>
+                        <Image style={style.image} source={avaliacao.image}></Image>
                     </View>
                 </View>
-            ) : (
+                :
                 <></>
-            )}
+            }
+
         </SafeAreaView>
     )
 }

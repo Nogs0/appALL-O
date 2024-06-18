@@ -18,13 +18,10 @@ export default function ALLORequestBase<T>(method: verbosAPI, url: string, param
         switch (method) {
             case verbosAPI.GET:
                 try {
-                    if (params) {
-                        url = `${url}?id=${params.id}`
-                    }
-
-                    await api.get(url).then((result) => {
-                        resolve(result.data.content);
-                    })
+                    await api.get(`${url}?${params}`)
+                        .then((result) => {
+                            resolve(result.data);
+                        })
                         .catch((e) => {
                             reject(e);
                         })

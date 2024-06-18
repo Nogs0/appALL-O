@@ -14,10 +14,11 @@ export type CardProps = {
     favorite: boolean,
     navigation: any,
     timeDistance: number,
-    numberRate: number
+    numberRate: number,
+    profissao: string
 }
 
-export default function CardProfessional({ props }: any) {
+export default function CardProfessional({ props, profession }: any) {
     const [favorite, setFavorite] = useState<boolean>(props.favorite);
     const setFavoriteAndUpdate = (id: number, favorite: boolean) => {
         setFavorite(favorite);
@@ -31,16 +32,16 @@ export default function CardProfessional({ props }: any) {
     }
 
     const getRate = (rate: number) => {
-        return <Icon name='star' color={yellowDefault}>{` ${rate.toFixed(1).replace('.', ',')}`}</Icon>
+        return <Icon name='star' color={yellowDefault}>{` ${rate?.toFixed(1).replace('.', ',')}`}</Icon>
     }
 
     const getPrice = (price: number) => {
-        return `R$${price.toFixed(2).replace('.', ',')}`
+        return `R$${price?.toFixed(2).replace('.', ',')}`
     }
 
     return (
         <SafeAreaView style={styles.container}>
-            <TouchableOpacity style={styles.contentContainer} onPress={() => props.navigation.navigate('ProfessionalProfile', { id: props.id })}>
+            <TouchableOpacity style={styles.contentContainer} onPress={() => props.navigation.navigate('ProfessionalProfile', { id: props.id, profession: profession })}>
                 <View style={styles.imageContainer}>
                     <Image style={styles.image} source={props.image}></Image>
                 </View>

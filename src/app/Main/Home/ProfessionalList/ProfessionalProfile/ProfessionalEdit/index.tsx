@@ -1,52 +1,43 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Alert, FlatList, Image, KeyboardAvoidingView, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import HeaderProfessional from '../../../../../../components/HeaderProfessional';
-import { ProvedorInput, useAPI } from '../../../../../../contexts/api';
-import { blackDefault, blueDefault, greyDefault, greyLoadingDefault, whiteDefault } from '../../../../../../shared/styleConsts';
-import style from './style';
-import InputCEP from '../../../../../../components/InputCEP';
-import getAddress from '../../../../../../services/cep';
+import { ActivityIndicator, Alert, FlatList, Image, KeyboardAvoidingView, SafeAreaView, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { showMessage } from 'react-native-flash-message';
 import { launchImageLibrary } from 'react-native-image-picker';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import HeaderProfessional from '../../../../../../components/HeaderProfessional';
 import Input from '../../../../../../components/Input';
-import { showMessage } from 'react-native-flash-message';
+import InputCEP from '../../../../../../components/InputCEP';
+import { PerfilProvedorOutput, ProvedorInput, useAPI } from '../../../../../../contexts/api';
+import getAddress from '../../../../../../services/cep';
+import { blackDefault, blueDefault, greyDefault, whiteDefault } from '../../../../../../shared/styleConsts';
+import style from './style';
 
 export default function ProfessionalEdit(props: any) {
-
-    const { getProfessionalToEdit, updateProfessional, updateImage } = useAPI();
+    const { updateProfessional, updateImage, getPerfilProfissional } = useAPI();
 
     const [params] = useState<any>(props.route.params);
-    const [professional, setProfessional] = useState<ProvedorInput | undefined>(undefined);
+    const [professional, setProfessional] = useState<PerfilProvedorOutput>();
 
-    const [razaoSocial, setRazaoSocial] = useState<string>(professional ? professional.razaoSocial : '');
+    const [razaoSocial, setRazaoSocial] = useState<string>(professional ? professional.nome : '');
     const [email, setEmail] = useState<string>(professional ? professional.email : '');
-    const [cpfCnpj, setCpfCnpj] = useState<string>(professional ? professional.cpfCnpj : '');
-    const [imagemDoPerfil, setImagemDoPerfil] = useState<any>(professional ? professional.imagemDoPerfil : undefined );
+    const [cpfCnpj, setCpfCnpj] = useState<string>(professional ? professional.provedor.cpfCnpj : '');
+    const [telefone, setTelefone] = useState<string>(professional ? professional.provedor.telefone : '');
+    const [perfilImagem, setPerfilImagem] = useState<string>();
+    const [descricao, setDescricao] = useState<string>(professional ? professional.descricao : '');
 
-    const [cep, setCep] = useState<string>(professional ? professional.endereco.cep : '');
-    const [estado, setEstado] = useState<string>(professional ? professional.endereco.estado : '');
-    const [cidade, setCidade] = useState<string>(professional ? professional.endereco.cidade : '');
-    const [bairro, setBairro] = useState<string>(professional ? professional.endereco.bairro : '');
-    const [logradouro, setLogradouro] = useState<string>(professional ? professional.endereco.logradouro : '');
-    const [numero, setNumero] = useState<string>(professional ? professional.endereco.numero : '');
+    const [cep, setCep] = useState<string>(professional ? professional.provedor.endereco.cep : '');
+    const [estado, setEstado] = useState<string>(professional ? professional.provedor.endereco.estado : '');
+    const [cidade, setCidade] = useState<string>(professional ? professional.provedor.endereco.cidade : '');
+    const [bairro, setBairro] = useState<string>(professional ? professional.provedor.endereco.bairro : '');
+    const [logradouro, setLogradouro] = useState<string>(professional ? professional.provedor.endereco.logradouro : '');
+    const [numero, setNumero] = useState<string>(professional ? professional.provedor.endereco.numero : '');
 
-    const [images, setImages] = useState<any[]>(professional ? professional.images : []);
+    const [servicoImagens, setServicoImagens] = useState<string[]>([]);
 
     const [loadingCEP, setLoadingCEP] = useState<boolean>(false);
     const [loadingUpdate, setLoadingUpdate] = useState<boolean>(false);
     const [loadingImage, setLoadingImage] = useState<boolean>(false);
 
     const [tab, setTab] = useState<number>(0);
-
-    const getProfessional = (id: number) => {
-        getProfessionalToEdit(id)
-            .then((resolve) => {
-                setProfessional(resolve)
-            })
-            .catch((error) => {
-                throw new Error(error)
-            })
-    }
 
     const searchCEP = () => {
         setLoadingCEP(true);
@@ -65,14 +56,14 @@ export default function ProfessionalEdit(props: any) {
                 setLoadingImage(true);
                 updateImage(response.assets[0])
                     .then((newImage) => {
-                        setImagemDoPerfil(newImage)
+                        setPerfilImagem(newImage.uri)
                         showMessage({
                             message: 'Imagem de perfil alterada!',
                             type: 'success'
                         })
                     }).catch((e) => {
                         showMessage({
-                            message: e,
+                            message: 'Falha ao atualizar imagem',
                             type: 'danger'
                         })
                     })
@@ -84,29 +75,34 @@ export default function ProfessionalEdit(props: any) {
     const handleupdate = () => {
         setLoadingUpdate(true)
         updateProfessional({
-            id: params.id,
-            razaoSocial,
+            id: professional?.id,
             email,
+            telefone,
             cpfCnpj,
-            imagemDoPerfil,
-            images,
-            endereco: {
+            razaoSocial,
+            enderecoInput: {
                 cep,
                 estado,
                 cidade,
                 bairro,
                 logradouro,
                 numero
-            }
+            },
+            idProfissoes: [1],
+            perfilImagem,
+            servicoImagens,
+            descricao
         } as ProvedorInput)
             .then(() => {
+                if (professional)
+                    getProfessional(professional.id);
                 showMessage({
                     message: 'Informações atualizadas!',
                     type: 'success'
                 })
             }).catch((e) => {
                 showMessage({
-                    message: e,
+                    message: 'Falha ao atualizar informações!',
                     type: 'danger'
                 })
             })
@@ -116,49 +112,63 @@ export default function ProfessionalEdit(props: any) {
     const renderItem = (item: any) => {
         return (
             <TouchableOpacity disabled={loadingUpdate} style={style.imageContainerFlatList} onLongPress={() => removeImage(item.fileName)}>
-                <Image style={style.imageFlatList} source={{ uri: item.uri }}></Image>
+                <Image style={style.imageFlatList} source={{ uri: item }}></Image>
             </TouchableOpacity>
         )
     }
 
     const addImage = () => {
-        console.log(images)
+        console.log(servicoImagens)
         launchImageLibrary({ mediaType: 'photo' }, (response) => {
             if (response.assets && response.assets.length > 0)
-                setImages((prev) => {
-                    if (response.assets)
-                        prev.push(response.assets[0]);
+                setServicoImagens((prev) => {
+                    if (response.assets && response.assets[0].uri)
+                        prev.push(response.assets[0].uri);
                     return [...prev];
                 })
         })
     }
 
-    const removeImage = (fileName: string) => {
-        let indexToDelete = images.findIndex(x => x.fileName == fileName);
+    const removeImage = (uri: string) => {
+        let indexToDelete = servicoImagens.findIndex(x => x == uri);
         if (indexToDelete != -1) {
-            setImages((prev) => {
+            setServicoImagens((prev) => {
                 prev.splice(indexToDelete, 1)
                 return [...prev]
             })
         }
     }
 
+    const getProfessional = (id: number) => {
+        getPerfilProfissional(id)
+            .then((result) => {
+                setProfessional(result);
+            })
+            .catch((e) => {
+                showMessage({
+                    message: 'Falha ao carregar profissional!',
+                    type: 'danger'
+                })
+            })
+    }
+
     useEffect(() => {
-        getProfessional(params?.id);
+        getProfessional(params.professionalId)
     }, [params])
 
     useEffect(() => {
         if (professional) {
-            setRazaoSocial(professional.razaoSocial);
+            setRazaoSocial(professional.nome);
             setEmail(professional.email);
-            setCpfCnpj(professional.cpfCnpj);
-            setImagemDoPerfil(professional.imagemDoPerfil);
-            setCep(professional.endereco.cep);
-            setEstado(professional.endereco.estado);
-            setCidade(professional.endereco.cidade);
-            setBairro(professional.endereco.bairro);
-            setLogradouro(professional.endereco.logradouro);
-            setNumero(professional.endereco.numero);
+            setCpfCnpj(professional.provedor.cpfCnpj);
+            setTelefone(professional.provedor.telefone);
+            setDescricao(professional.descricao);
+            setCep(professional.provedor.endereco.cep);
+            setEstado(professional.provedor.endereco.estado);
+            setCidade(professional.provedor.endereco.cidade);
+            setBairro(professional.provedor.endereco.bairro);
+            setLogradouro(professional.provedor.endereco.logradouro);
+            setNumero(professional.provedor.endereco.numero);
         }
     }, [professional])
 
@@ -174,9 +184,8 @@ export default function ProfessionalEdit(props: any) {
                         :
                         <></>
                     }
-                    <HeaderProfessional title={professional?.razaoSocial}
+                    <HeaderProfessional title={professional?.nome}
                         navigation={props.navigation}
-                        id={professional?.id}
                         defaultColor={blueDefault} />
                     <View style={style.contentContainer}>
                         <View style={style.tabsContainer}>
@@ -202,7 +211,7 @@ export default function ProfessionalEdit(props: any) {
                                 <ScrollView>
                                     <TouchableOpacity disabled={loadingUpdate || loadingImage} style={style.imageContainer}
                                         onPress={() => {
-                                            if (imagemDoPerfil)
+                                            if (perfilImagem)
                                                 Alert.alert("Atenção!", "Você realmente deseja alterar sua foto de perfil?", [
                                                     {
                                                         text: 'Cancelar',
@@ -215,14 +224,14 @@ export default function ProfessionalEdit(props: any) {
                                                 ])
                                             else changeImage();
                                         }}>
-                                        {imagemDoPerfil ?
+                                        {perfilImagem ?
                                             <View style={{ alignItems: 'center', justifyContent: 'center' }}>
                                                 {loadingImage ?
                                                     <ActivityIndicator style={style.loadingImage} size={35} color={blueDefault} />
                                                     :
                                                     <></>
                                                 }
-                                                <Image style={style.image} source={{ uri: imagemDoPerfil.uri }}></Image>
+                                                <Image style={style.image} source={{ uri: perfilImagem }}></Image>
                                             </View>
                                             :
                                             <View style={style.noImage}>
@@ -240,6 +249,14 @@ export default function ProfessionalEdit(props: any) {
                                         <Input editable={!loadingUpdate} text={razaoSocial} onChangeText={setRazaoSocial} placeholder='Nome' />
                                         <Input editable={!loadingUpdate} text={email} onChangeText={setEmail} placeholder='Email' />
                                         <Input editable={!loadingUpdate} text={cpfCnpj} onChangeText={setCpfCnpj} placeholder='Documento' />
+                                        <TextInput placeholder={'Sou um profissional pontual e que gosta de que tudo esteja bem feito!'}
+                                            style={style.textArea}
+                                            value={descricao}
+                                            onChangeText={setDescricao}
+                                            multiline={true}
+                                            numberOfLines={6}
+                                            placeholderTextColor={greyDefault}
+                                            textAlignVertical='top' />
                                     </View>
                                 </ScrollView>
                             </KeyboardAvoidingView>
@@ -266,7 +283,7 @@ export default function ProfessionalEdit(props: any) {
                             <View style={style.imageGridContainer}>
                                 <FlatList
                                     style={{ borderWidth: 1, width: '100%', marginBottom: 10, borderColor: greyDefault }}
-                                    data={images}
+                                    data={servicoImagens}
                                     keyExtractor={(item, index) => index.toString()}
                                     numColumns={3}
                                     renderItem={({ item }) => renderItem(item)} />

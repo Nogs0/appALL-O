@@ -30,7 +30,7 @@ export default StyleSheet.create({
         paddingVertical: 5,
         flexDirection: 'row'
     },
-    rate: {
+    avaliacao: {
         width: '80%',
         height: '100%'
     },

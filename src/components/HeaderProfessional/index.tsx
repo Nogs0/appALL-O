@@ -3,6 +3,7 @@ import { SafeAreaView, Text, TouchableOpacity } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { blueDefault, orangeDefault, whiteDefault } from '../../shared/styleConsts'
 import style from './style'
+import { PerfilProvedorOutput } from '../../contexts/api'
 
 interface HeaderProfessionalProps {
     title?: string,
@@ -11,13 +12,13 @@ interface HeaderProfessionalProps {
     isNotifications?: boolean,
     signOut?: any,
     defaultColor: string,
-    id?: number
+    professionalId?: number
 }
 
 export default function HeaderProfessional(props: HeaderProfessionalProps) {
 
     const handleEditProfessional = () => {
-        props.navigation.navigate('ProfessionalEdit', { id: props.id })
+        props.navigation.navigate('ProfessionalEdit', { professionalId: props.professionalId })
     }
 
     return (
