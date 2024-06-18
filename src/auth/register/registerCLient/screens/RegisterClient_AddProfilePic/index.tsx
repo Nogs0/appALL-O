@@ -9,31 +9,33 @@ import { useRegisterClient } from '../../../../../contexts/registerClient';
 import { blackDefault, orangeDefault, redDefault, whiteDefault } from '../../../../../shared/styleConsts';
 import styleRegister from '../../style';
 import style from './style';
+import { showMessage } from 'react-native-flash-message';
 
 export default function RegisterProfessional_Images({ navigation }: any) {
 
   const { endingRegister, loading, client } = useRegisterClient();
-  const [image, setImage] = useState<any>(require('../../../../../assets/images/default-profile-pic.png'));
+  const [image, setImage] = useState<string>('../../../../../assets/images/default-profile-pic.png');
   const [incorrectInformations, setIncorrectInformations] = useState<boolean>(false);
 
   const handleButtonEnd = async () => {
     console.log(image)
 
     endingRegister().then(() => {
-            navigation.navigate('RegisterClient_OkEndRegister');
+      navigation.navigate('RegisterClient_OkEndRegister');
+    })
+      .catch(() => {
+        showMessage({
+          message: 'Falha ao cadastrar cliente!',
+          type: 'danger'
         })
-        .catch(() => {
-          console.log("NAOOOOOOOOOOOOOOOO")
-        })
- 
-    
+      })
   }
 
   const addImage = () => {
 
     launchImageLibrary({ mediaType: 'photo' }, (response) => {
-      if (response.assets && response.assets.length > 0) {
-        setImage(response.assets[0]);
+      if (response.assets && response.assets.length > 0 && response.assets[0].uri) {
+        setImage(response.assets[0].uri);
       }
     })
   }
@@ -56,17 +58,9 @@ export default function RegisterProfessional_Images({ navigation }: any) {
           <TouchableOpacity style={style.buttonAddImage} onPress={() => addImage()}>
             <Text style={style.textButtonAddImage}>Adicionar Imagem</Text>
           </TouchableOpacity>
-          <Image source={image} style={style.profilePicture}></Image>
-          {
-            incorrectInformations ?
-              <Text style={{ color: redDefault, width: '100%', textAlign: 'left' }}>*Por favor, adicione pelo menos uma imagem!</Text>
-              : <></>
-          }
+          <Image source={{uri: image}} style={style.profilePicture}></Image>
           <TouchableOpacity style={styleRegister.buttonNext} onPress={() => handleButtonEnd()}>
             <Text style={styleRegister.textButtonNext}>Finalizar</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styleRegister.buttonNext} onPress={() => console.log(client)}>
-            <Text style={styleRegister.textButtonNext}>printar</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>

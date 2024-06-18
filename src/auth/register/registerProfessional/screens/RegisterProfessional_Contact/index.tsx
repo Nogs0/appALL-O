@@ -4,6 +4,7 @@ import { useRegisterProfessional } from '../../../../../contexts/registerProfess
 import styleRegister from '../../style';
 import HeaderRegisterProfessional from '../../../../../components/HeaderRegisterProfessional';
 import Input from '../../../../../components/Input';
+import { maskPhone } from '../../../../../shared/helpers';
 
 export default function RegisterProfessional_Contact({ navigation }: any) {
 
@@ -23,8 +24,6 @@ export default function RegisterProfessional_Contact({ navigation }: any) {
       telefone.length == 15
     )
   }
-
-  const maskPhone = ['(', /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]
 
   return (
     <SafeAreaView style={styleRegister.defaultContainer}>

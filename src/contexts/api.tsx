@@ -1,6 +1,7 @@
 import React, { createContext, useContext } from 'react';
 import ALLORequestBase, { api, verbosAPI } from '../services/api';
 import { TipoPessoaEnum } from '../shared/Enums/enums';
+import { ClienteInput } from './registerClient';
 
 export interface ClientDTO {
     id: number,
@@ -14,6 +15,7 @@ export interface ClientDTO {
 export interface ProvedorInput {
     id: number | undefined,
     email: string,
+    senha: string,
     telefone: string,
     cpfCnpj: string,
     razaoSocial: string,
@@ -93,7 +95,8 @@ interface APIContextData {
     updateSeenNotification(id: number): Promise<boolean>,
     getProfessions(): Promise<ProfissaoOutput[]>,
     sugerirProfissao(sugestao: string): Promise<void>,
-    createProvider(profissional: ProvedorInput): Promise<void>
+    createProvider(profissional: ProvedorInput): Promise<void>,
+    createClient(client: ClienteInput): Promise<void>
 }
 
 const APIContext = createContext<APIContextData>({} as APIContextData);
@@ -349,9 +352,23 @@ function APIProvider({ children }: any) {
         })
     }
 
+    const createClient = (client: ClienteInput): Promise<void> => {
+        console.log(client)
+        return new Promise<void>(async (resolve, reject) => {
+            ALLORequestBase(verbosAPI.POST, 'cliente', client)
+                .then(() => {
+                    resolve();
+                })
+                .catch((e) => {
+                    console.log(e.request);
+                    reject(e);
+                })
+        })
+    }
+
     return (
         <APIContext.Provider
-            value={{ getClientToEdit, getPerfilProfissional, updateProfessional, updateImage, updateFavoriteReview, getReviewsByProfessional, updateSeenNotification, updateClient, getProfessions, sugerirProfissao, createProvider }}>
+            value={{ getClientToEdit, getPerfilProfissional, updateProfessional, updateImage, updateFavoriteReview, getReviewsByProfessional, updateSeenNotification, updateClient, getProfessions, sugerirProfissao, createProvider, createClient }}>
             {children}
         </APIContext.Provider>
     )

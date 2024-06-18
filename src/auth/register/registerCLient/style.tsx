@@ -58,12 +58,21 @@ export default StyleSheet.create({
     inputsContainer: {
         width: '100%',
     },
-    subTitle:{
+    subTitle: {
         paddingTop: '2%',
         paddingHorizontal: 10,
         color: 'black',
         fontSize: 14,
         fontFamily: 'Rubik-Light',
         textAlign: 'center'
-    }
+    },
+    scrollViewDefaultContentContainer: {
+        position: 'absolute',
+        top: '25%',
+        width: '80%',
+        height: '70%',
+        padding: '5%',
+        borderRadius: 30,
+        backgroundColor: whiteDefault,
+    },
 })

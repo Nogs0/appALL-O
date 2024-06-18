@@ -3,7 +3,7 @@ import { useAuth } from "./auth";
 import { Endereco, ProvedorInput, useAPI } from "./api";
 import { TipoPessoaEnum } from "../shared/Enums/enums";
 
-interface InitialInformations {
+interface InitialInformationsProfessional {
     razaoSocial: string,
     cpfCnpj: string,
     email: string,
@@ -13,7 +13,7 @@ interface InitialInformations {
 interface RegisterProfessionalContextData {
     profissional: ProvedorInput | null,
     loading: boolean,
-    setInitialInformations(params: InitialInformations): void,
+    setInitialInformations(params: InitialInformationsProfessional): void,
     setDescription(description: string): void,
     setServices(services: number[]): void,
     setEndereco(endereco: Endereco): void,
@@ -32,8 +32,8 @@ function RegisterProfessionalProvider({ children }: any) {
 
     const [profissional, setProfissional] = useState<ProvedorInput | null>({
         id: 0,
-        email: '',
         senha: '',
+        email: '',
         descricao: '',
         telefone: '',
         cpfCnpj: '',
@@ -55,7 +55,7 @@ function RegisterProfessionalProvider({ children }: any) {
       });
     const [loading, setLoading] = useState<boolean>(false);
 
-    function setInitialInformations(params: InitialInformations) {
+    function setInitialInformations(params: InitialInformationsProfessional) {
         setProfissional((prev) => {
             if (!prev)
                 prev = {} as ProvedorInput;
@@ -63,7 +63,6 @@ function RegisterProfessionalProvider({ children }: any) {
             prev.razaoSocial = params.razaoSocial;
             prev.cpfCnpj = params.cpfCnpj;
             prev.email = params.email;
-            prev.senha = params.senha
             return prev;
         });
     }
@@ -121,9 +120,6 @@ function RegisterProfessionalProvider({ children }: any) {
         setLoading(true);
         return new Promise<void>((resolve, reject) => {
             if (profissional) {
-                console.log()
-                console.log(profissional)
-                console.log()
                 createProvider(profissional)
                 .then(() => {
                     resolve();
@@ -138,11 +134,11 @@ function RegisterProfessionalProvider({ children }: any) {
 
     function clearProfessional(): void {
         setProfissional({
-            id: undefined,
+            id: 0,
+            senha: '',
             razaoSocial: '',
             cpfCnpj: '',
             email: '',
-            senha: '',
             idProfissoes: [],
             descricao: '',
             enderecoInput: {

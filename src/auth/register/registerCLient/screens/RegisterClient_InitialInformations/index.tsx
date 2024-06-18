@@ -1,23 +1,26 @@
 import React, { useState } from 'react';
-import { Alert, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, KeyboardAvoidingView, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import HeaderRegisterClient from '../../../../../components/HeaderRegisterClient';
 import Input from '../../../../../components/Input';
 import InputPassword from '../../../../../components/InputPassword';
 import { useRegisterClient } from '../../../../../contexts/registerClient';
-import { regexEMAIL } from '../../../../../shared/helpers';
+import { maskPhone, regexDocumento, regexEMAIL } from '../../../../../shared/helpers';
 import { redDefault } from '../../../../../shared/styleConsts';
 import styleRegister from '../../style';
+import style from './style';
 
 export default function RegisterProfessional_InitialInformations({ navigation }: any) {
 
   const { client, setInitialInformations, clearClient } = useRegisterClient();
+  const [cpfCnpj, setCpfCnpj] = useState<string>(!!client ? client.cpfCnpj : '');
   const [nome, setNome] = useState<string>(client ? client.nome : '');
   const [email, setEmail] = useState<string>(client ? client.email : '');
+  const [telefone, setTelefone] = useState<string>(client ? client.telefone : '');
   const [senha, setSenha] = useState<string>(client ? client.senha : '');
   const [incorrectInformations, setIncorrectInformations] = useState<boolean>(false);
 
   const handleButtonNext = () => {
-    setInitialInformations({ email, nome, senha });
+    setInitialInformations({ email, telefone, cpfCnpj, nome, senha });
 
     if (canGoToTheNextStep()) {
       navigation.navigate('RegisterClient_CEP');
@@ -32,34 +35,34 @@ export default function RegisterProfessional_InitialInformations({ navigation }:
 
   const canGoToTheNextStep = (): boolean => {
     return (
-      regexEMAIL.test(email.trim().toLowerCase()) && senha.length > 0
+      regexEMAIL.test(email.trim().toLowerCase()) && senha.length > 0 && regexDocumento.test(cpfCnpj) && telefone.length == 15
     );
   }
 
   return (
-    <ScrollView contentContainerStyle={styleRegister.defaultContainer} keyboardShouldPersistTaps='handled' scrollEnabled={false}>
+    <SafeAreaView style={styleRegister.defaultContainer}>
       <HeaderRegisterClient navigation={navigation} goBack={handleGoBack} initialScreen />
-      <View style={styleRegister.defaultContentContainer}>
-        <Text style={styleRegister.title}>Seja bem-vindo!</Text>
-        <Text style={styleRegister.text}>Preencha os campos para criar a sua conta...</Text>
-        <View style={styleRegister.inputsContainer}>
-          <Input onFocus={() => setIncorrectInformations(false)} placeholder='Nome' text={nome} onChangeText={setNome} />
-          <Input keyboardType='email-address' onFocus={() => setIncorrectInformations(false)} placeholder='Email' text={email} onChangeText={setEmail} />
-          <InputPassword onFocus={() => setIncorrectInformations(false)} text={senha} onChangeText={setSenha} />
-        </View>
-        {
-          incorrectInformations ?
-            <Text style={{ color: redDefault, width: '100%', textAlign: 'left' }}>*Por favor, preencha todos os campos corretamente!</Text>
-            : null
-        }
-        <TouchableOpacity style={styleRegister.buttonNext} onPress={handleButtonNext}>
-          <Text style={styleRegister.textButtonNext}>Prosseguir</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styleRegister.buttonNext} onPress={(()=>{setInitialInformations({ email, nome, senha }); console.log(client)})}>
-          <Text style={styleRegister.textButtonNext}>Printar</Text>
-        </TouchableOpacity>
-
-      </View>
-    </ScrollView>
+      <KeyboardAvoidingView style={style.scrollViewDefaultContentContainer}>
+        <ScrollView>
+            <Text style={styleRegister.title}>Seja bem-vindo!</Text>
+            <Text style={styleRegister.text}>Preencha os campos para criar a sua conta...</Text>
+            <View style={styleRegister.inputsContainer}>
+              <Input onFocus={() => setIncorrectInformations(false)} placeholder='Nome' text={nome} onChangeText={setNome} />
+              <Input keyboardType='number-pad' isMask mask={maskPhone} onFocus={() => setIncorrectInformations(false)} placeholder='Telefone' text={telefone} onChangeText={setTelefone}></Input>
+              <Input onFocus={() => setIncorrectInformations(false)} placeholder='CPF' text={cpfCnpj} onChangeText={setCpfCnpj}></Input>
+              <Input keyboardType='email-address' onFocus={() => setIncorrectInformations(false)} placeholder='Email' text={email} onChangeText={setEmail} />
+              <InputPassword onFocus={() => setIncorrectInformations(false)} text={senha} onChangeText={setSenha} />
+            </View>
+            {
+              incorrectInformations ?
+                <Text style={{ color: redDefault, width: '100%', textAlign: 'left' }}>*Por favor, preencha todos os campos corretamente!</Text>
+                : null
+            }
+            <TouchableOpacity style={styleRegister.buttonNext} onPress={handleButtonNext}>
+              <Text style={styleRegister.textButtonNext}>Prosseguir</Text>
+            </TouchableOpacity>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }

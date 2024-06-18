@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import { useAuth } from "./auth";
-import { createClient } from "./api_client";
+import { useAPI } from "./api";
 
 interface Endereco {
     cep: string,
@@ -11,19 +11,27 @@ interface Endereco {
     numero: string
 }
 
-interface InitialInformations {
+interface InitialInformationsProfessional {
     nome: string,
     email: string,
     senha: string,
 }
 
+interface InitialInformationsClient {
+    nome: string,
+    email: string,
+    senha: string,
+    cpfCnpj: string,
+    telefone: string
+}
+
 export interface ClienteInput {
     id: number | undefined,
-    senha: string,
     email: string,
     telefone: string,
+    senha: string,
+    nome: string,
     cpfCnpj: string,
-    nome: string
     endereco: Endereco,
     imagem: string
 }
@@ -31,11 +39,10 @@ export interface ClienteInput {
 interface RegisterClientContextData {
     client: ClienteInput | null,
     loading: boolean,
-    setInitialInformations(params: InitialInformations): void,
+    setInitialInformations(params: InitialInformationsClient): void,
     setAddress(address: Endereco): void,
-    setContacts(phoneNumber: string): void,
     setProfilePic(profilePic: any): void,
-    endingRegister(): Promise<string>,
+    endingRegister(): Promise<void>,
     clearClient(): void
 }
 
@@ -43,31 +50,35 @@ const RegisterClientContext = createContext<RegisterClientContextData>({} as Reg
 
 function RegisterClientProvider({ children }: any) {
     const { endRegister } = useAuth();
+    const { createClient } = useAPI();
 
     const [client, setClient] = useState<ClienteInput | null>({
         id: 0,
-        email: 'exemploMatheus@org.com',
+        email: '',
         senha: '',
-        telefone: '33978890000',
-        cpfCnpj: '869.039.770-15',
-        nome: 'matheus o homem',
-        endereco:{
-            cep: '37714660',
+        telefone: '',
+        nome: '',
+        cpfCnpj: '',
+        endereco: {
+            cep: '',
             estado: '',
             cidade: '',
             bairro: '',
             logradouro: '',
             numero: ''
         },
-        imagem: 'string'
-        
+        imagem: ''
+
     });
     const [loading, setLoading] = useState<boolean>(false);
 
-    function setInitialInformations(params: InitialInformations) {
+    function setInitialInformations(params: InitialInformationsClient) {
         setClient((prev) => {
             if (!prev)
                 prev = {} as ClienteInput;
+
+            prev.cpfCnpj = params.cpfCnpj;
+            prev.telefone = params.telefone;
             prev.email = params.email;
             prev.nome = params.nome;
             prev.senha = params.senha
@@ -79,54 +90,44 @@ function RegisterClientProvider({ children }: any) {
     function setAddress(endereco: Endereco) {
         setClient((prev) => {
             if (!prev) prev = {} as ClienteInput;
-            return { ...prev, endereco };
+            
+            prev.endereco = endereco;
+            return prev;
         });
     }
 
-    function setContacts(phoneNumber: string) {
+    function setProfilePic(uri: string) {
         setClient((prev) => {
             if (!prev) prev = {} as ClienteInput;
-            return { ...prev, phoneNumber };
+            prev.imagem = uri;
+            return prev;
         });
     }
 
-    function setProfilePic(profilePic: any) {
-        setClient((prev) => {
-            if (!prev) prev = {} as ClienteInput;
-            return { ...prev, profilePic };
-        });
-    }
-
-    function endingRegister(): Promise<string> {
+    function endingRegister(): Promise<void> {
         setLoading(true);
-        return new Promise<string>((resolve, reject) => {
-            if (client){
-                console.log(client);
-                
+        return new Promise<void>((resolve, reject) => {
+            if (client) {
                 createClient(client).then(() => {
-                    resolve("AAAAAAAAAAAAAAA");
+                    resolve();
                 })
-                .catch(() => {
-                    reject()
-                });
-                setLoading(false);
+                    .catch((e) => {
+                        reject(e)
+                    });
             }
-            else{
-                reject(client);
-            }
-           
+            setLoading(false);
         });
     }
 
     function clearClient(): void {
         setClient({
-            id: undefined,
+            id: 0,
             email: '',
             senha: '',
             telefone: '',
-            cpfCnpj: '',
             nome: '',
-            endereco:{
+            cpfCnpj: '',
+            endereco: {
                 cep: '',
                 estado: '',
                 cidade: '',
@@ -141,7 +142,7 @@ function RegisterClientProvider({ children }: any) {
 
     return (
         <RegisterClientContext.Provider
-            value={{ client, setInitialInformations, setAddress, setContacts, setProfilePic, endingRegister, loading, clearClient }}>
+            value={{ client, setInitialInformations, setAddress, setProfilePic, endingRegister, loading, clearClient }}>
             {children}
         </RegisterClientContext.Provider>
     );
@@ -151,7 +152,7 @@ function useRegisterClient() {
     const context = useContext(RegisterClientContext);
 
     if (!context)
-        throw new Error('useRegisterProfessional must be used with in RegisterProvider.');
+        throw new Error('useRegisterClient must be used with in RegisterClientProvider.');
 
     return context;
 }

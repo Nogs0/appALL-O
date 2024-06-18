@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { ActivityIndicator, Alert, SafeAreaView, Text, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, Alert, KeyboardAvoidingView, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from 'react-native'
 
 import styleRegister from '../../style'
 import style from './style'
@@ -73,29 +73,27 @@ export default function RegisterProfessional_ServiceLocation({ navigation }: any
           : <></>
       }
       <HeaderRegisterClient navigation={navigation} />
-      <View style={styleRegister.defaultContentContainer}>
-        <Text style={styleRegister.title}>Informe sua cidade</Text>
-        <View style={styleRegister.inputsContainer}>
-          <InputCEP onFocus={() => setIncorrectInformations(false)} isClient searchCEP={searchCEP} cep={cep} onChangeText={setCep} />
-          <Input onFocus={() => setIncorrectInformations(false)} editable={!loadingCEP} placeholder='Estado' text={estado} onChangeText={setEstado} />
-          <Input onFocus={() => setIncorrectInformations(false)} editable={!loadingCEP} placeholder='Cidade' text={cidade} onChangeText={setCidade} />
-          <Input onFocus={() => setIncorrectInformations(false)} editable={!loadingCEP} placeholder='Bairro' text={bairro} onChangeText={setBairro} />
-          <Input onFocus={() => setIncorrectInformations(false)} editable={!loadingCEP} placeholder='Logradouro' text={logradouro} onChangeText={setLogradouro} />
-          <Input onFocus={() => setIncorrectInformations(false)} editable={!loadingCEP} placeholder='Número' text={numero} onChangeText={setNumero} />
-        </View>
-        {
-          incorrectInformations ?
-            <Text style={{ color: redDefault, width: '100%', textAlign: 'left' }}>*Por favor, preencha todos os campos corretamente!</Text>
-            : <></>
-        }
-        <TouchableOpacity style={styleRegister.buttonNext} onPress={() => handleButtonNext()}>
-          <Text style={styleRegister.textButtonNext}>Prosseguir</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styleRegister.buttonNext} onPress={() => {setAddress({cep,estado,cidade,bairro, logradouro,numero,});console.log(client)}}>
-          <Text style={styleRegister.textButtonNext}>print</Text>
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+      <KeyboardAvoidingView style={styleRegister.scrollViewDefaultContentContainer}>
+        <ScrollView>
+          <Text style={styleRegister.title}>Informe seu endereço</Text>
+          <View style={styleRegister.inputsContainer}>
+            <InputCEP onFocus={() => setIncorrectInformations(false)} isClient searchCEP={searchCEP} cep={cep} onChangeText={setCep} />
+            <Input onFocus={() => setIncorrectInformations(false)} editable={!loadingCEP} placeholder='Estado' text={estado} onChangeText={setEstado} />
+            <Input onFocus={() => setIncorrectInformations(false)} editable={!loadingCEP} placeholder='Cidade' text={cidade} onChangeText={setCidade} />
+            <Input onFocus={() => setIncorrectInformations(false)} editable={!loadingCEP} placeholder='Bairro' text={bairro} onChangeText={setBairro} />
+            <Input onFocus={() => setIncorrectInformations(false)} editable={!loadingCEP} placeholder='Logradouro' text={logradouro} onChangeText={setLogradouro} />
+            <Input onFocus={() => setIncorrectInformations(false)} editable={!loadingCEP} placeholder='Número' text={numero} onChangeText={setNumero} />
+          </View>
+          {
+            incorrectInformations ?
+              <Text style={{ color: redDefault, width: '100%', textAlign: 'left' }}>*Por favor, preencha todos os campos corretamente!</Text>
+              : <></>
+          }
+          <TouchableOpacity style={styleRegister.buttonNext} onPress={() => handleButtonNext()}>
+            <Text style={styleRegister.textButtonNext}>Prosseguir</Text>
+          </TouchableOpacity>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </SafeAreaView >
   )
 }

@@ -4,7 +4,7 @@ import HeaderRegisterProfessional from '../../../../../components/HeaderRegister
 import Input from '../../../../../components/Input';
 import InputPassword from '../../../../../components/InputPassword';
 import { useRegisterProfessional } from '../../../../../contexts/registerProfessional';
-import { regexDocumento, regexEMAIL } from '../../../../../shared/helpers';
+import { maskPhone, regexDocumento, regexEMAIL } from '../../../../../shared/helpers';
 import { redDefault } from '../../../../../shared/styleConsts';
 import styleRegister from '../../style';
 import { SafeAreaView } from 'react-native-safe-area-context';
