@@ -4,6 +4,7 @@ import { Endereco, ProvedorInput, useAPI } from "./api";
 import { TipoPessoaEnum } from "../shared/Enums/enums";
 
 interface InitialInformations {
+    razaoSocial: string,
     cpfCnpj: string,
     email: string,
     senha: string,
@@ -30,27 +31,28 @@ function RegisterProfessionalProvider({ children }: any) {
     const { createProvider } = useAPI();
 
     const [profissional, setProfissional] = useState<ProvedorInput | null>({
-        id: undefined,
-        razaoSocial: '',
-        cpfCnpj: '',
+        id: 0,
         email: '',
         senha: '',
-        servicos: [],
         descricao: '',
-        endereco: {
-            cep: '',
-            estado: '',
-            cidade: '',
-            bairro: '',
-            logradouro: '',
-            numero: ''
-        },
         telefone: '',
-        images: [],
-        profissoesId: [],
+        cpfCnpj: '',
+        razaoSocial: '',
         tipoPessoa: TipoPessoaEnum.FISICA,
-        imagemDoPerfil: {}
-    });
+        enderecoInput: {
+          cep: '',
+          estado: '',
+          cidade: '',
+          bairro: '',
+          logradouro: '',
+          numero: ''
+        },
+        idProfissoes: [
+          
+        ],
+        perfilImagem: '',
+        servicoImagens: []
+      });
     const [loading, setLoading] = useState<boolean>(false);
 
     function setInitialInformations(params: InitialInformations) {
@@ -58,6 +60,7 @@ function RegisterProfessionalProvider({ children }: any) {
             if (!prev)
                 prev = {} as ProvedorInput;
 
+            prev.razaoSocial = params.razaoSocial;
             prev.cpfCnpj = params.cpfCnpj;
             prev.email = params.email;
             prev.senha = params.senha
@@ -79,8 +82,7 @@ function RegisterProfessionalProvider({ children }: any) {
         setProfissional((prev) => {
             if (!prev)
                 prev = {} as ProvedorInput;
-
-            prev.profissoesId = profissoes;
+            prev.idProfissoes = profissoes;
             return prev;
         });
     }
@@ -90,7 +92,7 @@ function RegisterProfessionalProvider({ children }: any) {
             if (!prev)
                 prev = {} as ProvedorInput;
 
-            prev.endereco = endereco;
+            prev.enderecoInput = endereco;
             return prev;
         });
     }
@@ -110,7 +112,7 @@ function RegisterProfessionalProvider({ children }: any) {
             if (!prev)
                 prev = {} as ProvedorInput;
 
-            prev.images = images;
+            prev.servicoImagens = images;
             return prev;
         });
     }
@@ -118,8 +120,10 @@ function RegisterProfessionalProvider({ children }: any) {
     function endingRegister(): Promise<void> {
         setLoading(true);
         return new Promise<void>((resolve, reject) => {
-            console.log(profissional);
             if (profissional) {
+                console.log()
+                console.log(profissional)
+                console.log()
                 createProvider(profissional)
                 .then(() => {
                     resolve();
@@ -139,9 +143,9 @@ function RegisterProfessionalProvider({ children }: any) {
             cpfCnpj: '',
             email: '',
             senha: '',
-            servicos: [],
+            idProfissoes: [],
             descricao: '',
-            endereco: {
+            enderecoInput: {
                 cep: '',
                 estado: '',
                 cidade: '',
@@ -150,10 +154,9 @@ function RegisterProfessionalProvider({ children }: any) {
                 numero: ''
             },
             telefone: '',
-            images: [],
-            profissoesId: [],
             tipoPessoa: TipoPessoaEnum.FISICA,
-            imagemDoPerfil: {}
+            perfilImagem: '',
+            servicoImagens: [],
         });
         endRegister();
     }

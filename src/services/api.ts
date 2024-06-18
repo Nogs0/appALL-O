@@ -18,16 +18,16 @@ export default function ALLORequestBase<T>(method: verbosAPI, url: string, param
         switch (method) {
             case verbosAPI.GET:
                 try {
-                    if (params){
+                    if (params) {
                         url = `${url}?id=${params.id}`
                     }
-                    
+
                     await api.get(url).then((result) => {
                         resolve(result.data.content);
                     })
-                    .catch((e) => {
-                        reject(e);
-                    })
+                        .catch((e) => {
+                            reject(e);
+                        })
                 }
                 catch (e) {
                     throw e;
@@ -35,17 +35,14 @@ export default function ALLORequestBase<T>(method: verbosAPI, url: string, param
                 break;
             case verbosAPI.POST:
                 try {
-                    api.post(url, params, {
-                        headers: {
-                            'Authorization': token
-                        }
-                    }).then((result) => {
-                        resolve(result.data.content)
-                    })
-                    .catch((e) => {
-                        console.log(e.request)
-                        reject(e);
-                    })
+                    api.post(url, params)
+                        .then((result) => {
+                            resolve(result.data.content)
+                        })
+                        .catch((e) => {
+                            console.log(e.request)
+                            reject(e);
+                        })
                 }
                 catch (e) {
                     throw e;
@@ -60,9 +57,9 @@ export default function ALLORequestBase<T>(method: verbosAPI, url: string, param
                     }).then((result) => {
                         resolve(result.data.content)
                     })
-                    .catch((e) => {
-                        reject(e);
-                    })
+                        .catch((e) => {
+                            reject(e);
+                        })
                 }
                 catch (e) {
                     throw e;
@@ -77,9 +74,9 @@ export default function ALLORequestBase<T>(method: verbosAPI, url: string, param
                     }).then((result) => {
                         resolve(result.data.content)
                     })
-                    .catch((e) => {
-                        reject(e);
-                    })
+                        .catch((e) => {
+                            reject(e);
+                        })
                 }
                 catch (e) {
                     throw e;

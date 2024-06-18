@@ -12,7 +12,7 @@ import { showMessage } from 'react-native-flash-message';
 export default function RegisterProfessional_Images({ navigation }: any) {
 
   const { endingRegister, loading, setImages, profissional } = useRegisterProfessional();
-  const [imagesTela, setImagesTela] = useState<any[]>(profissional ? profissional.images : []);
+  const [imagesTela, setImagesTela] = useState<any[]>(profissional ? profissional.servicoImagens : []);
   const [incorrectInformations, setIncorrectInformations] = useState<boolean>(false);
 
   const handleButtonEnd = async () => {
@@ -42,7 +42,7 @@ export default function RegisterProfessional_Images({ navigation }: any) {
       if (response.assets && response.assets.length > 0)
         setImagesTela((prev) => {
           if (response.assets)
-            prev.push(response.assets[0]);
+            prev.push(response.assets[0].uri);
           return [...prev];
         })
     })
@@ -60,7 +60,7 @@ export default function RegisterProfessional_Images({ navigation }: any) {
             return [...prev];
           })
         }}>
-        <Image style={{ width: 100, height: 100 }} source={{ uri: item.uri }}></Image>
+        <Image style={{ width: 100, height: 100 }} source={{ uri: item }}></Image>
       </TouchableOpacity>
     )
   }

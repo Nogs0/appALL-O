@@ -18,7 +18,7 @@ export default function RegisterProfessional_Services(props: any) {
 
   const [servico, setServico] = useState<string>('');
   const [searchingServico, setSearchingServico] = useState<boolean>(false);
-  const [listServicos, setListServicos] = useState<number[]>(profissional ? profissional.profissoesId : []);
+  const [listServicos, setListServicos] = useState<number[]>(profissional ? profissional.idProfissoes : []);
   const [incorrectInformations, setIncorrectInformations] = useState<boolean>(false);
 
   const [servicosBase, setServicosBase] = useState<ProfissaoOutput[]>([]);

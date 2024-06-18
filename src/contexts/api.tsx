@@ -19,11 +19,10 @@ export interface ProvedorInput {
     cpfCnpj: string,
     razaoSocial: string,
     tipoPessoa: TipoPessoaEnum,
-    profissoesId: number[]
-    endereco: Endereco,
-    imagemDoPerfil: any,
-    images: [],
-    servicos: number[],
+    idProfissoes: number[]
+    enderecoInput: Endereco,
+    perfilImagem: any,
+    servicoImagens: [],
     descricao: string
 }
 
@@ -91,26 +90,7 @@ function APIProvider({ children }: any) {
         return new Promise<ProvedorInput>((resolve, reject) => {
             try {
                 setTimeout(() => {
-                    resolve({
-                        id: 1,
-                        razaoSocial: 'João',
-                        email: 'joaoguinogueira04@gmail.com',
-                        senha: 'ejw-9fí2e2n',
-                        cpfCnpj: '087.606.736-48',
-                        telefone: '(35) 99826-5445',
-                        tipoPessoa: TipoPessoaEnum.FISICA,
-                        profissoesId: [1, 2, 3],
-                        imagemDoPerfil: undefined,
-                        images: [],
-                        endereco: {
-                            cep: '37714660',
-                            estado: 'MG',
-                            cidade: 'Poços de Caldas',
-                            bairro: 'Campo das Antas',
-                            logradouro: 'Avenida Sinesio do Lago',
-                            numero: '543'
-                        },
-                    } as ProvedorInput)
+                    
                 }, 1000)
             }
             catch (e) {

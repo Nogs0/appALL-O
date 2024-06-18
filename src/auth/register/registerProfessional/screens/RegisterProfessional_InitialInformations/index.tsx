@@ -14,14 +14,14 @@ export default function RegisterProfessional_InitialInformations({ navigation }:
   const { profissional, setInitialInformations, clearProfessional } = useRegisterProfessional();
 
   const [cpfCnpj, setCpfCnpj] = useState<string>(!!profissional ? profissional.cpfCnpj : '');
-  const [name, setName] = useState<string>(!!profissional ? profissional.razaoSocial : '');
+  const [razaoSocial, setRazaoSocial] = useState<string>(!!profissional ? profissional.razaoSocial : '');
   const [email, setEmail] = useState<string>(!!profissional ? profissional.email : '');
   const [senha, setSenha] = useState<string>(!!profissional ? profissional.senha : '');
   const [incorrectInformations, setIncorrectInformations] = useState<boolean>(false);
 
   const handleButtonNext = () => {
     setInitialInformations({
-      cpfCnpj, email, senha
+      razaoSocial, cpfCnpj, email, senha
     });
 
     if (canGoToTheNextStep())
@@ -35,7 +35,7 @@ export default function RegisterProfessional_InitialInformations({ navigation }:
 
   const canGoToTheNextStep = (): boolean => {
     return (
-      regexDocumento.test(cpfCnpj) && regexEMAIL.test(email) && senha.length > 0 && name.length > 0
+      regexDocumento.test(cpfCnpj) && regexEMAIL.test(email) && senha.length > 0 && razaoSocial.length > 0
     )
   }
 
@@ -48,7 +48,7 @@ export default function RegisterProfessional_InitialInformations({ navigation }:
           <Text style={styleRegister.title}>Seja bem-vindo!</Text>
           <Text style={styleRegister.text}>Preencha os campos para criar a sua conta...</Text>
           <View style={styleRegister.inputsContainer}>
-            <Input onFocus={() => setIncorrectInformations(false)} placeholder='Nome' text={name} onChangeText={setName}></Input>
+            <Input onFocus={() => setIncorrectInformations(false)} placeholder='Nome' text={razaoSocial} onChangeText={setRazaoSocial}></Input>
             <Input keyboardType='number-pad' onFocus={() => setIncorrectInformations(false)} placeholder='CNPJ ou CPF' text={cpfCnpj} onChangeText={setCpfCnpj}></Input>
             <Input keyboardType='email-address' onFocus={() => setIncorrectInformations(false)} placeholder='Email' text={email} onChangeText={setEmail}></Input>
             <InputPassword onFocus={() => setIncorrectInformations(false)} text={senha} onChangeText={setSenha}></InputPassword>
