@@ -1,35 +1,38 @@
 import { createContext, useContext, useState } from "react";
 import { useAuth } from "./auth";
-interface Address {
-    postalCode: string,
-    state: string,
-    city: string,
-    neighborhood: string,
-    street: string,
-    number: string
+import { createClient } from "./api_client";
+
+interface Endereco {
+    cep: string,
+    estado: string,
+    cidade: string,
+    bairro: string,
+    logradouro: string,
+    numero: string
 }
 
 interface InitialInformations {
-    name: string,
+    nome: string,
     email: string,
-    password: string,
+    senha: string,
 }
 
-interface ClientCreateDto {
-    name: string,
-    document: string,
+export interface ClienteInput {
+    id: number | undefined,
+    senha: string,
     email: string,
-    password: string,
-    address: Address,
-    phoneNumber: string,
-    profilePic: any
+    telefone: string,
+    cpfCnpj: string,
+    nome: string
+    endereco: Endereco,
+    imagem: string
 }
 
 interface RegisterClientContextData {
-    client: ClientCreateDto | null,
+    client: ClienteInput | null,
     loading: boolean,
     setInitialInformations(params: InitialInformations): void,
-    setAddress(address: Address): void,
+    setAddress(address: Endereco): void,
     setContacts(phoneNumber: string): void,
     setProfilePic(profilePic: any): void,
     endingRegister(): Promise<string>,
@@ -41,84 +44,97 @@ const RegisterClientContext = createContext<RegisterClientContextData>({} as Reg
 function RegisterClientProvider({ children }: any) {
     const { endRegister } = useAuth();
 
-    const [client, setClient] = useState<ClientCreateDto | null>({
-        name: '',
-        document: '',
-        email: '',
-        password: '',
-        address: {
-            postalCode: '',
-            state: '',
-            city: '',
-            neighborhood: '',
-            street: '',
-            number: ''
+    const [client, setClient] = useState<ClienteInput | null>({
+        id: 0,
+        email: 'exemploMatheus@org.com',
+        senha: '',
+        telefone: '33978890000',
+        cpfCnpj: '869.039.770-15',
+        nome: 'matheus o homem',
+        endereco:{
+            cep: '37714660',
+            estado: '',
+            cidade: '',
+            bairro: '',
+            logradouro: '',
+            numero: ''
         },
-        phoneNumber: '',
-        profilePic: []
+        imagem: 'string'
+        
     });
     const [loading, setLoading] = useState<boolean>(false);
 
     function setInitialInformations(params: InitialInformations) {
         setClient((prev) => {
             if (!prev)
-                prev = {} as ClientCreateDto;
-            prev.name = params.name;
+                prev = {} as ClienteInput;
             prev.email = params.email;
-            prev.password = params.password
+            prev.nome = params.nome;
+            prev.senha = params.senha
             return prev;
         });
     }
 
 
-    function setAddress(address: Address) {
+    function setAddress(endereco: Endereco) {
         setClient((prev) => {
-            if (!prev) prev = {} as ClientCreateDto;
-            return { ...prev, address };
+            if (!prev) prev = {} as ClienteInput;
+            return { ...prev, endereco };
         });
     }
 
     function setContacts(phoneNumber: string) {
         setClient((prev) => {
-            if (!prev) prev = {} as ClientCreateDto;
+            if (!prev) prev = {} as ClienteInput;
             return { ...prev, phoneNumber };
         });
     }
 
     function setProfilePic(profilePic: any) {
         setClient((prev) => {
-            if (!prev) prev = {} as ClientCreateDto;
+            if (!prev) prev = {} as ClienteInput;
             return { ...prev, profilePic };
         });
     }
 
     function endingRegister(): Promise<string> {
         setLoading(true);
-        return new Promise<string>((resolve) => {
-            setTimeout(() => {
+        return new Promise<string>((resolve, reject) => {
+            if (client){
                 console.log(client);
-                resolve("Cadastro finalizado -> Aqui devemos integrar com o cadastro do cliente na API");
+                
+                createClient(client).then(() => {
+                    resolve("AAAAAAAAAAAAAAA");
+                })
+                .catch(() => {
+                    reject()
+                });
                 setLoading(false);
-            }, 2000);
+            }
+            else{
+                reject(client);
+            }
+           
         });
     }
 
     function clearClient(): void {
         setClient({
-            name: '',
-            document: '',
+            id: undefined,
             email: '',
-            password: '',
-            address: {
-                postalCode: '',
-                state: '',
-                city: '',
-                neighborhood: '',
-                street: '',
-                number: ''
+            senha: '',
+            telefone: '',
+            cpfCnpj: '',
+            nome: '',
+            endereco:{
+                cep: '',
+                estado: '',
+                cidade: '',
+                bairro: '',
+                logradouro: '',
+                numero: ''
             },
-            phoneNumber: '',
-            profilePic: []
+            imagem: ''
         });
         endRegister();
     }

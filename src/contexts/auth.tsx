@@ -67,7 +67,11 @@ function AuthProvider({ children }: any) {
                 if (isProfessional)
                     setDefaultColor(blueDefault);
                 
+<<<<<<< HEAD
                 // api.defaults.headers.Authorization = `Baerer ${response.token}`;
+=======
+                //api.defaults.headers.Authorization = `Baerer ${response.token}`;
+>>>>>>> matheus-integracao
                 
                 await AsyncStorage.setItem('@RNAuth:user', JSON.stringify(response.user));
                 await AsyncStorage.setItem('@RNAuth:token', response.token);

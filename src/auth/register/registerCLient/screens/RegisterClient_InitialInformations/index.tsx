@@ -9,14 +9,15 @@ import { redDefault } from '../../../../../shared/styleConsts';
 import styleRegister from '../../style';
 
 export default function RegisterProfessional_InitialInformations({ navigation }: any) {
+
   const { client, setInitialInformations, clearClient } = useRegisterClient();
-  const [name, setName] = useState<string>(client ? client.email : '');
+  const [nome, setNome] = useState<string>(client ? client.nome : '');
   const [email, setEmail] = useState<string>(client ? client.email : '');
-  const [password, setPassword] = useState<string>(client ? client.password : '');
+  const [senha, setSenha] = useState<string>(client ? client.senha : '');
   const [incorrectInformations, setIncorrectInformations] = useState<boolean>(false);
 
   const handleButtonNext = () => {
-    setInitialInformations({ name, email, password });
+    setInitialInformations({ email, nome, senha });
 
     if (canGoToTheNextStep()) {
       navigation.navigate('RegisterClient_CEP');
@@ -31,7 +32,7 @@ export default function RegisterProfessional_InitialInformations({ navigation }:
 
   const canGoToTheNextStep = (): boolean => {
     return (
-      regexEMAIL.test(email.trim().toLowerCase()) && password.length > 0
+      regexEMAIL.test(email.trim().toLowerCase()) && senha.length > 0
     );
   }
 
@@ -42,9 +43,9 @@ export default function RegisterProfessional_InitialInformations({ navigation }:
         <Text style={styleRegister.title}>Seja bem-vindo!</Text>
         <Text style={styleRegister.text}>Preencha os campos para criar a sua conta...</Text>
         <View style={styleRegister.inputsContainer}>
-          <Input onFocus={() => setIncorrectInformations(false)} placeholder='Nome' text={name} onChangeText={setName} />
+          <Input onFocus={() => setIncorrectInformations(false)} placeholder='Nome' text={nome} onChangeText={setNome} />
           <Input keyboardType='email-address' onFocus={() => setIncorrectInformations(false)} placeholder='Email' text={email} onChangeText={setEmail} />
-          <InputPassword onFocus={() => setIncorrectInformations(false)} text={password} onChangeText={setPassword} />
+          <InputPassword onFocus={() => setIncorrectInformations(false)} text={senha} onChangeText={setSenha} />
         </View>
         {
           incorrectInformations ?
@@ -54,6 +55,10 @@ export default function RegisterProfessional_InitialInformations({ navigation }:
         <TouchableOpacity style={styleRegister.buttonNext} onPress={handleButtonNext}>
           <Text style={styleRegister.textButtonNext}>Prosseguir</Text>
         </TouchableOpacity>
+        <TouchableOpacity style={styleRegister.buttonNext} onPress={(()=>{setInitialInformations({ email, nome, senha }); console.log(client)})}>
+          <Text style={styleRegister.textButtonNext}>Printar</Text>
+        </TouchableOpacity>
+
       </View>
     </ScrollView>
   );

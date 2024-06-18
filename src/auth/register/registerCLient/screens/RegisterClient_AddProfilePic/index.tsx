@@ -12,16 +12,21 @@ import style from './style';
 
 export default function RegisterProfessional_Images({ navigation }: any) {
 
-  const { endingRegister, loading } = useRegisterClient();
+  const { endingRegister, loading, client } = useRegisterClient();
   const [image, setImage] = useState<any>(require('../../../../../assets/images/default-profile-pic.png'));
   const [incorrectInformations, setIncorrectInformations] = useState<boolean>(false);
 
   const handleButtonEnd = async () => {
     console.log(image)
 
-    let response = await endingRegister();
-    console.log(response);
-    navigation.navigate('RegisterClient_OkEndRegister');
+    endingRegister().then(() => {
+            navigation.navigate('RegisterClient_OkEndRegister');
+        })
+        .catch(() => {
+          console.log("NAOOOOOOOOOOOOOOOO")
+        })
+ 
+    
   }
 
   const addImage = () => {
@@ -59,6 +64,9 @@ export default function RegisterProfessional_Images({ navigation }: any) {
           }
           <TouchableOpacity style={styleRegister.buttonNext} onPress={() => handleButtonEnd()}>
             <Text style={styleRegister.textButtonNext}>Finalizar</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styleRegister.buttonNext} onPress={() => console.log(client)}>
+            <Text style={styleRegister.textButtonNext}>printar</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
