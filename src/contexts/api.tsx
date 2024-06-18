@@ -53,10 +53,25 @@ export interface ProvedorOutput {
     favorito: boolean
 }
 
+export interface ClienteOutput {
+    id: number,
+    nome: string,
+    provedoresFavoritados: ProvedorOutput[],
+}
+
+export interface AvaliacaoOutput {
+    id: number,
+    provedor: ProvedorOutput,
+    cliente: ClienteOutput,
+    nota: number,
+    titulo: string,
+    descricao: string
+}
+
 export interface PerfilProvedorOutput {
     id: number,
     provedor: ProvedorOutput,
-    avaliacao: any,
+    avaliacao: AvaliacaoOutput,
     servicosConcluidos: number,
     mediaAvaliacao: number,
     tempoCadastro: number,
@@ -119,6 +134,7 @@ function APIProvider({ children }: any) {
                     resolve(result);
                 })
                 .catch((e) => {
+                    console.log(e.request);
                     reject(e);
                 })
         })
@@ -127,13 +143,13 @@ function APIProvider({ children }: any) {
     const updateProfessional = (input: ProvedorInput): Promise<void> => {
         return new Promise<void>((resolve, reject) => {
             ALLORequestBase<void>(verbosAPI.PUT, 'provedor', input)
-            .then(() => {
-                resolve();
-            })
-            .catch((e) => {
-                console.log(e.request)
-                reject();
-            })
+                .then(() => {
+                    resolve();
+                })
+                .catch((e) => {
+                    console.log(e.request)
+                    reject();
+                })
         })
     }
 
@@ -302,7 +318,7 @@ function APIProvider({ children }: any) {
                     resolve(result.content as ProfissaoOutput[]);
                 })
                 .catch((e) => {
-                    console.log(e)
+                    console.log(e.request)
                     reject(e);
                 })
         })
