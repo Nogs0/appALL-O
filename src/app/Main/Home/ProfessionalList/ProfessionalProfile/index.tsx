@@ -21,7 +21,6 @@ export default function ProfessionalProfile(props: any) {
     const getProfessional = (id: number) => {
         getPerfilProfissional(id)
             .then((result) => {
-
                 console.log(result);
                 setProfessional(result);
             })

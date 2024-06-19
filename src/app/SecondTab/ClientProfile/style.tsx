@@ -89,9 +89,9 @@ export default StyleSheet.create({
     },
     bottomContainer:{
         flexDirection: 'row',
-        marginBottom: '15%',
-        justifyContent: 'space-between'
-
+        marginBottom: '5%',
+        justifyContent: 'space-between',
+        backgroundColor: whiteDefault,
         
     },
     buttonAddImage: {

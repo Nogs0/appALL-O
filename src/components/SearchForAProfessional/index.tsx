@@ -1,21 +1,28 @@
-import { View, Text, TextInput, SafeAreaView } from 'react-native'
 import React from 'react'
-import style from './style'
+import { SafeAreaView, Text, TextInput, View } from 'react-native'
 import Icon from 'react-native-vector-icons/AntDesign'
-import { blackDefault, whiteDefault } from '../../shared/styleConsts'
+import { blackDefault } from '../../shared/styleConsts'
+import style from './style'
 
-export default function SearchForAProfessional() {
+interface SearchForAProfessionProps {
+  search: string,
+  onChangeSearch(value: string): void,
+}
+
+export default function SearchForAProfession(props: SearchForAProfessionProps) {
   return (
     <SafeAreaView style={style.container}>
-      <Text style={style.label}>Busque por um profissional</Text>
+      <Text style={style.label}>Busque por uma profissão</Text>
       <View style={style.containerSearch}>
         <TextInput
-            style={style.search}
-            placeholder='Pesquisar'
-            placeholderTextColor={blackDefault}
+          value={props.search}
+          onChangeText={props.onChangeSearch}
+          style={style.search}
+          placeholder='Pesquisar'
+          placeholderTextColor={blackDefault}
         />
         <Icon style={style.iconSearch} size={20} name='search1'></Icon>
-    </View>
+      </View>
     </SafeAreaView>
   )
 }

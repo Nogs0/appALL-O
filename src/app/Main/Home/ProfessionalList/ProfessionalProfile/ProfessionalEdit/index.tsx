@@ -95,7 +95,7 @@ export default function ProfessionalEdit(props: any) {
         } as ProvedorInput)
             .then(() => {
                 if (professional)
-                    getProfessional(professional.id);
+                    getProfessional(professional.provedor.id);
                 showMessage({
                     message: 'Informações atualizadas!',
                     type: 'success'

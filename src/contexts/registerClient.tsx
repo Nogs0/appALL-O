@@ -1,8 +1,9 @@
 import { createContext, useContext, useState } from "react";
 import { useAuth } from "./auth";
-import { useAPI } from "./api";
+import { ClienteInput, useAPI } from "./api";
 
 interface Endereco {
+    id: number, 
     cep: string,
     estado: string,
     cidade: string,
@@ -23,17 +24,6 @@ interface InitialInformationsClient {
     senha: string,
     cpfCnpj: string,
     telefone: string
-}
-
-export interface ClienteInput {
-    id: number | undefined,
-    email: string,
-    telefone: string,
-    senha: string,
-    nome: string,
-    cpfCnpj: string,
-    endereco: Endereco,
-    imagem: string
 }
 
 interface RegisterClientContextData {
@@ -59,7 +49,8 @@ function RegisterClientProvider({ children }: any) {
         telefone: '',
         nome: '',
         cpfCnpj: '',
-        endereco: {
+        enderecoInput: {
+            id: 0,
             cep: '',
             estado: '',
             cidade: '',
@@ -91,7 +82,7 @@ function RegisterClientProvider({ children }: any) {
         setClient((prev) => {
             if (!prev) prev = {} as ClienteInput;
             
-            prev.endereco = endereco;
+            prev.enderecoInput = endereco;
             return prev;
         });
     }
@@ -127,7 +118,8 @@ function RegisterClientProvider({ children }: any) {
             telefone: '',
             nome: '',
             cpfCnpj: '',
-            endereco: {
+            enderecoInput: {
+                id: 0,
                 cep: '',
                 estado: '',
                 cidade: '',

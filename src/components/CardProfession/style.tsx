@@ -3,7 +3,7 @@ import { blackDefault, greyDefault, orangeDefault, whiteDefault } from "../../sh
 
 export default StyleSheet.create({
     container: {
-        width: '35%',
+        width: '33.333333333333%',
         height: '100%',
     },
     informationContainer: {

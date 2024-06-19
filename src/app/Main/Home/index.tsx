@@ -1,21 +1,69 @@
-import React from 'react';
-import { SafeAreaView, ScrollView, View } from 'react-native';
+import React, { useState } from 'react';
+import { FlatList, SafeAreaView, ScrollView, View } from 'react-native';
 import MostAccessed from '../../../components/MostAccessed';
-import SearchForAProfessional from '../../../components/SearchForAProfessional';
 import Highlights from '../../../components/Highlights';
 import OtherProfessions from '../../../components/OtherProfessions';
 import { whiteDefault } from '../../../shared/styleConsts';
+import SearchForAProfession from '../../../components/SearchForAProfessional';
+import { ProfissaoOutput, useAPI } from '../../../contexts/api';
+import CardProfession from '../../../components/CardProfession';
+import { showMessage } from 'react-native-flash-message';
 
 export default function Home(props: any) {
 
+  const { getProfessionsBySearch } = useAPI();
+
+  const [search, setSearch] = useState<string>('');
+  const [profissoes, setProfissoes] = useState<ProfissaoOutput[]>([]);
+
+  const handleSearch = (value: string) => {
+    setSearch(value);
+    getProfessionsBySearch(value)
+      .then((result) => {
+        setProfissoes((prev) => {
+          return [...result]
+        });
+      })
+      .catch((e) => {
+        showMessage({
+          message: 'Falha ao buscar profissões',
+          type: 'danger'
+        })
+      })
+  }
+
+  const renderItem = (item: ProfissaoOutput) => {
+    return (
+      <CardProfession
+        profession={item.nome.replace(/^\w/, (c) => c.toUpperCase())}
+        professionId={item.id}
+        onPress={() => console.log(item.nomeIcone)}
+        professionIcon={item.nomeIcone} />
+    )
+  }
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: whiteDefault, paddingTop: 10 }}>
-      <ScrollView stickyHeaderIndices={[0]}>
-        <SearchForAProfessional />
-        <MostAccessed />
-        <Highlights />
-        <OtherProfessions navigation={props.navigation} />
-      </ScrollView>
+      <SearchForAProfession search={search} onChangeSearch={handleSearch} />
+      {search.length > 0 ?
+        <View style={{ alignItems: 'center', width: '100%' }}>
+          <FlatList
+            style={{ width: '90%' }}
+            numColumns={3}
+            data={profissoes}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({ item }) => renderItem(item)}
+          />
+        </View>
+        :
+        <>
+          <ScrollView style={{ flex: 0.8 }}>
+            <MostAccessed />
+            <Highlights />
+            <OtherProfessions navigation={props.navigation} />
+          </ScrollView>
+        </>
+      }
     </SafeAreaView>
   )
 }

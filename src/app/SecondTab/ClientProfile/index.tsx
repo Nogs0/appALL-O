@@ -6,29 +6,30 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import HeaderClient from '../../../components/HeaderClient/indext';
 import Input from '../../../components/Input';
 import InputCEP from '../../../components/InputCEP';
-import { ClientDTO, useAPI } from '../../../contexts/api';
+import { ClientDTO, ClienteInput, PefilClienteOutput, useAPI } from '../../../contexts/api';
 import { useAuth } from '../../../contexts/auth';
 import getAddress from '../../../services/cep';
 import { blackDefault, orangeDefault, whiteDefault } from '../../../shared/styleConsts';
 import style from './style';
 
-
 export default function ClientProfile(props: any) {
 
-    const { getClientToEdit, updateClient, updateImage } = useAPI();
-    const { signOut } = useAuth();
+    const { getPerfilCliente, updateClient, updateImage } = useAPI();
+    const { signOut, user } = useAuth();
     const [params, setParams] = useState<any>(props);
-    const [client, setClient] = useState<ClientDTO | undefined>(undefined);
-    const [nome, setNome] = useState<string>(client ? client.nome : '');
-    const [email, setEmail] = useState<string>(client ? client.email : '');
-    const [imagemDoPerfil, setImagemDoPerfil] = useState<any>(client?.imagemDoPerfil);
+    const [cliente, setCliente] = useState<PefilClienteOutput>();
+    const [nome, setNome] = useState<string>(cliente ? cliente.nome : '');
+    const [email, setEmail] = useState<string>(cliente ? cliente.email : '');
+    const [telefone, setTelefone] = useState<string>(cliente ? cliente.telefone : '');
+    const [cpfCnpj, setCpfCnpj] = useState<string>(cliente ? cliente.cliente.cpf : '');
+    const [imagem, setImagem] = useState<string>(cliente ? cliente.pathToImage : '');
 
-    const [cep, setCep] = useState<string>(client ? client.endereco.cep : '');
-    const [estado, setEstado] = useState<string>(client ? client.endereco.estado : '');
-    const [cidade, setCidade] = useState<string>(client ? client.endereco.cidade : '');
-    const [bairro, setBairro] = useState<string>(client ? client.endereco.bairro : '');
-    const [logradouro, setLogradouro] = useState<string>(client ? client.endereco.logradouro : '');
-    const [numero, setNumero] = useState<string>(client ? client.endereco.numero : '');
+    const [cep, setCep] = useState<string>(cliente ? cliente.cliente.endereco.cep : '');
+    const [estado, setEstado] = useState<string>(cliente ? cliente.cliente.endereco.estado : '');
+    const [cidade, setCidade] = useState<string>(cliente ? cliente.cliente.endereco.cidade : '');
+    const [bairro, setBairro] = useState<string>(cliente ? cliente.cliente.endereco.bairro : '');
+    const [logradouro, setLogradouro] = useState<string>(cliente ? cliente.cliente.endereco.logradouro : '');
+    const [numero, setNumero] = useState<string>(cliente ? cliente.cliente.endereco.numero : '');
 
 
     const [loadingCEP, setLoadingCEP] = useState<boolean>(false);
@@ -38,12 +39,15 @@ export default function ClientProfile(props: any) {
     const [tab, setTab] = useState<number>(0);
 
     const getClient = (id: number) => {
-        getClientToEdit(id)
+        getPerfilCliente(id)
             .then((resolve) => {
-                setClient(resolve)
+                setCliente(resolve);
             })
             .catch((error) => {
-                throw new Error(error)
+                showMessage({
+                    message: 'Falha ao carregar cliente',
+                    type: 'danger'
+                })
             })
     }
 
@@ -67,7 +71,7 @@ export default function ClientProfile(props: any) {
                 setLoadingImage(true);
                 updateImage(response.assets[0])
                     .then((newImage) => {
-                        setImagemDoPerfil(newImage)
+                        setImagem(newImage)
                         showMessage({
                             message: 'Imagem de perfil alterada!',
                             type: 'success'
@@ -84,57 +88,67 @@ export default function ClientProfile(props: any) {
     }
 
     const handleupdate = () => {
-        setLoadingUpdate(true)
-        updateClient({
-            id: params.id,
-            nome,
-            email,
-            imagemDoPerfil,
-            endereco: {
-                cep,
-                estado,
-                cidade,
-                bairro,
-                logradouro,
-                numero
-            }
-        } as ClientDTO)
-            .then(() => {
-                showMessage({
-                    message: 'Informações atualizadas!',
-                    type: 'success'
+        if (cliente) {
+            setLoadingUpdate(true)
+            updateClient({
+                id: cliente.cliente.id,
+                nome,
+                email,
+                telefone,
+                imagem,
+                cpfCnpj,
+                enderecoInput: {
+                    id: cliente.cliente.endereco.id,
+                    cep,
+                    estado,
+                    cidade,
+                    bairro,
+                    logradouro,
+                    numero
+                }
+            } as ClienteInput)
+                .then(() => {
+                    if (cliente)
+                        getClient(cliente.cliente.id)
+                    showMessage({
+                        message: 'Informações atualizadas!',
+                        type: 'success'
+                    })
+                }).catch((e) => {
+                    showMessage({
+                        message: 'Falha ao atualizar informações',
+                        type: 'danger'
+                    })
                 })
-            }).catch((e) => {
-                showMessage({
-                    message: e,
-                    type: 'danger'
-                })
-            })
-            .finally(() => setLoadingUpdate(false))
+                .finally(() => setLoadingUpdate(false))
+        }
     }
 
     useEffect(() => {
-        getClient(params?.id);
-    }, [params])
+        if (user)
+            getClient(user.id);
+    }, [])
 
     useEffect(() => {
-        if (client) {
-            setNome(client.nome);
-            setEmail(client.email);
-            setImagemDoPerfil(client.imagemDoPerfil);
-            setCep(client.endereco.cep);
-            setEstado(client.endereco.estado);
-            setCidade(client.endereco.cidade);
-            setBairro(client.endereco.bairro);
-            setLogradouro(client.endereco.logradouro);
-            setNumero(client.endereco.numero);
+        if (cliente && cliente.cliente.endereco) {
+            setNome(cliente.nome);
+            setEmail(cliente.email);
+            setTelefone(cliente.cliente.telefone);
+            setCpfCnpj(cliente.cliente.cpf);
+            setImagem(cliente.pathToImage);
+            setCep(cliente.cliente.endereco.cep);
+            setEstado(cliente.cliente.endereco.estado);
+            setCidade(cliente.cliente.endereco.cidade);
+            setBairro(cliente.cliente.endereco.bairro);
+            setLogradouro(cliente.cliente.endereco.logradouro);
+            setNumero(cliente.cliente.endereco.numero);
         }
-    }, [client])
+    }, [cliente])
 
     return (
         <SafeAreaView style={style.container}>
 
-            {!client ?
+            {!cliente ?
                 <ActivityIndicator size={70} color={whiteDefault}></ActivityIndicator>
                 :
                 <>
@@ -143,9 +157,9 @@ export default function ClientProfile(props: any) {
                         :
                         <></>
                     }
-                    <HeaderClient title={client?.nome}
+                    <HeaderClient title={cliente?.nome}
                         navigation={props.navigation}
-                        id={client?.id}
+                        id={cliente?.id}
                         hasButton={false} />
                     <View style={style.contentContainer}>
                         <View style={style.tabsContainer}>
@@ -159,15 +173,13 @@ export default function ClientProfile(props: any) {
                                 <Text style={{ color: tab == 1 ? whiteDefault : blackDefault, fontSize: 20, fontFamily: 'Rubik-SemiBold' }}>Endereço
                                 </Text>
                             </TouchableOpacity>
-
                         </View>
-
                         {tab == 0 ?
                             <KeyboardAvoidingView style={style.inputsContainerInformations}>
                                 <ScrollView>
                                     <TouchableOpacity disabled={loadingUpdate || loadingImage} style={style.imageContainer}
                                         onPress={() => {
-                                            if (imagemDoPerfil)
+                                            if (imagem)
                                                 Alert.alert("Atenção!", "Você realmente deseja alterar sua foto de perfil?", [
                                                     {
                                                         text: 'Cancelar',
@@ -180,14 +192,14 @@ export default function ClientProfile(props: any) {
                                                 ])
                                             else changeImage();
                                         }}>
-                                        {imagemDoPerfil ?
+                                        {imagem ?
                                             <View style={{ alignItems: 'center', justifyContent: 'center' }}>
                                                 {loadingImage ?
                                                     <ActivityIndicator style={style.loadingImage} size={35} color={orangeDefault} />
                                                     :
                                                     <></>
                                                 }
-                                                <Image style={style.image} source={{ uri: imagemDoPerfil.uri }}></Image>
+                                                <Image style={style.image} source={{ uri: imagem }}></Image>
                                             </View>
                                             :
                                             <View style={style.noImage}>
@@ -204,6 +216,8 @@ export default function ClientProfile(props: any) {
                                     <View style={style.inputsContainer}>
                                         <Input editable={!loadingUpdate} text={nome} onChangeText={setNome} placeholder='Nome' />
                                         <Input editable={!loadingUpdate} text={email} onChangeText={setEmail} placeholder='Email' />
+                                        <Input editable={!loadingUpdate} text={telefone} onChangeText={setTelefone} placeholder='Email' />
+                                        <Input editable={!loadingUpdate} text={cpfCnpj} onChangeText={setCpfCnpj} placeholder='CPF' />
                                     </View>
                                 </ScrollView>
                             </KeyboardAvoidingView>

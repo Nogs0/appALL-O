@@ -1,7 +1,6 @@
 import React, { createContext, useContext } from 'react';
 import ALLORequestBase, { api, verbosAPI } from '../services/api';
 import { TipoPessoaEnum } from '../shared/Enums/enums';
-import { ClienteInput } from './registerClient';
 
 export interface ClientDTO {
     id: number,
@@ -27,7 +26,19 @@ export interface ProvedorInput {
     descricao: string
 }
 
+export interface ClienteInput {
+    id: number | undefined,
+    email: string,
+    senha: string,
+    telefone: string,
+    cpfCnpj: string,
+    nome: string,
+    enderecoInput: Endereco,
+    imagem: any,
+}
+
 export interface Endereco {
+    id: number,
     cep: string,
     estado: string,
     cidade: string,
@@ -38,7 +49,7 @@ export interface Endereco {
 
 export interface ProfissaoOutput {
     id: number,
-    nomeIcone: string | undefined,
+    nomeIcone: string,
     nome: string
 }
 
@@ -58,13 +69,30 @@ export interface ProvedorOutput {
 export interface ClienteOutput {
     id: number,
     nome: string,
+    cpf: string,
+    email: string,
+    telefone: string,
+    endereco: Endereco,
+    favoritos: ProvedorOutput[],
+    ativo: boolean,
+
+}
+
+export interface PefilClienteOutput {
+    id: number,
+    nome: string,
+    cpf: string,
+    email: string,
+    cliente: ClienteOutput,
+    telefone: string,
+    pathToImage: string,
     provedoresFavoritados: ProvedorOutput[],
 }
 
 export interface AvaliacaoOutput {
     id: number,
     provedor: ProvedorOutput,
-    cliente: ClienteOutput,
+    cliente: PefilClienteOutput,
     nota: number,
     titulo: string,
     descricao: string
@@ -85,10 +113,10 @@ export interface PerfilProvedorOutput {
 }
 
 interface APIContextData {
-    getClientToEdit(id: number): Promise<ClientDTO>,
+    getPerfilCliente(id: number): Promise<PefilClienteOutput>,
     getPerfilProfissional(id: number): Promise<PerfilProvedorOutput>,
-    updateProfessional(dto: ProvedorInput): Promise<void>,
-    updateClient(dto: ClientDTO): Promise<void>,
+    updateProfessional(input: ProvedorInput): Promise<void>,
+    updateClient(input: ClienteInput): Promise<void>,
     updateImage(image: any): Promise<any>,
     updateFavoriteReview(id: number): Promise<boolean>,
     getReviewsByProfessional(id: number): Promise<any>,
@@ -96,36 +124,25 @@ interface APIContextData {
     getProfessions(): Promise<ProfissaoOutput[]>,
     sugerirProfissao(sugestao: string): Promise<void>,
     createProvider(profissional: ProvedorInput): Promise<void>,
-    createClient(client: ClienteInput): Promise<void>
+    createClient(client: ClienteInput): Promise<void>,
+    getProfessionsBySearch(search: string): Promise<ProfissaoOutput[]> 
 }
 
 const APIContext = createContext<APIContextData>({} as APIContextData);
 
 function APIProvider({ children }: any) {
 
-    const getClientToEdit = (id: number): Promise<ClientDTO> => {
-        return new Promise<ClientDTO>((resolve, reject) => {
-            try {
-                setTimeout(() => {
-                    resolve({
-                        id: 1,
-                        nome: 'Matheus',
-                        email: 'matheus_jonnas@proton.me',
-                        senha: 'ejw-9fí2e2n',
-                        endereco: {
-                            cep: '37730000',
-                            estado: 'MG',
-                            cidade: 'Campestre',
-                            bairro: 'Campo das Antas',
-                            logradouro: 'Avenida Sinesio do Lago',
-                            numero: '543'
-                        },
-                    } as ClientDTO)
-                }, 1000)
-            }
-            catch (e) {
-                reject(e);
-            }
+    const getPerfilCliente = (id: number): Promise<PefilClienteOutput> => {
+        return new Promise<PefilClienteOutput>((resolve, reject) => {
+            ALLORequestBase<PefilClienteOutput>(verbosAPI.GET, 'cliente/perfil', `idCliente=${id}`)
+                .then((result) => {
+                    console.log(result);
+                    resolve(result);
+                })
+                .catch((e) => {
+                    console.log(e.request);
+                    reject(e);
+                })
 
         })
     }
@@ -156,16 +173,16 @@ function APIProvider({ children }: any) {
         })
     }
 
-    const updateClient = (dto: ClientDTO): Promise<void> => {
+    const updateClient = (input: ClienteInput): Promise<void> => {
         return new Promise<void>((resolve, reject) => {
-            try {
-                setTimeout(() => {
-                    resolve()
-                }, 2000);
-            }
-            catch (e) {
-                reject(e);
-            }
+            ALLORequestBase<void>(verbosAPI.PUT, 'cliente', input)
+                .then(() => {
+                    resolve();
+                })
+                .catch((e) => {
+                    console.log(e.request)
+                    reject();
+                })
         })
     }
 
@@ -327,6 +344,19 @@ function APIProvider({ children }: any) {
         })
     }
 
+    const getProfessionsBySearch = (search: string): Promise<ProfissaoOutput[]> => {
+        return new Promise<ProfissaoOutput[]>(async (resolve, reject) => {
+            ALLORequestBase<any>(verbosAPI.GET, 'profissao/filter', `profissao=${search}`)
+                .then((result) => {
+                    resolve(result as ProfissaoOutput[]);
+                })
+                .catch((e) => {
+                    console.log(e.request)
+                    reject(e);
+                })
+        })
+    }
+
     const sugerirProfissao = (sugestao: string): Promise<void> => {
         return new Promise<void>(async (resolve, reject) => {
             ALLORequestBase(verbosAPI.POST, 'profissao/sugerir', { sugestao })
@@ -368,7 +398,7 @@ function APIProvider({ children }: any) {
 
     return (
         <APIContext.Provider
-            value={{ getClientToEdit, getPerfilProfissional, updateProfessional, updateImage, updateFavoriteReview, getReviewsByProfessional, updateSeenNotification, updateClient, getProfessions, sugerirProfissao, createProvider, createClient }}>
+            value={{ getPerfilCliente, getPerfilProfissional, updateProfessional, updateImage, updateFavoriteReview, getReviewsByProfessional, updateSeenNotification, updateClient, getProfessions, sugerirProfissao, createProvider, createClient, getProfessionsBySearch }}>
             {children}
         </APIContext.Provider>
     )
