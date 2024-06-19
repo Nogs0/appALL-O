@@ -18,18 +18,20 @@ export default function Home(props: any) {
 
   const handleSearch = (value: string) => {
     setSearch(value);
-    getProfessionsBySearch(value)
-      .then((result) => {
-        setProfissoes((prev) => {
-          return [...result]
-        });
-      })
-      .catch((e) => {
-        showMessage({
-          message: 'Falha ao buscar profissões',
-          type: 'danger'
+    if (value.length > 0) {
+      getProfessionsBySearch(value)
+        .then((result) => {
+          setProfissoes((prev) => {
+            return [...result]
+          });
         })
-      })
+        .catch((e) => {
+          showMessage({
+            message: 'Falha ao buscar profissões',
+            type: 'danger'
+          })
+        })
+    }
   }
 
   const renderItem = (item: ProfissaoOutput) => {

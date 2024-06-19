@@ -8,7 +8,7 @@ export enum verbosAPI {
 }
 
 export const api = axios.create({
-    baseURL: 'http://192.168.15.68:8080/api/allo/',
+    baseURL: 'http://192.168.100.50:8080/api/allo/',
 })
 
 const token = ''
