@@ -63,7 +63,9 @@ export interface ProvedorOutput {
     email: string,
     telefone: string,
     ativo: boolean,
-    favorito: boolean
+    favorito: boolean,
+    imagem: string,
+    mediaAvaliacao: number,
 }
 
 export interface ClienteOutput {
@@ -126,12 +128,26 @@ interface APIContextData {
     createProvider(profissional: ProvedorInput): Promise<void>,
     createClient(client: ClienteInput): Promise<void>,
     getProfessionsBySearch(search: string): Promise<ProfissaoOutput[]> 
+    getAllProfessionalsByID(id: number): Promise<ProvedorOutput[]>
 }
 
 const APIContext = createContext<APIContextData>({} as APIContextData);
 
 function APIProvider({ children }: any) {
 
+    const getAllProfessionalsByID = (id: number): Promise<ProvedorOutput[]> => {
+        return new Promise<ProvedorOutput[]>((resolve, reject) => {
+            ALLORequestBase<ProvedorOutput[]>(verbosAPI.GET, 'provedor/filter/profissao', `idProfissao=${id}` )
+            .then((result) => {
+                console.log(result);
+                resolve(result);
+            })
+            .catch((e) => {
+                console.log(e.request);
+                reject(e);
+            })
+        })
+    }
     const getPerfilCliente = (id: number): Promise<PefilClienteOutput> => {
         return new Promise<PefilClienteOutput>((resolve, reject) => {
             ALLORequestBase<PefilClienteOutput>(verbosAPI.GET, 'cliente/perfil', `idCliente=${id}`)
@@ -398,7 +414,7 @@ function APIProvider({ children }: any) {
 
     return (
         <APIContext.Provider
-            value={{ getPerfilCliente, getPerfilProfissional, updateProfessional, updateImage, updateFavoriteReview, getReviewsByProfessional, updateSeenNotification, updateClient, getProfessions, sugerirProfissao, createProvider, createClient, getProfessionsBySearch }}>
+            value={{ getAllProfessionalsByID, getPerfilCliente, getPerfilProfissional, updateProfessional, updateImage, updateFavoriteReview, getReviewsByProfessional, updateSeenNotification, updateClient, getProfessions, sugerirProfissao, createProvider, createClient, getProfessionsBySearch }}>
             {children}
         </APIContext.Provider>
     )

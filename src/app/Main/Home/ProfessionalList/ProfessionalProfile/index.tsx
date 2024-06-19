@@ -46,7 +46,7 @@ export default function ProfessionalProfile(props: any) {
         <SafeAreaView style={[style.container, { backgroundColor: isProfessional ? blueDefault : orangeDefault }]}>
             {professional ? (
                 <>
-                    <HeaderProfessional title={isProfessional ? 'SEU PERFIL' : props.profession}
+                    <HeaderProfessional title={isProfessional ? 'SEU PERFIL' : params.profissao.replace(/^\w/, (c:string) => c.toUpperCase())}
                         navigation={props.navigation}
                         signOut={handleSignOut}
                         isProfessional={isProfessional}
