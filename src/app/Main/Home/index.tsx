@@ -9,9 +9,10 @@ import { ProfissaoOutput, useAPI } from '../../../contexts/api';
 import CardProfession from '../../../components/CardProfession';
 import { showMessage } from 'react-native-flash-message';
 
-export default function Home(props: any) {
 
-  const { getProfessionsBySearch } = useAPI();
+export default function Home({ navigation }: any) {
+
+  const { getProfessionsBySearch, getAllProfessionalsByID } = useAPI();
 
   const [search, setSearch] = useState<string>('');
   const [profissoes, setProfissoes] = useState<ProfissaoOutput[]>([]);
@@ -39,7 +40,8 @@ export default function Home(props: any) {
       <CardProfession
         profession={item.nome.replace(/^\w/, (c) => c.toUpperCase())}
         professionId={item.id}
-        onPress={() => console.log(item.nomeIcone)}
+        onPress={() => {
+          navigation.navigate('ProfessionalList', { profissao: item.nome, id: item.id, navigation})}}
         professionIcon={item.nomeIcone} />
     )
   }
@@ -62,7 +64,7 @@ export default function Home(props: any) {
           <ScrollView style={{ flex: 0.8 }}>
             <MostAccessed />
             <Highlights />
-            <OtherProfessions navigation={props.navigation} />
+            <OtherProfessions navigation={navigation.navigation} />
           </ScrollView>
         </>
       }

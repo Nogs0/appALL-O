@@ -3,23 +3,12 @@ import { Image, SafeAreaView, Text, TouchableOpacity, View } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { greyDefault, orangeDefault, yellowDefault } from '../../shared/styleConsts'
 import styles from './styles'
+import { Endereco, ProfissaoOutput, ProvedorOutput } from '../../contexts/api'
+import { TipoPessoaEnum } from '../../shared/Enums/enums'
 
-export type CardProps = {
-    id: number,
-    name: string,
-    rate: number,
-    obs: string,
-    priceAvg: number,
-    image: any,
-    favorite: boolean,
-    navigation: any,
-    timeDistance: number,
-    numberRate: number,
-    profissao: string
-}
 
-export default function CardProfessional({ props, profession }: any) {
-    const [favorite, setFavorite] = useState<boolean>(props.favorite);
+export default function CardProfessional(props: any){
+    const [favorite, setFavorite] = useState<boolean>(props.favorito);
     const setFavoriteAndUpdate = (id: number, favorite: boolean) => {
         setFavorite(favorite);
         //onde sera feito o update
@@ -41,13 +30,13 @@ export default function CardProfessional({ props, profession }: any) {
 
     return (
         <SafeAreaView style={styles.container}>
-            <TouchableOpacity style={styles.contentContainer} onPress={() => props.navigation.navigate('ProfessionalProfile', { id: props.id, profession: profession })}>
+            <TouchableOpacity style={styles.contentContainer} onPress={() => {props.navigation.navigate('ProfessionalProfile', { id: props.id, profissao: props.profissao })}}>
                 <View style={styles.imageContainer}>
-                    <Image style={styles.image} source={props.image}></Image>
+                    <Image style={styles.image} source={require('../../assets/images/jardineiro.jpg')}></Image>
                 </View>
                 <View style={styles.informationContainer}>
-                    <Text style={styles.nameProfessional}>{props.name}</Text>
-                    {getRate(props.rate)}
+                    <Text style={styles.nameProfessional}>{props.razaoSocial}</Text>
+                    {getRate(props.mediaAvaliacao)}
                     <Text style={styles.info}>{`${props.timeDistance}min - ${getPrice(props.priceAvg)}`}</Text>
                     <Text style={styles.infoObs}>{props.obs}</Text>
                 </View>
