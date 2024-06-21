@@ -3,7 +3,7 @@ import { useAuth } from "./auth";
 import { ClienteInput, useAPI } from "./api";
 
 interface Endereco {
-    id: number, 
+    id: number,
     cep: string,
     estado: string,
     cidade: string,
@@ -81,16 +81,16 @@ function RegisterClientProvider({ children }: any) {
     function setAddress(endereco: Endereco) {
         setClient((prev) => {
             if (!prev) prev = {} as ClienteInput;
-            
+
             prev.enderecoInput = endereco;
             return prev;
         });
     }
 
-    function setProfilePic(uri: string) {
+    function setProfilePic(path: string) {
         setClient((prev) => {
             if (!prev) prev = {} as ClienteInput;
-            prev.imagem = uri;
+            prev.imagem = path;
             return prev;
         });
     }
@@ -99,9 +99,11 @@ function RegisterClientProvider({ children }: any) {
         setLoading(true);
         return new Promise<void>((resolve, reject) => {
             if (client) {
-                createClient(client).then(() => {
-                    resolve();
-                })
+                console.log(client)
+                createClient(client)
+                    .then(() => {
+                        resolve();
+                    })
                     .catch((e) => {
                         reject(e)
                     });

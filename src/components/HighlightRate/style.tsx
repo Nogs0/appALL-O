@@ -40,6 +40,7 @@ export default StyleSheet.create({
         fontFamily: 'Rubik-SemiBold'
     },
     rateNote: {
+        textAlign: 'left',
         color: whiteDefault,
         fontFamily: 'Rubik-LightItalic'
     },

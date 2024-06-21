@@ -14,7 +14,7 @@ import style from './style';
 
 export default function ClientProfile(props: any) {
 
-    const { getPerfilCliente, updateClient, updateImage } = useAPI();
+    const { getPerfilCliente, updateClient, updateImageClient, getImageClient } = useAPI();
     const { signOut, user } = useAuth();
     const [params, setParams] = useState<any>(props);
     const [cliente, setCliente] = useState<PefilClienteOutput>();
@@ -22,7 +22,8 @@ export default function ClientProfile(props: any) {
     const [email, setEmail] = useState<string>(cliente ? cliente.email : '');
     const [telefone, setTelefone] = useState<string>(cliente ? cliente.telefone : '');
     const [cpfCnpj, setCpfCnpj] = useState<string>(cliente ? cliente.cliente.cpf : '');
-    const [imagem, setImagem] = useState<string>(cliente ? cliente.pathToImage : '');
+    const [imagemId, setImagemId] = useState<string>(cliente ? cliente.imagemPerfil : '');
+    const [imagem, setImagem] = useState<any>();
 
     const [cep, setCep] = useState<string>(cliente ? cliente.cliente.endereco.cep : '');
     const [estado, setEstado] = useState<string>(cliente ? cliente.cliente.endereco.estado : '');
@@ -42,10 +43,27 @@ export default function ClientProfile(props: any) {
         getPerfilCliente(id)
             .then((resolve) => {
                 setCliente(resolve);
+                console.log(resolve);
+                if (resolve.imagemPerfil.length > 0)
+                    getImage(resolve.imagemPerfil);
             })
-            .catch((error) => {
+            .catch((e) => {
                 showMessage({
                     message: 'Falha ao carregar cliente',
+                    type: 'danger'
+                })
+            })
+    }
+
+    const getImage = (idImage: string) => {
+        getImageClient(idImage)
+            .then((result) => {
+                setImagem(result);
+            })
+            .catch((e) => {
+                console.log(e)
+                showMessage({
+                    message: 'Falha ao carregar imagem',
                     type: 'danger'
                 })
             })
@@ -67,18 +85,22 @@ export default function ClientProfile(props: any) {
 
     const changeImage = () => {
         launchImageLibrary({ mediaType: 'photo' }, (response) => {
-            if (response.assets && response.assets.length > 0) {
+            if (response.assets && response.assets.length > 0 && response.assets[0].uri && response.assets[0].fileName) {
                 setLoadingImage(true);
-                updateImage(response.assets[0])
+                updateImageClient(response.assets[0].uri, response.assets[0].fileName)
                     .then((newImage) => {
-                        setImagem(newImage)
+                        console.log(newImage);
+                        setImagemId(newImage);
+                        handleupdate();
+                        getImage(newImage);
                         showMessage({
-                            message: 'Imagem de perfil alterada!',
+                            message: 'Imagem de perfil alterada',
                             type: 'success'
                         })
                     }).catch((e) => {
+                        console.log(e)
                         showMessage({
-                            message: e,
+                            message: 'Falha ao atualizar imagem de perfil',
                             type: 'danger'
                         })
                     })
@@ -95,7 +117,7 @@ export default function ClientProfile(props: any) {
                 nome,
                 email,
                 telefone,
-                imagem,
+                imagem: imagemId,
                 cpfCnpj,
                 enderecoInput: {
                     id: cliente.cliente.endereco.id,
@@ -135,7 +157,6 @@ export default function ClientProfile(props: any) {
             setEmail(cliente.email);
             setTelefone(cliente.cliente.telefone);
             setCpfCnpj(cliente.cliente.cpf);
-            setImagem(cliente.pathToImage);
             setCep(cliente.cliente.endereco.cep);
             setEstado(cliente.cliente.endereco.estado);
             setCidade(cliente.cliente.endereco.cidade);
@@ -193,7 +214,7 @@ export default function ClientProfile(props: any) {
                                             else changeImage();
                                         }}>
                                         {imagem ?
-                                            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                                            <View style={style.hasImage}>
                                                 {loadingImage ?
                                                     <ActivityIndicator style={style.loadingImage} size={35} color={orangeDefault} />
                                                     :

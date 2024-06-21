@@ -15,14 +15,14 @@ export default StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
     },
-    imageContainer: {
+imageContainer: {
         alignItems: 'center',
         justifyContent: 'center',
     },
     image: {
         width: 150,
         height: 150,
-        borderRadius: 50,
+        borderRadius: 50
     },
     loadingImage: {
         width: 150,
@@ -36,6 +36,15 @@ export default StyleSheet.create({
         width: 130,
         height: 130,
     },
+    hasImage: {
+        alignItems: 'center', 
+        justifyContent: 'center',
+        borderRadius: 55, 
+        borderWidth: 5, 
+        borderColor: orangeDefault,
+        width: 160,
+        height: 160,
+    },
     noImage: {
         width: 150,
         height: 150,
@@ -43,18 +52,18 @@ export default StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 50,
-       
+
     },
     noImageText: {
-        color: blackDefault, 
-        fontFamily: 'Rubik-Light', 
+        color: blackDefault,
+        fontFamily: 'Rubik-Light',
         fontSize: 15,
         textAlign: 'center',
         display: 'flex'
-        
+
     },
     inputsContainer: {
-        marginTop: '20%'
+        marginTop: '15%'
     },
     inputsContainerAddress: {
         position: 'absolute',
@@ -87,12 +96,12 @@ export default StyleSheet.create({
         borderRadius: 10,
         textAlign: 'center'
     },
-    bottomContainer:{
+    bottomContainer: {
         flexDirection: 'row',
         marginBottom: '5%',
         justifyContent: 'space-between',
         backgroundColor: whiteDefault,
-        
+
     },
     buttonAddImage: {
         backgroundColor: orangeDefault,
@@ -130,7 +139,7 @@ export default StyleSheet.create({
         height: '100%',
         position: 'absolute',
         zIndex: 1,
-        backgroundColor: greyLoadingDefault 
+        backgroundColor: greyLoadingDefault
     },
     loadingCEP: {
         position: 'absolute',

@@ -3,53 +3,35 @@ import { ActivityIndicator, SafeAreaView, Text, TouchableOpacity, View } from 'r
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { Image } from 'react-native';
+import { showMessage } from 'react-native-flash-message';
 import { Asset, launchImageLibrary } from 'react-native-image-picker';
-import HeaderRegisterClient from '../../../../../components/HeaderRegisterClient';
-import { useRegisterClient } from '../../../../../contexts/registerClient';
-import { blackDefault, blueDefault, orangeDefault, redDefault, whiteDefault } from '../../../../../shared/styleConsts';
+import HeaderRegisterProfessional from '../../../../../components/HeaderRegisterProfessional';
+import { useAPI } from '../../../../../contexts/api';
+import { useRegisterProfessional } from '../../../../../contexts/registerProfessional';
+import { blackDefault, blueDefault, whiteDefault } from '../../../../../shared/styleConsts';
 import styleRegister from '../../style';
 import style from './style';
-import { showMessage } from 'react-native-flash-message';
-import { ALLORequestForm } from '../../../../../services/api';
-import { useAPI } from '../../../../../contexts/api';
 
-export default function RegisterCliente_AddProfilePic({ navigation }: any) {
+export default function RegisterProfessional_AddProfilePic({ navigation }: any) {
 
-  const { updateImageClient } = useAPI();
-  const { endingRegister, loading, setProfilePic } = useRegisterClient();
+  const { updateImageProfessional } = useAPI();
+  const { endingRegister, loading, setProfilePic } = useRegisterProfessional();
   const [imageTela, setImageTela] = useState<Asset>();
   const [loadingImage, setLoadingImage] = useState<boolean>(false);
 
   const handleButtonEnd = () => {
     if (imageTela?.uri && imageTela?.fileName) {
-      updateImageClient(imageTela.uri, imageTela.fileName).then((result) => {
-        setProfilePic(result)
-        endingRegister().then(() => {
-          navigation.navigate('RegisterClient_OkEndRegister');
-        })
-          .catch(() => {
-            showMessage({
-              message: 'Falha ao cadastrar cliente!',
-              type: 'danger'
-            })
-          })
-      }).catch((e) => {
-        showMessage({
-          message: 'Falha no upload da imagem',
-          type: 'danger'
-        })
-      })
-    } else {
-      endingRegister().then(() => {
-        navigation.navigate('RegisterClient_OkEndRegister');
-      })
-        .catch(() => {
+      updateImageProfessional(imageTela.uri, imageTela.fileName)
+        .then((result) => {
+          setProfilePic(result);  
+          navigation.navigate('RegisterProfessional_Images');
+        }).catch((e) => {
           showMessage({
-            message: 'Falha ao cadastrar cliente!',
+            message: 'Falha no upload da imagem',
             type: 'danger'
           })
         })
-    }
+    } 
   }
 
   const changeImage = () => {
@@ -64,13 +46,13 @@ export default function RegisterCliente_AddProfilePic({ navigation }: any) {
 
   return (
     loading ?
-      <View style={{ flex: 1, backgroundColor: orangeDefault, alignItems: 'center', justifyContent: 'center' }}>
+      <View style={{ flex: 1, backgroundColor: blueDefault, alignItems: 'center', justifyContent: 'center' }}>
         <ActivityIndicator size={70} color={whiteDefault} />
       </View>
       :
 
       <SafeAreaView style={styleRegister.defaultContainer}>
-        <HeaderRegisterClient navigation={navigation} />
+        <HeaderRegisterProfessional navigation={navigation} />
         <View style={styleRegister.defaultContentContainer}>
           <Icon name={'image-plus'} size={50} color={blackDefault}></Icon>
           <Text style={styleRegister.title}>Adicione uma foto de perfil!</Text>
@@ -81,7 +63,7 @@ export default function RegisterCliente_AddProfilePic({ navigation }: any) {
             {imageTela?.uri ?
               <View style={{ alignItems: 'center', justifyContent: 'center' }}>
                 {loadingImage ?
-                  <ActivityIndicator style={style.loadingImage} size={35} color={orangeDefault} />
+                  <ActivityIndicator style={style.loadingImage} size={35} color={blueDefault} />
                   :
                   <></>
                 }
@@ -92,7 +74,7 @@ export default function RegisterCliente_AddProfilePic({ navigation }: any) {
                 <Icon name={'camera'} size={50} color={blackDefault}></Icon>
                 <Text style={{ color: blackDefault, fontFamily: 'Rubik-SemiBold' }}>Adicionar foto de perfil</Text>
                 {loadingImage ?
-                  <ActivityIndicator style={style.loadingImage} size={35} color={orangeDefault} />
+                  <ActivityIndicator style={style.loadingImage} size={35} color={blueDefault} />
                   :
                   <></>
                 }
@@ -100,7 +82,7 @@ export default function RegisterCliente_AddProfilePic({ navigation }: any) {
             }
           </TouchableOpacity>
           <TouchableOpacity style={styleRegister.buttonNext} onPress={() => handleButtonEnd()}>
-            <Text style={styleRegister.textButtonNext}>Finalizar</Text>
+            <Text style={styleRegister.textButtonNext}>Prosseguir</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>

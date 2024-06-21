@@ -20,7 +20,8 @@ interface RegisterProfessionalContextData {
     setContacts(phoneNumber: string): void,
     setImages(images: any): void,
     endingRegister(): Promise<void>,
-    clearProfessional(): void
+    clearProfessional(): void,
+    setProfilePic(path: string): void
 }
 
 const RegisterProfessionalContext = createContext<RegisterProfessionalContextData>({} as RegisterProfessionalContextData)
@@ -33,26 +34,29 @@ function RegisterProfessionalProvider({ children }: any) {
     const [profissional, setProfissional] = useState<ProvedorInput | null>({
         id: 0,
         senha: '',
-        email: '',
-        descricao: '',
-        telefone: '',
-        cpfCnpj: '',
         razaoSocial: '',
-        tipoPessoa: TipoPessoaEnum.FISICA,
-        enderecoInput: {
-          cep: '',
-          estado: '',
-          cidade: '',
-          bairro: '',
-          logradouro: '',
-          numero: ''
+        cpfCnpj: '',
+        email: '',
+        idProfissoes: [],
+        perfilProvedorInput: {
+            idProvedor: 0,
+            idAvaliacao: 0,
+            descricao: '',
+            perfilImage: ''
         },
-        idProfissoes: [
-          
-        ],
-        perfilImagem: '',
-        servicoImagens: []
-      });
+        enderecoInput: {
+            id: 0,
+            cep: '',
+            estado: '',
+            cidade: '',
+            bairro: '',
+            logradouro: '',
+            numero: ''
+        },
+        telefone: '',
+        tipoPessoa: TipoPessoaEnum.FISICA,
+        servicoImagens: [],
+    });
     const [loading, setLoading] = useState<boolean>(false);
 
     function setInitialInformations(params: InitialInformationsProfessional) {
@@ -72,7 +76,7 @@ function RegisterProfessionalProvider({ children }: any) {
             if (!prev)
                 prev = {} as ProvedorInput;
 
-            prev.descricao = descricao;
+            prev.perfilProvedorInput.descricao = descricao;
             return prev;
         });
     }
@@ -116,17 +120,25 @@ function RegisterProfessionalProvider({ children }: any) {
         });
     }
 
+    function setProfilePic(path: string) {
+        setProfissional((prev) => {
+            if (!prev) prev = {} as ProvedorInput;
+            prev.perfilProvedorInput.perfilImage = path;
+            return prev;
+        });
+    }
+
     function endingRegister(): Promise<void> {
         setLoading(true);
         return new Promise<void>((resolve, reject) => {
             if (profissional) {
                 createProvider(profissional)
-                .then(() => {
-                    resolve();
-                })
-                .catch((e) => {
-                    reject(e);
-                })
+                    .then(() => {
+                        resolve();
+                    })
+                    .catch((e) => {
+                        reject(e);
+                    })
             }
             setLoading(false);
         });
@@ -140,8 +152,14 @@ function RegisterProfessionalProvider({ children }: any) {
             cpfCnpj: '',
             email: '',
             idProfissoes: [],
-            descricao: '',
+            perfilProvedorInput: {
+                idProvedor: 0,
+                idAvaliacao: 0,
+                descricao: '',
+                perfilImage: ''
+            },
             enderecoInput: {
+                id: 0,
                 cep: '',
                 estado: '',
                 cidade: '',
@@ -151,7 +169,6 @@ function RegisterProfessionalProvider({ children }: any) {
             },
             telefone: '',
             tipoPessoa: TipoPessoaEnum.FISICA,
-            perfilImagem: '',
             servicoImagens: [],
         });
         endRegister();
@@ -159,7 +176,7 @@ function RegisterProfessionalProvider({ children }: any) {
 
     return (
         <RegisterProfessionalContext.Provider
-            value={{ profissional, setInitialInformations, setDescription, setServices, setEndereco, setContacts, setImages, endingRegister, loading, clearProfessional }}>
+            value={{ profissional, setInitialInformations, setDescription, setServices, setEndereco, setContacts, setImages, endingRegister, loading, clearProfessional, setProfilePic }}>
             {children}
         </RegisterProfessionalContext.Provider>
     )

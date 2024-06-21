@@ -24,6 +24,15 @@ export default StyleSheet.create({
         height: 150,
         borderRadius: 50,
     },
+    hasImage: {
+        alignItems: 'center', 
+        justifyContent: 'center',
+        borderRadius: 55, 
+        borderWidth: 5, 
+        borderColor: blueDefault,
+        width: 160,
+        height: 160,
+    },
     loadingImage: {
         width: 150,
         height: 150,
@@ -61,9 +70,9 @@ export default StyleSheet.create({
         paddingHorizontal: '5%',
     },
     inputsContainerInformations: {
-        top: '15%',
+        top: '14%',
         width: '90%',
-        height: '70%',
+        height: '71%',
         paddingHorizontal: '5%',
         position: 'absolute'
     },

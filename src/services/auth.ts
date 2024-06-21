@@ -20,7 +20,7 @@ export function signIn(input: SignInInput) {
             let info = {
                 token: 'logado',
                 user : {
-                    id: 1,
+                    id: 2,
                     name: 'Joao',
                     email: input.email,
                 },

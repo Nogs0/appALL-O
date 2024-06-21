@@ -13,16 +13,18 @@ import { showMessage } from 'react-native-flash-message';
 
 export default function ProfessionalProfile(props: any) {
 
-    const { getPerfilProfissional } = useAPI();
+    const { getPerfilProfissional, getImageProfessional } = useAPI();
     const { isProfessional, signOut, user } = useAuth();
     const [params, setParams] = useState<any>(props.route.params);
     const [professional, setProfessional] = useState<PerfilProvedorOutput>();
+    const [imagem, setImagem] = useState<any>();
 
     const getProfessional = (id: number) => {
         getPerfilProfissional(id)
             .then((result) => {
-                console.log(result);
                 setProfessional(result);
+                if (result.imagemPerfil)
+                    getImage(result.imagemPerfil);
             })
             .catch((e) => {
                 showMessage({
@@ -30,6 +32,20 @@ export default function ProfessionalProfile(props: any) {
                     type: 'danger'
                 })
             })
+    }
+
+    const getImage = (idImage: string) => {
+        getImageProfessional(idImage)
+        .then((result) => {
+            setImagem(result);
+        })
+        .catch((e) => {
+            console.log(e)
+            showMessage({
+                message: 'Falha ao carregar imagem',
+                type: 'danger'
+            })
+        })
     }
 
     const handleSignOut = () => {
@@ -46,7 +62,7 @@ export default function ProfessionalProfile(props: any) {
         <SafeAreaView style={[style.container, { backgroundColor: isProfessional ? blueDefault : orangeDefault }]}>
             {professional ? (
                 <>
-                    <HeaderProfessional title={isProfessional ? 'SEU PERFIL' : params.profissao.replace(/^\w/, (c:string) => c.toUpperCase())}
+                    <HeaderProfessional title={isProfessional ? 'SEU PERFIL' : params.profissao.replace(/^\w/, (c: string) => c.toUpperCase())}
                         navigation={props.navigation}
                         signOut={handleSignOut}
                         isProfessional={isProfessional}
@@ -56,7 +72,11 @@ export default function ProfessionalProfile(props: any) {
                         <Text style={[style.nameProfessional, { color: isProfessional ? blueDefault : orangeDefault }]}>{professional.nome}</Text>
                         <View style={style.firstSection}>
                             <StarsRating id={professional.id} rate={professional.mediaAvaliacao} numberRate={professional.quantidadeAvaliacoes} navigation={props.navigation} defaultColor={isProfessional ? blueDefault : orangeDefault} />
-                            <Image style={style.image} source={require('../../../../../assets/images/eletricista.jpg')}></Image>
+                            {imagem ?
+                                <Image style={style.image} source={{ uri: imagem }}></Image>
+                                :
+                                <Image style={style.image} source={require('../../../../../assets/images/default-profile-pic.png')}></Image>
+                            }
                         </View>
                         <View style={style.secondSection}>
                             <ProfessionalDescription description={professional.descricao} defaultColor={isProfessional ? blueDefault : orangeDefault} />

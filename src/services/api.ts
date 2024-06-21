@@ -1,4 +1,7 @@
 import axios from 'axios';
+import configDev, { api_url } from '../services/config-dev';
+import { showMessage } from 'react-native-flash-message';
+
 
 export enum verbosAPI {
     GET = 1,
@@ -8,8 +11,26 @@ export enum verbosAPI {
 }
 
 export const api = axios.create({
-    baseURL: 'http://192.168.0.202:8080/api/allo/',
+    baseURL: configDev.api_url,
 })
+
+export const ALLORequestForm = (url: string, form: FormData): Promise<string> => {
+    return new Promise<string>((resolve, reject) => {
+        api.postForm(url, form,
+            {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                }
+            })
+            .then((result) => {
+                resolve(result.data);
+            })
+            .catch((e) => {
+                console.log(e.request);
+                reject(e);
+            })
+    })
+}
 
 const token = ''
 
@@ -20,7 +41,7 @@ export default function ALLORequestBase<T>(method: verbosAPI, url: string, param
                 try {
                     if (params)
                         url = `${url}?${params}`;
-                    
+
                     await api.get(url)
                         .then((result) => {
                             resolve(result.data);

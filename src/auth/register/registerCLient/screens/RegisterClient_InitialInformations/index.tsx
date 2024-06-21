@@ -49,7 +49,7 @@ export default function RegisterProfessional_InitialInformations({ navigation }:
             <View style={styleRegister.inputsContainer}>
               <Input onFocus={() => setIncorrectInformations(false)} placeholder='Nome' text={nome} onChangeText={setNome} />
               <Input keyboardType='number-pad' isMask mask={maskPhone} onFocus={() => setIncorrectInformations(false)} placeholder='Telefone' text={telefone} onChangeText={setTelefone}></Input>
-              <Input onFocus={() => setIncorrectInformations(false)} placeholder='CPF' text={cpfCnpj} onChangeText={setCpfCnpj}></Input>
+              <Input onFocus={() => setIncorrectInformations(false)} keyboardType='number-pad' placeholder='CPF' text={cpfCnpj} onChangeText={setCpfCnpj}></Input>
               <Input keyboardType='email-address' onFocus={() => setIncorrectInformations(false)} placeholder='Email' text={email} onChangeText={setEmail} />
               <InputPassword onFocus={() => setIncorrectInformations(false)} text={senha} onChangeText={setSenha} />
             </View>

@@ -41,6 +41,14 @@ export default StyleSheet.create({
         fontFamily: 'Rubik-Light',
         textAlign: 'center'
     },
+    subTitle: {
+        paddingTop: '2%',
+        paddingHorizontal: 10,
+        color: 'black',
+        fontSize: 14,
+        fontFamily: 'Rubik-Light',
+        textAlign: 'center'
+    },
     buttonNext: {
         width: '100%',
         marginTop: '10%',

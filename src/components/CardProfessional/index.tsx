@@ -37,7 +37,6 @@ export default function CardProfessional(props: any){
                 <View style={styles.informationContainer}>
                     <Text style={styles.nameProfessional}>{props.razaoSocial}</Text>
                     {getRate(props.mediaAvaliacao)}
-                    <Text style={styles.info}>{`${props.timeDistance}min - ${getPrice(props.priceAvg)}`}</Text>
                     <Text style={styles.infoObs}>{props.obs}</Text>
                 </View>
             </TouchableOpacity>

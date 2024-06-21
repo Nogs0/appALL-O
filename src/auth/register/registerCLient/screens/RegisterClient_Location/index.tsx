@@ -8,24 +8,25 @@ import Input from '../../../../../components/Input';
 import InputCEP from '../../../../../components/InputCEP';
 import { useRegisterClient } from '../../../../../contexts/registerClient';
 import getAddress from '../../../../../services/cep';
-import { blueDefault, redDefault } from '../../../../../shared/styleConsts';
+import { blueDefault, orangeDefault, redDefault } from '../../../../../shared/styleConsts';
 import { showMessage } from 'react-native-flash-message';
 
 export default function RegisterProfessional_ServiceLocation({ navigation }: any) {
 
   const { client, setAddress } = useRegisterClient();
 
-  const [cep, setCep] = useState<string>(!!client ? client.endereco?.cep : '');
-  const [cidade, setCidade] = useState<string>(!!client ? client.endereco?.cidade : '');
-  const [estado, setEstado] = useState<string>(!!client ? client.endereco?.estado : '');
-  const [bairro, setBairro] = useState<string>(!!client ? client.endereco?.bairro : '');
-  const [logradouro, setLogradouro] = useState<string>(!!client ? client.endereco?.logradouro : '');
-  const [numero, setNumero] = useState<string>(!!client ? client.endereco?.numero : '');
+  const [cep, setCep] = useState<string>(!!client ? client.enderecoInput?.cep : '');
+  const [cidade, setCidade] = useState<string>(!!client ? client.enderecoInput?.cidade : '');
+  const [estado, setEstado] = useState<string>(!!client ? client.enderecoInput?.estado : '');
+  const [bairro, setBairro] = useState<string>(!!client ? client.enderecoInput?.bairro : '');
+  const [logradouro, setLogradouro] = useState<string>(!!client ? client.enderecoInput?.logradouro : '');
+  const [numero, setNumero] = useState<string>(!!client ? client.enderecoInput?.numero : '');
   const [incorrectInformations, setIncorrectInformations] = useState<boolean>(false);
 
   const [loadingCEP, setLoadingCEP] = useState<boolean>(false);
   const handleButtonNext = () => {
     setAddress({
+      id : 0,
       cep,
       estado,
       cidade,
@@ -69,7 +70,7 @@ export default function RegisterProfessional_ServiceLocation({ navigation }: any
     <SafeAreaView style={styleRegister.defaultContainer}>
       {
         loadingCEP ?
-          <ActivityIndicator style={style.loadingCEP} size={70} color={blueDefault} />
+          <ActivityIndicator style={style.loadingCEP} size={70} color={orangeDefault} />
           : <></>
       }
       <HeaderRegisterClient navigation={navigation} />

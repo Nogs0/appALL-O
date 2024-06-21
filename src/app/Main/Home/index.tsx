@@ -41,7 +41,7 @@ export default function Home({ navigation }: any) {
         profession={item.nome.replace(/^\w/, (c) => c.toUpperCase())}
         professionId={item.id}
         onPress={() => {
-          navigation.navigate('ProfessionalList', { profissao: item.nome, id: item.id, navigation})}}
+          navigation.navigate('ProfessionalList', { profissao: item.nome, id: item.id})}}
         professionIcon={item.nomeIcone} />
     )
   }

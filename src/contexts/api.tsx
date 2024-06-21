@@ -1,6 +1,8 @@
 import React, { createContext, useContext } from 'react';
-import ALLORequestBase, { api, verbosAPI } from '../services/api';
+import ALLORequestBase, { ALLORequestForm, api, verbosAPI } from '../services/api';
 import { TipoPessoaEnum } from '../shared/Enums/enums';
+import { getTypeFromFileName } from '../shared/helpers';
+import { api_url } from '../services/config-dev';
 
 export interface ClientDTO {
     id: number,
@@ -11,19 +13,25 @@ export interface ClientDTO {
     imagemDoPerfil: any
 }
 
+export interface PerfilProvedorInput {
+    idProvedor: number,
+    idAvaliacao: number,
+    descricao: string,
+    perfilImage: string
+}
+
 export interface ProvedorInput {
     id: number | undefined,
     email: string,
-    senha: string,
     telefone: string,
     cpfCnpj: string,
+    enderecoInput: Endereco,
     razaoSocial: string,
     tipoPessoa: TipoPessoaEnum | undefined,
     idProfissoes: number[]
-    enderecoInput: Endereco,
-    perfilImagem: any,
+    perfilProvedorInput: PerfilProvedorInput,
     servicoImagens: string[],
-    descricao: string
+    senha: string,
 }
 
 export interface ClienteInput {
@@ -34,7 +42,7 @@ export interface ClienteInput {
     cpfCnpj: string,
     nome: string,
     enderecoInput: Endereco,
-    imagem: any,
+    imagem: string,
 }
 
 export interface Endereco {
@@ -87,7 +95,7 @@ export interface PefilClienteOutput {
     email: string,
     cliente: ClienteOutput,
     telefone: string,
-    pathToImage: string,
+    imagemPerfil: string,
     provedoresFavoritados: ProvedorOutput[],
 }
 
@@ -107,7 +115,7 @@ export interface PerfilProvedorOutput {
     servicosConcluidos: number,
     mediaAvaliacao: number,
     tempoCadastro: number,
-    pathToImage: any,
+    imagemPerfil: string,
     nome: string,
     email: string,
     descricao: string,
@@ -119,7 +127,6 @@ interface APIContextData {
     getPerfilProfissional(id: number): Promise<PerfilProvedorOutput>,
     updateProfessional(input: ProvedorInput): Promise<void>,
     updateClient(input: ClienteInput): Promise<void>,
-    updateImage(image: any): Promise<any>,
     updateFavoriteReview(id: number): Promise<boolean>,
     getReviewsByProfessional(id: number): Promise<any>,
     updateSeenNotification(id: number): Promise<boolean>,
@@ -127,8 +134,12 @@ interface APIContextData {
     sugerirProfissao(sugestao: string): Promise<void>,
     createProvider(profissional: ProvedorInput): Promise<void>,
     createClient(client: ClienteInput): Promise<void>,
-    getProfessionsBySearch(search: string): Promise<ProfissaoOutput[]> 
-    getAllProfessionalsByID(id: number): Promise<ProvedorOutput[]>
+    getProfessionsBySearch(search: string): Promise<ProfissaoOutput[]>
+    getAllProfessionalsByID(id: number): Promise<ProvedorOutput[]>,
+    getImageClient(idImage: string): Promise<any>,
+    getImageProfessional(idImage: string): Promise<any>,
+    updateImageClient(uri: string, fileName: string): Promise<string>,
+    updateImageProfessional(uri: string, fileName: string): Promise<string>
 }
 
 const APIContext = createContext<APIContextData>({} as APIContextData);
@@ -137,22 +148,20 @@ function APIProvider({ children }: any) {
 
     const getAllProfessionalsByID = (id: number): Promise<ProvedorOutput[]> => {
         return new Promise<ProvedorOutput[]>((resolve, reject) => {
-            ALLORequestBase<ProvedorOutput[]>(verbosAPI.GET, 'provedor/filter/profissao', `idProfissao=${id}` )
-            .then((result) => {
-                console.log(result);
-                resolve(result);
-            })
-            .catch((e) => {
-                console.log(e.request);
-                reject(e);
-            })
+            ALLORequestBase<ProvedorOutput[]>(verbosAPI.GET, 'provedor/filter/profissao', `idProfissao=${id}`)
+                .then((result) => {
+                    resolve(result);
+                })
+                .catch((e) => {
+                    console.log(e.request);
+                    reject(e);
+                })
         })
     }
     const getPerfilCliente = (id: number): Promise<PefilClienteOutput> => {
         return new Promise<PefilClienteOutput>((resolve, reject) => {
             ALLORequestBase<PefilClienteOutput>(verbosAPI.GET, 'cliente/perfil', `idCliente=${id}`)
                 .then((result) => {
-                    console.log(result);
                     resolve(result);
                 })
                 .catch((e) => {
@@ -167,6 +176,7 @@ function APIProvider({ children }: any) {
         return new Promise<PerfilProvedorOutput>((resolve, reject) => {
             ALLORequestBase<PerfilProvedorOutput>(verbosAPI.GET, 'provedor/perfil', `idProvedor=${id}`)
                 .then((result) => {
+                    console.log(result);
                     resolve(result);
                 })
                 .catch((e) => {
@@ -202,19 +212,6 @@ function APIProvider({ children }: any) {
         })
     }
 
-    const updateImage = (image: any): Promise<any> => {
-        return new Promise<any>((resolve, reject) => {
-            try {
-                setTimeout(() => {
-                    resolve(image)
-                }, 2000);
-            }
-            catch (e) {
-                reject(e);
-            }
-        })
-    }
-
     const updateFavoriteReview = (id: number): Promise<boolean> => {
         return new Promise<boolean>((resolve, reject) => {
             try {
@@ -242,11 +239,8 @@ function APIProvider({ children }: any) {
     }
 
     const getReviewsByProfessional = (id: number): Promise<any> => {
-
         return new Promise<any>((resolve, reject) => {
             setTimeout(() => {
-
-
                 resolve({
                     professionalName: 'Marcio DME',
                     revs: [
@@ -392,14 +386,13 @@ function APIProvider({ children }: any) {
                     resolve();
                 })
                 .catch((e) => {
-                    console.log(e);
+                    console.log(e.request);
                     reject();
                 })
         })
     }
 
     const createClient = (client: ClienteInput): Promise<void> => {
-        console.log(client)
         return new Promise<void>(async (resolve, reject) => {
             ALLORequestBase(verbosAPI.POST, 'cliente', client)
                 .then(() => {
@@ -412,9 +405,90 @@ function APIProvider({ children }: any) {
         })
     }
 
+    const getImageClient = (idImage: string): Promise<ArrayBuffer | string> => {
+        return new Promise<ArrayBuffer | string>((resolve, reject) => {
+            let urlToFetch = `${api_url}cliente/buscarImagem?fileName=${idImage}`;
+            fetch(urlToFetch)
+                .then(response => response.blob())
+                .then(blob => {
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                        const imageData = reader.result;
+                        resolve(imageData);
+                    };
+                    reader.readAsDataURL(blob);
+                })
+                .catch((e) => {
+                    console.error('Erro ao buscar a imagem:', e);
+                    reject(e)
+                });
+        })
+    }
+
+    const getImageProfessional = (idImage: string): Promise<ArrayBuffer | string> => {
+        return new Promise<ArrayBuffer | string>((resolve, reject) => {
+            let urlToFetch = `${api_url}provedor/buscarImagem?fileName=${idImage}`;
+            console.log(urlToFetch)
+            fetch(urlToFetch)
+                .then(response => response.blob())
+                .then(blob => {
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                        const imageData = reader.result;
+                        resolve(imageData);
+                    };
+                    reader.readAsDataURL(blob);
+                })
+                .catch((e) => {
+                    console.error('Erro ao buscar a imagem:', e);
+                    reject(e)
+                });
+        })
+    }
+
+    const updateImageClient = (uri: string, fileName: string): Promise<string> => {
+        return new Promise<string>((resolve, reject) => {
+            const form = new FormData();
+            const imageObject = {
+                name: 'perfil-cliente',
+                uri: uri,
+                type: `image/${getTypeFromFileName(fileName)}`
+            }
+
+            form.append('image', imageObject)
+            ALLORequestForm('cliente/upload', form)
+                .then((result) => {
+                    resolve(result);
+                })
+                .catch((e) => {
+                    reject(e);
+                });
+        })
+    }
+
+    const updateImageProfessional = (uri: string, fileName: string): Promise<string> => {
+        return new Promise<string>((resolve, reject) => {
+            const form = new FormData();
+            const imageObject = {
+                name: 'perfil-profissional',
+                uri: uri,
+                type: `image/${getTypeFromFileName(fileName)}`
+            }
+
+            form.append('image', imageObject)
+            ALLORequestForm('provedor/upload', form)
+                .then((result) => {
+                    resolve(result);
+                })
+                .catch((e) => {
+                    reject(e);
+                });
+        })
+    }
+
     return (
         <APIContext.Provider
-            value={{ getAllProfessionalsByID, getPerfilCliente, getPerfilProfissional, updateProfessional, updateImage, updateFavoriteReview, getReviewsByProfessional, updateSeenNotification, updateClient, getProfessions, sugerirProfissao, createProvider, createClient, getProfessionsBySearch }}>
+            value={{ getAllProfessionalsByID, getPerfilCliente, getPerfilProfissional, updateProfessional, updateFavoriteReview, getReviewsByProfessional, updateSeenNotification, updateClient, getProfessions, sugerirProfissao, createProvider, createClient, getProfessionsBySearch, getImageClient, updateImageClient, updateImageProfessional, getImageProfessional }}>
             {children}
         </APIContext.Provider>
     )

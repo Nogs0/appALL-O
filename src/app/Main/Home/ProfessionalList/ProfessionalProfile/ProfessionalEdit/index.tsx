@@ -12,7 +12,7 @@ import { blackDefault, blueDefault, greyDefault, whiteDefault } from '../../../.
 import style from './style';
 
 export default function ProfessionalEdit(props: any) {
-    const { updateProfessional, updateImage, getPerfilProfissional } = useAPI();
+    const { updateProfessional, updateImageProfessional, getPerfilProfissional, getImageProfessional } = useAPI();
 
     const [params] = useState<any>(props.route.params);
     const [professional, setProfessional] = useState<PerfilProvedorOutput>();
@@ -21,7 +21,7 @@ export default function ProfessionalEdit(props: any) {
     const [email, setEmail] = useState<string>(professional ? professional.email : '');
     const [cpfCnpj, setCpfCnpj] = useState<string>(professional ? professional.provedor.cpfCnpj : '');
     const [telefone, setTelefone] = useState<string>(professional ? professional.provedor.telefone : '');
-    const [perfilImagem, setPerfilImagem] = useState<string>();
+    const [imagem, setImagem] = useState<any>();
     const [descricao, setDescricao] = useState<string>(professional ? professional.descricao : '');
 
     const [cep, setCep] = useState<string>(professional ? professional.provedor.endereco.cep : '');
@@ -30,7 +30,7 @@ export default function ProfessionalEdit(props: any) {
     const [bairro, setBairro] = useState<string>(professional ? professional.provedor.endereco.bairro : '');
     const [logradouro, setLogradouro] = useState<string>(professional ? professional.provedor.endereco.logradouro : '');
     const [numero, setNumero] = useState<string>(professional ? professional.provedor.endereco.numero : '');
-
+    const [imagemId, setImagemId] = useState<string>(professional ? professional.imagemPerfil : '')
     const [servicoImagens, setServicoImagens] = useState<string[]>([]);
 
     const [loadingCEP, setLoadingCEP] = useState<boolean>(false);
@@ -52,24 +52,42 @@ export default function ProfessionalEdit(props: any) {
 
     const changeImage = () => {
         launchImageLibrary({ mediaType: 'photo' }, (response) => {
-            if (response.assets && response.assets.length > 0) {
+            if (response.assets && response.assets.length > 0 && response.assets[0].uri && response.assets[0].fileName) {
                 setLoadingImage(true);
-                updateImage(response.assets[0])
+                updateImageProfessional(response.assets[0].uri, response.assets[0].fileName)
                     .then((newImage) => {
-                        setPerfilImagem(newImage.uri)
+                        console.log(newImage);
+                        setImagemId(newImage);
+                        handleupdate();
+                        getImage(newImage);
                         showMessage({
-                            message: 'Imagem de perfil alterada!',
+                            message: 'Imagem de perfil alterada',
                             type: 'success'
                         })
                     }).catch((e) => {
+                        console.log(e)
                         showMessage({
-                            message: 'Falha ao atualizar imagem',
+                            message: 'Falha ao atualizar imagem de perfil',
                             type: 'danger'
                         })
                     })
                     .finally(() => setLoadingImage(false))
             }
         })
+    }
+
+    const getImage = (idImage: string) => {
+        getImageProfessional(idImage)
+            .then((result) => {
+                setImagem(result);
+            })
+            .catch((e) => {
+                console.log(e)
+                showMessage({
+                    message: 'Falha ao carregar imagem',
+                    type: 'danger'
+                })
+            })
     }
 
     const handleupdate = () => {
@@ -79,6 +97,10 @@ export default function ProfessionalEdit(props: any) {
             email,
             telefone,
             cpfCnpj,
+            perfilProvedorInput: {
+                descricao,
+                perfilImage: imagemId,
+            },
             razaoSocial,
             enderecoInput: {
                 cep,
@@ -89,9 +111,7 @@ export default function ProfessionalEdit(props: any) {
                 numero
             },
             idProfissoes: [1],
-            perfilImagem,
             servicoImagens,
-            descricao
         } as ProvedorInput)
             .then(() => {
                 if (professional)
@@ -143,6 +163,8 @@ export default function ProfessionalEdit(props: any) {
         getPerfilProfissional(id)
             .then((result) => {
                 setProfessional(result);
+                if (result.imagemPerfil)
+                    getImage(result.imagemPerfil);
             })
             .catch((e) => {
                 showMessage({
@@ -211,7 +233,7 @@ export default function ProfessionalEdit(props: any) {
                                 <ScrollView>
                                     <TouchableOpacity disabled={loadingUpdate || loadingImage} style={style.imageContainer}
                                         onPress={() => {
-                                            if (perfilImagem)
+                                            if (imagem)
                                                 Alert.alert("Atenção!", "Você realmente deseja alterar sua foto de perfil?", [
                                                     {
                                                         text: 'Cancelar',
@@ -224,14 +246,14 @@ export default function ProfessionalEdit(props: any) {
                                                 ])
                                             else changeImage();
                                         }}>
-                                        {perfilImagem ?
-                                            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                                        {imagem ?
+                                            <View style={style.hasImage}>
                                                 {loadingImage ?
                                                     <ActivityIndicator style={style.loadingImage} size={35} color={blueDefault} />
                                                     :
                                                     <></>
                                                 }
-                                                <Image style={style.image} source={{ uri: perfilImagem }}></Image>
+                                                <Image style={style.image} source={{ uri: imagem }}></Image>
                                             </View>
                                             :
                                             <View style={style.noImage}>

@@ -47,7 +47,7 @@ export default function ProfessionalList(props: any) {
     return (
       <CardProfessional
         profissao={params.profissao}
-        navigation={params.navigation}
+        navigation={navigation}
         razaoSocial={item.razaoSocial}
         favorito={item.favorito}
         imagem={item.imagem}

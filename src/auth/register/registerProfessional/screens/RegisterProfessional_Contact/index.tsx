@@ -5,6 +5,7 @@ import styleRegister from '../../style';
 import HeaderRegisterProfessional from '../../../../../components/HeaderRegisterProfessional';
 import Input from '../../../../../components/Input';
 import { maskPhone } from '../../../../../shared/helpers';
+import { showMessage } from 'react-native-flash-message';
 
 export default function RegisterProfessional_Contact({ navigation }: any) {
 
@@ -15,8 +16,11 @@ export default function RegisterProfessional_Contact({ navigation }: any) {
     setContacts(telefone);
 
     if (canGoToTheNextStep())
-      navigation.navigate('RegisterProfessional_Images');
-    else Alert.alert("Erro", "Preencha os campos corretamente!")
+      navigation.navigate('RegisterProfessional_AddProfilePic');
+    else showMessage({
+      message: 'Preencha os campos corretamente!',
+      type: 'warning'
+    })
   }
 
   const canGoToTheNextStep = (): boolean => {
