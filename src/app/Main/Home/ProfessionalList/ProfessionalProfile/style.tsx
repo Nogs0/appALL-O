@@ -1,7 +1,20 @@
 import { StyleSheet } from "react-native";
-import { greenDefault, greyDefault, orangeDefault, whiteDefault } from "../../../../../shared/styleConsts";
+import { greenDefault, greenWpp, greyDefault, orangeDefault, whiteDefault } from "../../../../../shared/styleConsts";
 
 export default StyleSheet.create({
+    WhatsappContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        marginRight: "5%",
+        backgroundColor: greenWpp,
+        alignItems: 'center',
+        borderRadius: 50,
+        height: '20%',
+        width: "40%",
+        right: 0,
+        position: 'absolute'
+    },
     container: {
         flex: 1,
         justifyContent: 'center'

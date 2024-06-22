@@ -15,7 +15,7 @@ export const greenDefault = "#4dff4d"
 export const greenDefault2 = "#ccffcc"
 export const blueDefault = "#77ADFF";
 export const blueDefault2 = "#818DFF";
-
+export const greenWpp = "#25D366"
 
 
 export default StyleSheet.create({

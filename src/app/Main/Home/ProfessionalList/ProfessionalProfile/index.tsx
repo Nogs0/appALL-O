@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Image, SafeAreaView, Text, View } from 'react-native';
+import { ActivityIndicator, Image, Linking, SafeAreaView, Text, View } from 'react-native';
 import HeaderProfessional from '../../../../../components/HeaderProfessional';
 import HighlightRate from '../../../../../components/HighlightRate';
 import InfoCards from '../../../../../components/InfoCards';
@@ -10,14 +10,23 @@ import { blueDefault, orangeDefault, whiteDefault } from '../../../../../shared/
 import style from './style';
 import { PerfilProvedorOutput, useAPI } from '../../../../../contexts/api';
 import { showMessage } from 'react-native-flash-message';
+import WhatsappButton from '../../../../../components/WhatsappButton';
+import { TouchableOpacity } from 'react-native';
+import { fixPhone } from '../../../../../shared/helpers';
 
 export default function ProfessionalProfile(props: any) {
-
+    
     const { getPerfilProfissional, getImageProfessional } = useAPI();
     const { isProfessional, signOut, user } = useAuth();
     const [params, setParams] = useState<any>(props.route.params);
     const [professional, setProfessional] = useState<PerfilProvedorOutput>();
     const [imagem, setImagem] = useState<any>();
+    const wppNumber = professional?.provedor.telefone.replace(fixPhone, "55$1$2$3");
+
+    const handleWhatsapp = () => {
+        console.log("Vamos Kaio!")
+        Linking.openURL('http://wa.me/' + wppNumber)
+    }
 
     const getProfessional = (id: number) => {
         getPerfilProfissional(id)
@@ -79,14 +88,20 @@ export default function ProfessionalProfile(props: any) {
                             }
                         </View>
                         <View style={style.secondSection}>
+                           
                             <ProfessionalDescription description={professional.descricao} defaultColor={isProfessional ? blueDefault : orangeDefault} />
                         </View>
                         <View style={style.thirdSection}>
+    
+                            <WhatsappButton telefone={professional.provedor.telefone} onPress={() => handleWhatsapp()} ></WhatsappButton>
                             <HighlightRate avaliacao={professional.avaliacao} defaultColor={isProfessional ? blueDefault : orangeDefault} />
+
                         </View>
+            
                         <View style={style.fourthSection}>
                             <InfoCards servicosConcluidos={professional.servicosConcluidos} mediaAvaliacao={professional.mediaAvaliacao} tempoCadastro={professional.mediaAvaliacao} defaultColor={isProfessional ? blueDefault : orangeDefault} />
                         </View>
+                     
                     </View>
                 </>
             ) :
