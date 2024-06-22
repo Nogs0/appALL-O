@@ -1,14 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, FlatList, Image, SafeAreaView, Text, View } from 'react-native';
+import { ActivityIndicator, Alert, FlatList, Image, Linking, SafeAreaView, Text, View } from 'react-native';
 import { showMessage } from 'react-native-flash-message';
 import CustomDialog from '../../../../../components/CustomDialog';
+import { ScrollView } from 'react-native';
 import HeaderProfessional from '../../../../../components/HeaderProfessional';
 import HighlightRate from '../../../../../components/HighlightRate';
 import InfoCards from '../../../../../components/InfoCards';
 import ProfessionalDescription from '../../../../../components/ProfessionalDescription';
 import StarsRating from '../../../../../components/StarsRating';
+import WhatsappButton from '../../../../../components/WhatsappButton';
 import { FeedbackServicoInput, PerfilProvedorOutput, ServicoOutput, useAPI } from '../../../../../contexts/api';
 import { useAuth } from '../../../../../contexts/auth';
+import { fixPhone } from '../../../../../shared/helpers';
 import { blackDefault, blueDefault, greyLoadingDefault2, orangeDefault, whiteDefault } from '../../../../../shared/styleConsts';
 import style from './style';
 
@@ -19,6 +22,39 @@ export default function ProfessionalProfile(props: any) {
     const [params, setParams] = useState<any>(props.route.params);
     const [professional, setProfessional] = useState<PerfilProvedorOutput>();
     const [imagem, setImagem] = useState<any>();
+    const wppNumber = professional?.provedor.telefone.replace(fixPhone, "55$1$2$3");
+
+    const handleScroll = (event: Event) => {
+        console.log("nossa")
+    };
+    const openWhatsapp = () => {
+        Linking.openURL('http://wa.me/' + wppNumber)
+    }
+    const registerService = () => {
+        console.log("Optou por registrar um serviço")
+    }
+
+    const handleWhatsapp = () => {
+
+        Alert.alert("Atenção!", "Você deseja abrir uma ordem de serviço?", [
+            {
+                text: 'Cancelar',
+                onPress: () => {
+                    console.log('Cancelou')
+                }
+
+            },
+            {
+                text: 'Sim',
+                onPress: () => {
+                    registerService()
+                    openWhatsapp()
+                }
+
+            }
+        ])
+
+    }
 
     const [servicoAtual, setServicoAtual] = useState<number>(0);
     const [servicosNaoVistos, setServicosNaoVistos] = useState<ServicoOutput[]>([]);
@@ -184,24 +220,41 @@ export default function ProfessionalProfile(props: any) {
                         isProfessional={isProfessional}
                         defaultColor={isProfessional ? blueDefault : orangeDefault}
                         professionalId={professional.provedor.id} />
-                    <View style={style.contentContainer}>
-                        <Text style={[style.nameProfessional, { color: isProfessional ? blueDefault : orangeDefault }]}>{professional.nome}</Text>
-                        <View style={style.firstSection}>
-                            <StarsRating id={professional.id} rate={professional.mediaAvaliacao} numberRate={professional.quantidadeAvaliacoes} navigation={props.navigation} defaultColor={isProfessional ? blueDefault : orangeDefault} />
-                            {imagem ?
-                                <Image style={style.image} source={{ uri: imagem }}></Image>
-                                :
-                                <Image style={style.image} source={require('../../../../../assets/images/default-profile-pic.png')}></Image>
-                            }
-                        </View>
-                        <View style={style.secondSection}>
-                            <ProfessionalDescription description={professional.descricao} defaultColor={isProfessional ? blueDefault : orangeDefault} />
-                        </View>
-                        <View style={style.thirdSection}>
-                            <HighlightRate avaliacao={professional.avaliacao} defaultColor={isProfessional ? blueDefault : orangeDefault} />
-                        </View>
-                        <View style={style.fourthSection}>
-                            <InfoCards servicosConcluidos={professional.servicosConcluidos} mediaAvaliacao={professional.mediaAvaliacao} tempoCadastro={professional.mediaAvaliacao} defaultColor={isProfessional ? blueDefault : orangeDefault} />
+                    <View style={style.contentContainer} >
+
+                        <ScrollView >
+                            <Text style={[style.nameProfessional, { color: isProfessional ? blueDefault : orangeDefault }]}>{professional.nome}</Text>
+
+                            <View style={style.firstSection}>
+                                <StarsRating id={professional.id} rate={professional.mediaAvaliacao} numberRate={professional.quantidadeAvaliacoes} navigation={props.navigation} defaultColor={isProfessional ? blueDefault : orangeDefault} />
+                                {imagem ?
+                                    <Image style={style.image} source={{ uri: imagem }}></Image>
+                                    :
+                                    <Image style={style.image} source={require('../../../../../assets/images/default-profile-pic.png')}></Image>
+                                }
+                            </View>
+
+                            <View style={style.secondSection}>
+
+                                <ProfessionalDescription description={professional.descricao} defaultColor={isProfessional ? blueDefault : orangeDefault} />
+                            </View>
+                            <View style={style.thirdSection}>
+                                <HighlightRate avaliacao={professional.avaliacao} defaultColor={isProfessional ? blueDefault : orangeDefault} />
+
+                            </View>
+
+                            <View style={style.fourthSection}>
+                                <InfoCards servicosConcluidos={professional.servicosConcluidos} mediaAvaliacao={professional.mediaAvaliacao} tempoCadastro={professional.mediaAvaliacao} defaultColor={isProfessional ? blueDefault : orangeDefault} />
+                            </View>
+
+                        </ScrollView>
+                        <View style={{
+                            width: "100%",
+                            justifyContent: "flex-end",
+                            backgroundColor: '#00000000',
+
+                        }}>
+                            <WhatsappButton style={style.WhatsappContainer} telefone={professional.provedor.telefone} onPress={() => handleWhatsapp()} ></WhatsappButton>
                         </View>
                     </View>
                 </>
@@ -211,3 +264,5 @@ export default function ProfessionalProfile(props: any) {
         </SafeAreaView>
     )
 }
+
+

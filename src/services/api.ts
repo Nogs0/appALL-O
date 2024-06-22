@@ -1,5 +1,5 @@
 import axios from 'axios';
-import configDev, { api_url } from '../services/config-dev';
+import configDev from './config-dev';
 import { showMessage } from 'react-native-flash-message';
 
 
