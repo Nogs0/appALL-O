@@ -16,17 +16,15 @@ interface Response {
 
 export function signIn(input: SignInInput) {
     return new Promise<Response>((resolve) => {
-        setTimeout(() => {
-            let info = {
-                token: 'logado',
-                user : {
-                    id: 2,
-                    name: 'Joao',
-                    email: input.email,
-                },
-                isProfessional: input.isProfessional
-            };
-            resolve(info);
-        }, 1000);
+        let info = {
+            token: 'logado',
+            user: {
+                id: 1,
+                name: 'Joao',
+                email: input.email,
+            },
+            isProfessional: input.isProfessional
+        };
+        resolve(info);
     });
 }

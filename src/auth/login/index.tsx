@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { ActivityIndicator, Alert, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import style from './style';
 
@@ -11,12 +11,12 @@ import Input from '../../components/Input';
 import InputPassword from '../../components/InputPassword';
 import { useAuth } from '../../contexts/auth';
 import { SignInInput } from '../../services/auth';
-import { orangeDefault4, blueDefault, redDefault, greyDefault, blackDefault } from '../../shared/styleConsts';
+import { blackDefault, blueDefault, greyDefault, orangeDefault, orangeDefault4, redDefault, whiteDefault } from '../../shared/styleConsts';
 import Register from '../register';
 
 
 export default function SignIn({ navigation }: any) {
-    const { signIn, register, isRegister } = useAuth();
+    const { signIn, register, isRegister, loading } = useAuth();
 
     const [color, setColor] = useState(orangeDefault4);
     const [isProfessional, setIsProfessional] = useState<boolean>(false);
@@ -62,48 +62,57 @@ export default function SignIn({ navigation }: any) {
 
     return (
         <SafeAreaView style={style.container}>
-            {logo}
-            <TouchableOpacity
-                style={[style.botaoTrocaLogin, { backgroundColor: color }]}
-                onPress={() => setIsProfessional(!isProfessional)}>
-                <Icon name='change-circle' size={22} style={style.iconeTroca}></Icon>
-                <Text style={style.textTrocaLogin}> {text} </Text>
-            </TouchableOpacity>
-            <View style={style.inputsContainer}>
-                <Input
-                    onFocus={() => setIncorrectCredentials(false)}
-                    borderColor={incorrectCredentials ? redDefault : greyDefault}
-                    placeholder='E-mail'
-                    text={email}
-                    onChangeText={setEmail} />
-                <InputPassword
-                    onFocus={() => setIncorrectCredentials(false)}
-                    borderColor={incorrectCredentials ? redDefault : greyDefault}
-                    text={password}
-                    onChangeText={setPassword} />
-            </View>
-            {incorrectCredentials ?
-                <Text style={{ color: redDefault }}>*Email ou senha incorretos!</Text> : <></>}
-            <View style={style.buttonsContainer}>
-                <View style={style.signInContainer}>
-                    <TouchableOpacity style={[style.botaoAcao, { backgroundColor: color }]} onPress={() => handleSignIn()}>
-                        <Text style={style.textAcao}>ENTRAR</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={{ alignItems: 'center', padding: 10 }}
-                        onPress={() => console.log('Esqueci minha senha!')}>
-                        <Text style={{ color: redDefault }}>Esqueci minha senha...</Text>
-                    </TouchableOpacity>
-                </View>
-                <View style={style.registerContainer}>
-                    <Text style={{ color: blackDefault, fontFamily: 'Rubik-SemiBold' }}>
-                        Não tem uma conta?
-                    </Text>
-                    <TouchableOpacity style={[style.botaoAcao, { backgroundColor: color }]} onPress={() => handleRegister()}>
-                        <Text style={style.textAcao}>REGISTRAR</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-        </SafeAreaView>
+            {
+                loading ?
+                    <ActivityIndicator size={70} color={orangeDefault}/>
+                    :
+                    <>
+                        {logo}
+                        <TouchableOpacity
+                            style={[style.botaoTrocaLogin, { backgroundColor: color }]}
+                            onPress={() => setIsProfessional(!isProfessional)}>
+                            <Icon name='change-circle' size={22} style={style.iconeTroca}></Icon>
+                            <Text style={style.textTrocaLogin}> {text} </Text>
+                        </TouchableOpacity>
+                        <View style={style.inputsContainer}>
+                            <Input
+                                onFocus={() => setIncorrectCredentials(false)}
+                                borderColor={incorrectCredentials ? redDefault : greyDefault}
+                                placeholder='E-mail'
+                                text={email}
+                                onChangeText={setEmail} />
+                            <InputPassword
+                                onFocus={() => setIncorrectCredentials(false)}
+                                borderColor={incorrectCredentials ? redDefault : greyDefault}
+                                text={password}
+                                onChangeText={setPassword} />
+                        </View>
+                        {
+                            incorrectCredentials ?
+                                <Text style={{ color: redDefault }}>*Email ou senha incorretos!</Text> : <></>
+                        }
+                        <View style={style.buttonsContainer}>
+                            <View style={style.signInContainer}>
+                                <TouchableOpacity style={[style.botaoAcao, { backgroundColor: color }]} onPress={() => handleSignIn()}>
+                                    <Text style={style.textAcao}>ENTRAR</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={{ alignItems: 'center', padding: 10 }}
+                                    onPress={() => console.log('Esqueci minha senha!')}>
+                                    <Text style={{ color: redDefault }}>Esqueci minha senha...</Text>
+                                </TouchableOpacity>
+                            </View>
+                            <View style={style.registerContainer}>
+                                <Text style={{ color: blackDefault, fontFamily: 'Rubik-SemiBold' }}>
+                                    Não tem uma conta?
+                                </Text>
+                                <TouchableOpacity style={[style.botaoAcao, { backgroundColor: color }]} onPress={() => handleRegister()}>
+                                    <Text style={style.textAcao}>REGISTRAR</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </>
+            }
+        </SafeAreaView >
     )
 }

@@ -1,23 +1,27 @@
-import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Image, SafeAreaView, Text, View } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { ActivityIndicator, FlatList, Image, SafeAreaView, Text, View } from 'react-native';
+import { showMessage } from 'react-native-flash-message';
+import CustomDialog from '../../../../../components/CustomDialog';
 import HeaderProfessional from '../../../../../components/HeaderProfessional';
 import HighlightRate from '../../../../../components/HighlightRate';
 import InfoCards from '../../../../../components/InfoCards';
 import ProfessionalDescription from '../../../../../components/ProfessionalDescription';
 import StarsRating from '../../../../../components/StarsRating';
+import { FeedbackServicoInput, PerfilProvedorOutput, ServicoOutput, useAPI } from '../../../../../contexts/api';
 import { useAuth } from '../../../../../contexts/auth';
-import { blueDefault, orangeDefault, whiteDefault } from '../../../../../shared/styleConsts';
+import { blackDefault, blueDefault, greyLoadingDefault2, orangeDefault, whiteDefault } from '../../../../../shared/styleConsts';
 import style from './style';
-import { PerfilProvedorOutput, useAPI } from '../../../../../contexts/api';
-import { showMessage } from 'react-native-flash-message';
 
 export default function ProfessionalProfile(props: any) {
 
-    const { getPerfilProfissional, getImageProfessional } = useAPI();
+    const { getPerfilProfissional, getImageProfessional, getServicosNaoVistosProfissional, feedbackServico } = useAPI();
     const { isProfessional, signOut, user } = useAuth();
     const [params, setParams] = useState<any>(props.route.params);
     const [professional, setProfessional] = useState<PerfilProvedorOutput>();
     const [imagem, setImagem] = useState<any>();
+
+    const [servicoAtual, setServicoAtual] = useState<number>(0);
+    const [servicosNaoVistos, setServicosNaoVistos] = useState<ServicoOutput[]>([]);
 
     const getProfessional = (id: number) => {
         getPerfilProfissional(id)
@@ -25,6 +29,18 @@ export default function ProfessionalProfile(props: any) {
                 setProfessional(result);
                 if (result.imagemPerfil)
                     getImage(result.imagemPerfil);
+
+                if (isProfessional)
+                    getServicosNaoVistosProfissional(id)
+                        .then((result) => {
+                            setServicosNaoVistos(result);
+                        })
+                        .catch((e) => {
+                            showMessage({
+                                message: 'Falha ao carregar serviços',
+                                type: 'danger'
+                            })
+                        });
             })
             .catch((e) => {
                 showMessage({
@@ -36,32 +52,132 @@ export default function ProfessionalProfile(props: any) {
 
     const getImage = (idImage: string) => {
         getImageProfessional(idImage)
-        .then((result) => {
-            setImagem(result);
-        })
-        .catch((e) => {
-            console.log(e)
-            showMessage({
-                message: 'Falha ao carregar imagem',
-                type: 'danger'
+            .then((result) => {
+                setImagem(result);
             })
-        })
+            .catch((e) => {
+                console.log(e)
+                showMessage({
+                    message: 'Falha ao carregar imagem',
+                    type: 'danger'
+                })
+            })
     }
 
     const handleSignOut = () => {
         signOut();
     }
 
-    useEffect(() => {
-        props.navigation.addListener('focus', () => {
-            getProfessional(isProfessional ? user?.id : params?.id);
+    const removeServico = (id: number) => {
+        setServicosNaoVistos((prev) => {
+            let index = servicosNaoVistos.findIndex(x => x.idServico == id)
+            if (index != -1)
+                prev.splice(index, 1)
+            return [...prev]
         })
+    }
+
+    const handlePress = (idServico: number, confirmado: boolean) => {
+        removeServico(idServico)
+        showMessage({
+            message: 'Obrigado pelo feedback!',
+            type: 'success'
+        })
+
+        feedbackServico({ idServico, confirmado } as FeedbackServicoInput)
+            .finally(() =>
+                showMessage({
+                    message: 'Obrigado pelo feedback!',
+                    type: 'success'
+                }))
+    }
+
+    useEffect(() => {
+        getProfessional(isProfessional ? user?.id : params?.id);
     }, [])
+
+    const renderItem = (item: ServicoOutput) => {
+        return (
+            <CustomDialog
+                isProfessional
+                cancel={() => handlePress(item.idServico, false)}
+                ok={() => handlePress(item.idServico, true)}
+                title='NOTIFICAÇÃO DE SERVIÇO'
+                text={`Olá, ${professional?.nome}, você prestou algum serviço para o(a) cliente ${item.nomeCliente}?`}
+            />
+        )
+    }
+
+    const onViewableItemsChanged = ({ viewableItems }: any) => {
+        if (viewableItems[0] !== undefined) {
+            setServicoAtual(viewableItems[0]?.index)
+            console.log(viewableItems[0]?.index)
+        }
+    }
+
+    const viewabilityConfigCallbackPairs = useRef([
+        {
+            viewabilityConfig: {
+                itemVisiblePercentThreshold: 20
+            },
+            onViewableItemsChanged
+        }
+    ]);
 
     return (
         <SafeAreaView style={[style.container, { backgroundColor: isProfessional ? blueDefault : orangeDefault }]}>
             {professional ? (
                 <>
+                    {servicosNaoVistos.length > 0 ?
+                        <View style={{
+                            height: '100%',
+                            width: '100%',
+                            backgroundColor: greyLoadingDefault2,
+                            position: 'absolute',
+                            zIndex: 1,
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                        }}>
+                            <FlatList
+                                horizontal
+                                style={{
+                                    height: '100%',
+                                }}
+                                contentContainerStyle={{ alignItems: 'center', justifyContent: 'center' }}
+                                data={servicosNaoVistos}
+                                keyExtractor={(item, index) => index.toString()}
+                                renderItem={({ item }) => renderItem(item)}
+                                showsHorizontalScrollIndicator={false}
+                                pagingEnabled
+                                viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}
+                            />
+                            <FlatList
+                                horizontal
+                                style={{ alignSelf: 'center', bottom: 240 }}
+                                data={servicosNaoVistos}
+                                keyExtractor={(item, index) => index.toString()}
+                                renderItem={({ item, index }) => {
+                                    return (
+                                        <View
+                                            style={{
+                                                width: index === servicoAtual ? 12 : 8,
+                                                height: 8,
+                                                borderRadius: 4,
+                                                backgroundColor: index === servicoAtual ? blackDefault : blueDefault,
+                                                marginHorizontal: 2
+                                            }} />
+                                    )
+                                }}
+                                showsHorizontalScrollIndicator={false}
+                                pagingEnabled
+                                viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}
+                                scrollEnabled={false}
+                            />
+                        </View>
+                        :
+                        <></>
+                    }
+
                     <HeaderProfessional title={isProfessional ? 'SEU PERFIL' : params.profissao.replace(/^\w/, (c: string) => c.toUpperCase())}
                         navigation={props.navigation}
                         signOut={handleSignOut}

@@ -19,7 +19,6 @@ export default function ProfessionalEdit(props: any) {
 
     const [razaoSocial, setRazaoSocial] = useState<string>(professional ? professional.nome : '');
     const [email, setEmail] = useState<string>(professional ? professional.email : '');
-    const [cpfCnpj, setCpfCnpj] = useState<string>(professional ? professional.provedor.cpfCnpj : '');
     const [telefone, setTelefone] = useState<string>(professional ? professional.provedor.telefone : '');
     const [imagem, setImagem] = useState<any>();
     const [descricao, setDescricao] = useState<string>(professional ? professional.descricao : '');
@@ -96,13 +95,17 @@ export default function ProfessionalEdit(props: any) {
             id: professional?.id,
             email,
             telefone,
-            cpfCnpj,
+            cpfCnpj: professional?.provedor.cpfCnpj,
             perfilProvedorInput: {
+                idProvedor: professional?.id,
+                idAvaliacao: professional?.avaliacao.id,
                 descricao,
                 perfilImage: imagemId,
             },
             razaoSocial,
+            tipoPessoa: professional?.provedor.tipoPessoa,
             enderecoInput: {
+                id: professional?.provedor.endereco.id,
                 cep,
                 estado,
                 cidade,
@@ -163,6 +166,7 @@ export default function ProfessionalEdit(props: any) {
         getPerfilProfissional(id)
             .then((result) => {
                 setProfessional(result);
+                console.log(result)
                 if (result.imagemPerfil)
                     getImage(result.imagemPerfil);
             })
@@ -182,7 +186,6 @@ export default function ProfessionalEdit(props: any) {
         if (professional) {
             setRazaoSocial(professional.nome);
             setEmail(professional.email);
-            setCpfCnpj(professional.provedor.cpfCnpj);
             setTelefone(professional.provedor.telefone);
             setDescricao(professional.descricao);
             setCep(professional.provedor.endereco.cep);
@@ -196,7 +199,6 @@ export default function ProfessionalEdit(props: any) {
 
     return (
         <SafeAreaView style={style.container}>
-
             {!professional ?
                 <ActivityIndicator size={70} color={whiteDefault}></ActivityIndicator>
                 :
@@ -270,7 +272,6 @@ export default function ProfessionalEdit(props: any) {
                                     <View style={style.inputsContainer}>
                                         <Input editable={!loadingUpdate} text={razaoSocial} onChangeText={setRazaoSocial} placeholder='Nome' />
                                         <Input editable={!loadingUpdate} text={email} onChangeText={setEmail} placeholder='Email' />
-                                        <Input editable={!loadingUpdate} text={cpfCnpj} onChangeText={setCpfCnpj} placeholder='Documento' />
                                         <TextInput placeholder={'Sou um profissional pontual e que gosta de que tudo esteja bem feito!'}
                                             style={style.textArea}
                                             value={descricao}
