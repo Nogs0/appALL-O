@@ -22,13 +22,14 @@ export default function ProfessionalProfile(props: any) {
     const [params, setParams] = useState<any>(props.route.params);
     const [professional, setProfessional] = useState<PerfilProvedorOutput>();
     const [imagem, setImagem] = useState<any>();
-    const wppNumber = professional?.provedor.telefone.replace(fixPhone, "55$1$2$3");
-
+    
     const handleScroll = (event: Event) => {
         console.log("nossa")
-    };
-    const openWhatsapp = () => {
-        Linking.openURL('http://wa.me/' + wppNumber)
+        };
+    
+        const openWhatsapp = () => {
+        let wppNumber = professional?.provedor.telefone.replace(fixPhone, "55$1$2$3");
+        Linking.openURL('http://wa.me/' + wppNumber + `?text=Olá, ${professional?.nome}, tudo bem? Sou o(a) ${user?.name}, gostaria de solicitar um serviço!`)
     }
     const registerService = () => {
         console.log("Optou por registrar um serviço")
@@ -224,7 +225,7 @@ export default function ProfessionalProfile(props: any) {
 
                         <ScrollView >
                             <Text style={[style.nameProfessional, { color: isProfessional ? blueDefault : orangeDefault }]}>{professional.nome}</Text>
-
+ 
                             <View style={style.firstSection}>
                                 <StarsRating id={professional.id} rate={professional.mediaAvaliacao} numberRate={professional.quantidadeAvaliacoes} navigation={props.navigation} defaultColor={isProfessional ? blueDefault : orangeDefault} />
                                 {imagem ?
