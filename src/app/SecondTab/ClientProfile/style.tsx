@@ -15,7 +15,7 @@ export default StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
     },
-imageContainer: {
+    imageContainer: {
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -37,10 +37,10 @@ imageContainer: {
         height: 130,
     },
     hasImage: {
-        alignItems: 'center', 
+        alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: 55, 
-        borderWidth: 5, 
+        borderRadius: 55,
+        borderWidth: 5,
         borderColor: orangeDefault,
         width: 160,
         height: 160,

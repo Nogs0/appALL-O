@@ -132,10 +132,15 @@ export interface FeedbackServicoInput {
     confirmado: boolean
 }
 
+export interface ImagemUpload {
+    uri: string,
+    fileName: string
+}
+
 export interface AvaliacaoInput {
     idServico: number,
     descricao: string,
-    imagens: string[],
+    imagens: ImagemUpload[],
     nota: number
 }
 
@@ -164,7 +169,8 @@ interface APIContextData {
     updateImageProfessional(uri: string, fileName: string): Promise<string>,
     getServicosNaoVistosProfissional(id: number): Promise<ServicoOutput[]>,
     feedbackServico(input: FeedbackServicoInput): Promise<void>,
-    getServicosParaAvaliarCliente(id: number): Promise<ServicoParaAvaliarOutput[]>
+    getServicosParaAvaliarCliente(id: number): Promise<ServicoParaAvaliarOutput[]>,
+    createAvaliacao(input: AvaliacaoInput): Promise<void>
 }
 
 const APIContext = createContext<APIContextData>({} as APIContextData);
@@ -504,6 +510,12 @@ function APIProvider({ children }: any) {
         })
     }
 
+    const createAvaliacao = (input: AvaliacaoInput): Promise<void> => {
+        return new Promise<void>((resolve, reject) => {
+            resolve();
+        })
+    }
+
     return (
         <APIContext.Provider
             value={{
@@ -526,7 +538,8 @@ function APIProvider({ children }: any) {
                 getImageProfessional,
                 getServicosNaoVistosProfissional,
                 feedbackServico,
-                getServicosParaAvaliarCliente
+                getServicosParaAvaliarCliente,
+                createAvaliacao
             }}>
             {children}
         </APIContext.Provider>

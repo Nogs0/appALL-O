@@ -11,7 +11,6 @@ export default function HeaderRegisterClient({ navigation, initialScreen, ending
   const handleRegisterOut = () => {
     if (initialScreen) {
       goBack();
-      // endRegister();
     }
     else navigation.goBack();
   }

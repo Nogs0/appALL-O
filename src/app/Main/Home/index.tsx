@@ -30,7 +30,7 @@ export default function Home({ navigation }: any) {
         .then((result) => {
           setServicosParaAvaliar(result)
         })
-        .catch((e) =>{
+        .catch((e) => {
           showMessage({
             message: 'Falha ao carregar serviços para avaliar',
             type: 'danger'
@@ -62,7 +62,7 @@ export default function Home({ navigation }: any) {
       <CardProfession
         profession={item.nome.replace(/^\w/, (c) => c.toUpperCase())}
         professionId={item.id}
-        onPress={() => 
+        onPress={() =>
           navigation.navigate('ProfessionalList', { profissao: item.nome, id: item.id })
         }
         professionIcon={item.nomeIcone} />
@@ -106,15 +106,13 @@ export default function Home({ navigation }: any) {
   }
 
   const handlePress = (idServico: number, confirmado: boolean) => {
-    removeServico(idServico)
-
-    if (confirmado) {
+    if (confirmado)
       navigation.navigate('AvaliacaoServico')
-    }
+    removeServico(idServico);
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: whiteDefault, paddingTop: 10 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: whiteDefault}}>
 
       {servicosParaAvaliar.length > 0 ?
         <View style={{
