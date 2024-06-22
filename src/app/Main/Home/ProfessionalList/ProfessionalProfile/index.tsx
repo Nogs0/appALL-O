@@ -248,14 +248,18 @@ export default function ProfessionalProfile(props: any) {
                             </View>
 
                         </ScrollView>
-                        <View style={{
-                            width: "100%",
-                            justifyContent: "flex-end",
-                            backgroundColor: '#00000000',
+                        {
+                            isProfessional ? <>
+                            </> :
+                                <View style={{
+                                    width: "100%",
+                                    justifyContent: "flex-end",
+                                    backgroundColor: '#00000000',
 
-                        }}>
-                            <WhatsappButton style={style.WhatsappContainer} telefone={professional.provedor.telefone} onPress={() => handleWhatsapp()} ></WhatsappButton>
-                        </View>
+                                }}>
+                                    <WhatsappButton style={style.WhatsappContainer} telefone={professional.provedor.telefone} onPress={() => handleWhatsapp()} ></WhatsappButton>
+                                </View>
+                        }
                     </View>
                 </>
             ) :
