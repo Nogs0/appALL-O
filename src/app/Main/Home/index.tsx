@@ -75,7 +75,7 @@ export default function Home({ navigation }: any) {
         cancel={() => handlePress(item.idServico, false)}
         ok={() => handlePress(item.idServico, true)}
         title='NOTIFICAÇÃO DE SERVIÇO'
-        text={`Olá, ${user?.name}, você gostaria de avaliar o serviço realizado pelo(a) profissional ${item.nomeProvedor}?`}
+        text={`ALL-O! ${user?.name}, você gostaria de avaliar o serviço realizado pelo(a) profissional ${item.nomeProvedor}?`}
       />
     )
   }
@@ -168,7 +168,7 @@ export default function Home({ navigation }: any) {
       {search.length > 0 ?
         <View style={{ alignItems: 'center', width: '100%' }}>
           <FlatList
-            style={{ width: '90%' }}
+            style={{ width: '90%', height: '82%' }}
             numColumns={3}
             data={profissoes}
             keyExtractor={(item, index) => index.toString()}

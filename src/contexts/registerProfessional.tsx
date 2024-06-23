@@ -2,6 +2,7 @@ import { createContext, useContext, useState } from "react";
 import { useAuth } from "./auth";
 import { Endereco, ProvedorInput, useAPI } from "./api";
 import { TipoPessoaEnum } from "../shared/Enums/enums";
+import md5 from 'md5';
 
 interface InitialInformationsProfessional {
     razaoSocial: string,
@@ -67,6 +68,8 @@ function RegisterProfessionalProvider({ children }: any) {
             prev.razaoSocial = params.razaoSocial;
             prev.cpfCnpj = params.cpfCnpj;
             prev.email = params.email;
+            console.log(md5(params.senha));
+            prev.senha = md5(params.senha);
             return prev;
         });
     }

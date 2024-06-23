@@ -1,8 +1,9 @@
 import React, { createContext, useContext } from 'react';
-import ALLORequestBase, { ALLORequestForm, api, verbosAPI } from '../services/api';
+import ALLORequestBase, { ALLORequestForm, verbosAPI } from '../services/api';
 import { TipoPessoaEnum } from '../shared/Enums/enums';
 import { getTypeFromFileName } from '../shared/helpers';
 import { api_url } from '../services/config-dev';
+import { useAuth } from './auth';
 
 export interface ClientDTO {
     id: number,
@@ -177,9 +178,11 @@ const APIContext = createContext<APIContextData>({} as APIContextData);
 
 function APIProvider({ children }: any) {
 
+    const { token } = useAuth();
+
     const getAllProfessionalsByID = (id: number): Promise<ProvedorOutput[]> => {
         return new Promise<ProvedorOutput[]>((resolve, reject) => {
-            ALLORequestBase<ProvedorOutput[]>(verbosAPI.GET, 'provedor/filter/profissao', `idProfissao=${id}`)
+            ALLORequestBase<ProvedorOutput[]>(token, verbosAPI.GET, 'provedor/filter/profissao', `idProfissao=${id}`)
                 .then((result) => {
                     resolve(result);
                 })
@@ -189,14 +192,15 @@ function APIProvider({ children }: any) {
                 })
         })
     }
+
     const getPerfilCliente = (id: number): Promise<PefilClienteOutput> => {
+        console.log(token)
         return new Promise<PefilClienteOutput>((resolve, reject) => {
-            ALLORequestBase<PefilClienteOutput>(verbosAPI.GET, 'cliente/perfil', `idCliente=${id}`)
+            ALLORequestBase<PefilClienteOutput>(token, verbosAPI.GET, 'cliente/perfil', `idCliente=${id}`)
                 .then((result) => {
                     resolve(result);
                 })
                 .catch((e) => {
-                    console.log(e.request);
                     reject(e);
                 })
 
@@ -205,7 +209,7 @@ function APIProvider({ children }: any) {
 
     const getPerfilProfissional = (id: number): Promise<PerfilProvedorOutput> => {
         return new Promise<PerfilProvedorOutput>((resolve, reject) => {
-            ALLORequestBase<PerfilProvedorOutput>(verbosAPI.GET, 'provedor/perfil', `idProvedor=${id}`)
+            ALLORequestBase<PerfilProvedorOutput>(token, verbosAPI.GET, 'provedor/perfil', `idProvedor=${id}`)
                 .then((result) => {
                     resolve(result);
                 })
@@ -218,7 +222,7 @@ function APIProvider({ children }: any) {
     const updateProfessional = (input: ProvedorInput): Promise<void> => {
         console.log(input)
         return new Promise<void>((resolve, reject) => {
-            ALLORequestBase<void>(verbosAPI.PUT, 'provedor', input)
+            ALLORequestBase<void>(token, verbosAPI.PUT, 'provedor', input)
                 .then(() => {
                     resolve();
                 })
@@ -231,7 +235,7 @@ function APIProvider({ children }: any) {
 
     const updateClient = (input: ClienteInput): Promise<void> => {
         return new Promise<void>((resolve, reject) => {
-            ALLORequestBase<void>(verbosAPI.PUT, 'cliente', input)
+            ALLORequestBase<void>(token, verbosAPI.PUT, 'cliente', input)
                 .then(() => {
                     resolve();
                 })
@@ -276,32 +280,6 @@ function APIProvider({ children }: any) {
                         date: '09/05/2024',
                         image: require('../assets/images/encanador.jpg'),
                         images: [
-                            require('../assets/images/eletricista.jpg'),
-                            require('../assets/images/eletricista.jpg'),
-                            require('../assets/images/eletricista.jpg'),
-                            require('../assets/images/eletricista.jpg')
-                        ]
-                    },
-                    {
-                        client: 'Andrew Customer',
-                        rate: 5,
-                        rateNote: 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
-                        date: '09/05/2024',
-                        image: require('../assets/images/encanador.jpg'),
-                        images: [
-                            require('../assets/images/encanador.jpg'),
-                            require('../assets/images/encanador.jpg'),
-                            require('../assets/images/encanador.jpg'),
-                            require('../assets/images/encanador.jpg')
-                        ]
-                    },
-                    {
-                        client: 'Andrew Customer',
-                        rate: 5,
-                        rateNote: 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
-                        date: '09/05/2024',
-                        image: require('../assets/images/encanador.jpg'),
-                        images: [
                             require('../assets/images/encanador.jpg'),
                             require('../assets/images/encanador.jpg'),
                             require('../assets/images/encanador.jpg'),
@@ -315,7 +293,7 @@ function APIProvider({ children }: any) {
 
     const getProfessions = (): Promise<ProfissaoOutput[]> => {
         return new Promise<ProfissaoOutput[]>(async (resolve, reject) => {
-            ALLORequestBase<any>(verbosAPI.GET, 'profissao')
+            ALLORequestBase<any>(token, verbosAPI.GET, 'profissao')
                 .then((result) => {
                     resolve(result.content as ProfissaoOutput[]);
                 })
@@ -328,7 +306,7 @@ function APIProvider({ children }: any) {
 
     const getProfessionsBySearch = (search: string): Promise<ProfissaoOutput[]> => {
         return new Promise<ProfissaoOutput[]>(async (resolve, reject) => {
-            ALLORequestBase<any>(verbosAPI.GET, 'profissao/filter', `profissao=${search}`)
+            ALLORequestBase<any>(token, verbosAPI.GET, 'profissao/filter', `profissao=${search}`)
                 .then((result) => {
                     resolve(result as ProfissaoOutput[]);
                 })
@@ -341,7 +319,7 @@ function APIProvider({ children }: any) {
 
     const sugerirProfissao = (sugestao: string): Promise<void> => {
         return new Promise<void>(async (resolve, reject) => {
-            ALLORequestBase(verbosAPI.POST, 'profissao/sugerir', { sugestao })
+            ALLORequestBase(token, verbosAPI.POST, 'profissao/sugerir', { sugestao })
                 .then(() => {
                     resolve();
                 })
@@ -353,7 +331,13 @@ function APIProvider({ children }: any) {
 
     const createProvider = (profissional: ProvedorInput): Promise<void> => {
         return new Promise<void>((resolve, reject) => {
-            ALLORequestBase(verbosAPI.POST, 'provedor', profissional)
+            fetch(`${api_url}provedor`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(profissional)
+            })
                 .then((result) => {
                     resolve();
                 })
@@ -366,7 +350,13 @@ function APIProvider({ children }: any) {
 
     const createClient = (client: ClienteInput): Promise<void> => {
         return new Promise<void>(async (resolve, reject) => {
-            ALLORequestBase(verbosAPI.POST, 'cliente', client)
+            fetch(`${api_url}cliente`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(client)
+            })
                 .then(() => {
                     resolve();
                 })
@@ -428,11 +418,20 @@ function APIProvider({ children }: any) {
             }
 
             form.append('image', imageObject)
-            ALLORequestForm('cliente/upload', form)
-                .then((result) => {
-                    resolve(result);
+            fetch(`${api_url}cliente/upload`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                },
+                body: form
+            })
+                .then((result) => result.text())
+                .then((id) => {
+                    resolve(id);
                 })
                 .catch((e) => {
+
+                    console.log(e)
                     reject(e);
                 });
         })
@@ -448,11 +447,19 @@ function APIProvider({ children }: any) {
             }
 
             form.append('image', imageObject)
-            ALLORequestForm('provedor/upload', form)
-                .then((result) => {
-                    resolve(result);
+            fetch(`${api_url}provedor/upload`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                },
+                body: form
+            })
+                .then((result) => result.text())
+                .then((id) => {
+                    resolve(id);
                 })
                 .catch((e) => {
+                    console.log(e)
                     reject(e);
                 });
         })

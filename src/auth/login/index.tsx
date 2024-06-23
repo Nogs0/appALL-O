@@ -10,7 +10,6 @@ import { useState } from 'react';
 import Input from '../../components/Input';
 import InputPassword from '../../components/InputPassword';
 import { useAuth } from '../../contexts/auth';
-import { SignInInput } from '../../services/auth';
 import { blackDefault, blueDefault, greyDefault, orangeDefault, orangeDefault4, redDefault, whiteDefault } from '../../shared/styleConsts';
 import Register from '../register';
 
@@ -35,10 +34,10 @@ export default function SignIn({ navigation }: any) {
     const handleSignIn = () => {
         if (canSignIn()) {
             signIn({
-                email,
-                password,
+                login: email,
+                senha: password,
                 isProfessional
-            } as SignInInput)
+            })
                 .then(() => {
                     setIncorrectCredentials(false)
                 })
@@ -64,7 +63,7 @@ export default function SignIn({ navigation }: any) {
         <SafeAreaView style={style.container}>
             {
                 loading ?
-                    <ActivityIndicator size={70} color={orangeDefault}/>
+                    <ActivityIndicator size={70} color={orangeDefault} />
                     :
                     <>
                         {logo}

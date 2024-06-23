@@ -1,7 +1,5 @@
 import axios from 'axios';
 import configDev from './config-dev';
-import { showMessage } from 'react-native-flash-message';
-
 
 export enum verbosAPI {
     GET = 1,
@@ -14,12 +12,13 @@ export const api = axios.create({
     baseURL: configDev.api_url,
 })
 
-export const ALLORequestForm = (url: string, form: FormData): Promise<string> => {
+export const ALLORequestForm = (token: string, url: string, form: FormData): Promise<string> => {
     return new Promise<string>((resolve, reject) => {
         api.postForm(url, form,
             {
                 headers: {
-                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data'
                 }
             })
             .then((result) => {
@@ -32,9 +31,7 @@ export const ALLORequestForm = (url: string, form: FormData): Promise<string> =>
     })
 }
 
-const token = ''
-
-export default function ALLORequestBase<T>(method: verbosAPI, url: string, params?: any): Promise<T> {
+export default function ALLORequestBase<T>(token: string, method: verbosAPI, url: string, params?: any): Promise<T> {
     return new Promise<T>(async (resolve, reject) => {
         switch (method) {
             case verbosAPI.GET:
@@ -42,7 +39,12 @@ export default function ALLORequestBase<T>(method: verbosAPI, url: string, param
                     if (params)
                         url = `${url}?${params}`;
 
-                    await api.get(url)
+                    await api.get(url, {
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        }
+                    })
                         .then((result) => {
                             resolve(result.data);
                         })
@@ -57,7 +59,12 @@ export default function ALLORequestBase<T>(method: verbosAPI, url: string, param
                 break;
             case verbosAPI.POST:
                 try {
-                    api.post(url, params)
+                    api.post(url, params, {
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        }
+                    })
                         .then((result) => {
                             resolve(result.data.content)
                         })
@@ -74,7 +81,8 @@ export default function ALLORequestBase<T>(method: verbosAPI, url: string, param
                 try {
                     api.put(url, params, {
                         headers: {
-                            'Authorization': token
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
                         }
                     }).then((result) => {
                         resolve(result.data.content)
@@ -91,7 +99,8 @@ export default function ALLORequestBase<T>(method: verbosAPI, url: string, param
                 try {
                     api.delete(url, {
                         headers: {
-                            'Authorization': token
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
                         }
                     }).then((result) => {
                         resolve(result.data.content)

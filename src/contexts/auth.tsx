@@ -1,21 +1,28 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createContext, useContext, useEffect, useState } from "react";
-import api from '../services/api';
-import * as auth from '../services/auth';
+import api, { verbosAPI } from '../services/api';
 import { blueDefault, orangeDefault } from "../shared/styleConsts";
 import { useRegisterProfessional } from "./registerProfessional";
-import { SignInInput } from "../services/auth";
+import ALLORequestBase from "../services/api";
+import { api_url } from "../services/config-dev";
+
+interface AuthInput {
+    login: string,
+    senha: string,
+    isProfessional: boolean
+}
+
 interface User {
-    id: number, 
-    name: string,
-    email: string
+    id: number,
+    name: string
 }
 
 interface AuthContextData {
     signed: boolean,
+    token: string,
     user: User | null,
     isProfessional: boolean,
-    signIn(input: SignInInput): Promise<void>,
+    signIn(input: AuthInput): Promise<void>,
     signOut(): void,
     register(professional: boolean): void,
     loading: boolean,
@@ -27,7 +34,7 @@ const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 function AuthProvider({ children }: any) {
 
-    const [token, setToken] = useState<string>();
+    const [token, setToken] = useState<any>();
     const [user, setUser] = useState<User | null>(null);
     const [isProfessional, setIsProfessional] = useState<boolean>(false);
     const [isRegister, setIsRegister] = useState<boolean>(false);
@@ -40,12 +47,15 @@ function AuthProvider({ children }: any) {
             const storagedUser = await AsyncStorage.getItem('@RNAuth:user');
             const storagedToken = await AsyncStorage.getItem('@RNAuth:token');
             const storagedIsProfessional = await AsyncStorage.getItem('@RNAuth:isProfessional');
+
             let isprofessional = false;
+            console.log(storagedToken)
+
             if (storagedUser && storagedToken && storagedIsProfessional) {
                 setUser(JSON.parse(storagedUser));
                 isprofessional = JSON.parse(storagedIsProfessional);
                 setIsProfessional(isprofessional);
-                // api.defaults.headers.Authorization = `Baerer ${storagedToken}`;
+                setToken(storagedToken)
             }
             if (isprofessional)
                 setDefaultColor(blueDefault);
@@ -54,29 +64,32 @@ function AuthProvider({ children }: any) {
         }
 
         loadStorageData();
-    });
+    }, []);
 
-    async function signIn(input: SignInInput): Promise<void> {
-        return new Promise<void>(async (resolve, reject) => {
-            try {
-                const response = await auth.signIn(input);
-                setUser(response.user);
-                setToken(response.token);
-                setIsProfessional(response.isProfessional);
-                
-                if (isProfessional)
-                    setDefaultColor(blueDefault);
-                
-                // api.defaults.headers.Authorization = `Baerer ${response.token}`;
-                
-                await AsyncStorage.setItem('@RNAuth:user', JSON.stringify(response.user));
-                await AsyncStorage.setItem('@RNAuth:token', response.token);
-                await AsyncStorage.setItem('@RNAuth:isProfessional', JSON.stringify(response.isProfessional));
-                resolve();
-            }
-            catch (e) {
-                reject(e);
-            }
+    function signIn(input: AuthInput): Promise<void> {
+        return new Promise<void>((resolve, reject) => {
+            fetch(`${api_url}auth/login`, {
+                method: 'POST',
+                body: JSON.stringify(input),
+                headers: {"Content-type": "application/json; charset=UTF-8"}
+            })
+                .then((response) => response.text())
+                .then(async (text) => {
+                    console.log(text)
+                    setUser({ name: 'Matheus Feliciano', id: 1 });
+                    setToken(text);
+
+                    if (input.isProfessional)
+                        setDefaultColor(blueDefault);
+
+                    await AsyncStorage.setItem('@RNAuth:user', JSON.stringify({ name: 'Matheus Feliciano', id: 1 }));
+                    await AsyncStorage.setItem('@RNAuth:token', text);
+                    await AsyncStorage.setItem('@RNAuth:isProfessional', JSON.stringify(input.isProfessional));
+                })
+                .catch((e) => {
+                    console.log('ERRO --->', e);
+                    reject(e);
+                })
         })
     }
 
@@ -97,7 +110,7 @@ function AuthProvider({ children }: any) {
 
     return (
         <AuthContext.Provider
-            value={{ signed: !!user, user, isProfessional, signIn, signOut, register, loading, isRegister, endRegister }}>
+            value={{ signed: !!user, user, isProfessional, signIn, signOut, register, loading, isRegister, endRegister, token }}>
             {children}
         </AuthContext.Provider>
     )
