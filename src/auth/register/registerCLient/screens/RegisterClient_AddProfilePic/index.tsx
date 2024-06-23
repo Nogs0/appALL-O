@@ -22,23 +22,24 @@ export default function RegisterCliente_AddProfilePic({ navigation }: any) {
 
   const handleButtonEnd = () => {
     if (imageTela?.uri && imageTela?.fileName) {
-      updateImageClient(imageTela.uri, imageTela.fileName).then((result) => {
-        setProfilePic(result)
-        endingRegister().then(() => {
-          navigation.navigate('RegisterClient_OkEndRegister');
-        })
-          .catch(() => {
-            showMessage({
-              message: 'Falha ao cadastrar cliente!',
-              type: 'danger'
-            })
+      updateImageClient(imageTela.uri, imageTela.fileName)
+        .then((result) => {
+          setProfilePic(result)
+          endingRegister().then(() => {
+            navigation.navigate('RegisterClient_OkEndRegister');
           })
-      }).catch((e) => {
-        showMessage({
-          message: 'Falha no upload da imagem',
-          type: 'danger'
+            .catch(() => {
+              showMessage({
+                message: 'Falha ao cadastrar cliente!',
+                type: 'danger'
+              })
+            })
+        }).catch((e) => {
+          showMessage({
+            message: 'Falha no upload da imagem',
+            type: 'danger'
+          })
         })
-      })
     } else {
       endingRegister().then(() => {
         navigation.navigate('RegisterClient_OkEndRegister');

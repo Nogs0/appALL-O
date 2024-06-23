@@ -1,28 +1,30 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FlatList, SafeAreaView, ScrollView, View } from 'react-native';
-import MostAccessed from '../../../components/MostAccessed';
-import Highlights from '../../../components/Highlights';
-import OtherProfessions from '../../../components/OtherProfessions';
-import { blackDefault, blueDefault, greyLoadingDefault2, orangeDefault, whiteDefault } from '../../../shared/styleConsts';
-import SearchForAProfession from '../../../components/SearchForAProfessional';
-import { ProfissaoOutput, ServicoParaAvaliarOutput, useAPI } from '../../../contexts/api';
-import CardProfession from '../../../components/CardProfession';
 import { showMessage } from 'react-native-flash-message';
-import CustomDialog from '../../../components/CustomDialog';
+import CardProfession from '../../../components/CardProfession';
+import CustomDialogAvaliacao from '../../../components/CustomDialogAvaliacao';
+import Highlights from '../../../components/Highlights';
+import MostAccessed from '../../../components/MostAccessed';
+import OtherProfessions from '../../../components/OtherProfessions';
+import SearchForAProfession from '../../../components/SearchForAProfessional';
+import { ProfissaoOutput, ServicoOutput, useAPI } from '../../../contexts/api';
 import { useAuth } from '../../../contexts/auth';
+import { greyLoadingDefault2, whiteDefault } from '../../../shared/styleConsts';
 
 
 export default function Home({ navigation }: any) {
 
-  const { getProfessionsBySearch, getAllProfessionalsByID, getServicosParaAvaliarCliente } = useAPI();
+  const { getProfessionsBySearch, getServicosParaAvaliarCliente, createAvaliacao } = useAPI();
 
   const { user } = useAuth();
 
   const [search, setSearch] = useState<string>('');
   const [profissoes, setProfissoes] = useState<ProfissaoOutput[]>([]);
 
-  const [servicoAtual, setServicoAtual] = useState<number>(0);
-  const [servicosParaAvaliar, setServicosParaAvaliar] = useState<ServicoParaAvaliarOutput[]>([])
+  const [servicosParaAvaliar, setServicosParaAvaliar] = useState<ServicoOutput[]>([])
+
+  const [nota, setNota] = useState<number>(5);
+  const [descricao, setDescricao] = useState<string>('')
 
   useEffect(() => {
     if (user)
@@ -69,50 +71,46 @@ export default function Home({ navigation }: any) {
     )
   }
 
-  const renderItemServico = (item: ServicoParaAvaliarOutput) => {
+  const renderItemServico = (item: ServicoOutput) => {
     return (
-      <CustomDialog
-        cancel={() => handlePress(item.idServico, false)}
-        ok={() => handlePress(item.idServico, true)}
+      <CustomDialogAvaliacao
+        ok={() => handlePress(item.id)}
         title='NOTIFICAÇÃO DE SERVIÇO'
-        text={`ALL-O! ${user?.name}, você gostaria de avaliar o serviço realizado pelo(a) profissional ${item.nomeProvedor}?`}
+        text={`ALL-O! ${user?.name}, você poderia avaliar o serviço realizado pelo(a) profissional ${item.provedor.razaoSocial}?`}
+        estrelas={nota}
+        setEstrelas={setNota}
+        descricao={descricao}
+        setDescricao={setDescricao}
       />
     )
   }
 
-  const onViewableItemsChanged = ({ viewableItems }: any) => {
-    if (viewableItems[0] !== undefined) {
-      setServicoAtual(viewableItems[0]?.index)
-      console.log(viewableItems[0]?.index)
-    }
-  }
-
-  const viewabilityConfigCallbackPairs = useRef([
-    {
-      viewabilityConfig: {
-        itemVisiblePercentThreshold: 20
-      },
-      onViewableItemsChanged
-    }
-  ]);
-
   const removeServico = (id: number) => {
     setServicosParaAvaliar((prev) => {
-      let index = servicosParaAvaliar.findIndex(x => x.idServico == id)
+      let index = servicosParaAvaliar.findIndex(x => x.id == id)
       if (index != -1)
         prev.splice(index, 1)
       return [...prev]
     })
   }
 
-  const handlePress = (idServico: number, confirmado: boolean) => {
-    if (confirmado)
-      navigation.navigate('AvaliacaoServico')
-    removeServico(idServico);
+  const handlePress = (idServico: number) => {
+    createAvaliacao({ idServico, descricao, nota })
+      .then(() => {
+        removeServico(idServico);
+        setNota(5);
+        setDescricao('');
+      })
+      .catch((e) => {
+        showMessage({
+          message: 'Falha ao registrar avaliação',
+          type: 'danger'
+        })
+      })
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: whiteDefault}}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: whiteDefault }}>
 
       {servicosParaAvaliar.length > 0 ?
         <View style={{
@@ -126,38 +124,15 @@ export default function Home({ navigation }: any) {
         }}>
           <FlatList
             horizontal
+            data={[servicosParaAvaliar[0]]}
             style={{
               height: '100%',
             }}
             contentContainerStyle={{ alignItems: 'center', justifyContent: 'center' }}
-            data={servicosParaAvaliar}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({ item }) => renderItemServico(item)}
             showsHorizontalScrollIndicator={false}
             pagingEnabled
-            viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}
-          />
-          <FlatList
-            horizontal
-            style={{ alignSelf: 'center', bottom: 240 }}
-            data={servicosParaAvaliar}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item, index }) => {
-              return (
-                <View
-                  style={{
-                    width: index === servicoAtual ? 12 : 8,
-                    height: 8,
-                    borderRadius: 4,
-                    backgroundColor: index === servicoAtual ? blackDefault : orangeDefault,
-                    marginHorizontal: 2
-                  }} />
-              )
-            }}
-            showsHorizontalScrollIndicator={false}
-            pagingEnabled
-            viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}
-            scrollEnabled={false}
           />
         </View>
         :

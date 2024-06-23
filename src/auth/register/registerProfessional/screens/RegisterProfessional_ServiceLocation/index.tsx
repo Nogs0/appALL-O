@@ -49,15 +49,17 @@ export default function RegisterProfessional_ServiceLocation({ navigation }: any
     )
   }
 
-  const searchCEP = () => {
-    setLoadingCEP(true);
-    setCidade('');
-    setEstado('');
-    setBairro('');
-    setLogradouro('');
-    setNumero('')
-    getAddress(cep)
-      .then((result) => {
+  const searchCEP = (value: string) => {
+    setCep(value)
+    console.log(value.length)
+    if (value.length == 10) {
+      setLoadingCEP(true);
+      setCidade('');
+      setEstado('');
+      setBairro('');
+      setLogradouro('');
+      setNumero('')
+      getAddress(value).then((result) => {
         setCidade(result.localidade);
         setEstado(result.uf);
         setBairro(result.bairro);
@@ -66,7 +68,8 @@ export default function RegisterProfessional_ServiceLocation({ navigation }: any
         message: 'CEP inválido!',
         type: 'danger'
       }))
-      .finally(() => setLoadingCEP(false));
+        .finally(() => setLoadingCEP(false));
+    }
   }
 
   return (
@@ -81,7 +84,7 @@ export default function RegisterProfessional_ServiceLocation({ navigation }: any
         <ScrollView>
           <Text style={styleRegister.title}>Como o cliente pode te encontrar?</Text>
           <View style={styleRegister.inputsContainer}>
-            <InputCEP onFocus={() => setIncorrectInformations(false)} searchCEP={searchCEP} cep={cep} onChangeText={setCep} />
+            <InputCEP onFocus={() => setIncorrectInformations(false)} cep={cep} onChangeText={searchCEP} />
             <Input onFocus={() => setIncorrectInformations(false)} editable={!loadingCEP} placeholder='Estado' text={estado} onChangeText={setEstado} />
             <Input onFocus={() => setIncorrectInformations(false)} editable={!loadingCEP} placeholder='Cidade' text={cidade} onChangeText={setCidade} />
             <Input onFocus={() => setIncorrectInformations(false)} editable={!loadingCEP} placeholder='Bairro' text={bairro} onChangeText={setBairro} />

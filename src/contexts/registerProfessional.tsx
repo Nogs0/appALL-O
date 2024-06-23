@@ -1,7 +1,7 @@
 import { createContext, useContext, useState } from "react";
 import { useAuth } from "./auth";
 import { Endereco, ProvedorInput, useAPI } from "./api";
-import { TipoPessoaEnum } from "../shared/Enums/enums";
+import { TipoPessoaEnum, UsuarioRole } from "../shared/Enums/enums";
 import md5 from 'md5';
 
 interface InitialInformationsProfessional {
@@ -34,7 +34,11 @@ function RegisterProfessionalProvider({ children }: any) {
 
     const [profissional, setProfissional] = useState<ProvedorInput | null>({
         id: 0,
-        senha: '',
+        usuario: {
+            login: '',
+            senha: '',
+            role: UsuarioRole.PROVEDOR
+        },
         razaoSocial: '',
         cpfCnpj: '',
         email: '',
@@ -69,7 +73,11 @@ function RegisterProfessionalProvider({ children }: any) {
             prev.cpfCnpj = params.cpfCnpj;
             prev.email = params.email;
             console.log(md5(params.senha));
-            prev.senha = md5(params.senha);
+            prev.usuario = {
+                login: params.email,
+                senha: params.senha,
+                role: UsuarioRole.PROVEDOR
+            };
             return prev;
         });
     }
@@ -150,7 +158,11 @@ function RegisterProfessionalProvider({ children }: any) {
     function clearProfessional(): void {
         setProfissional({
             id: 0,
-            senha: '',
+            usuario: {
+                login: '',
+                senha: '',
+                role: UsuarioRole.PROVEDOR
+            },
             razaoSocial: '',
             cpfCnpj: '',
             email: '',

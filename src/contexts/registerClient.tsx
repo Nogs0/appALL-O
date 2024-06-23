@@ -1,6 +1,7 @@
 import { createContext, useContext, useState } from "react";
 import { useAuth } from "./auth";
 import { ClienteInput, useAPI } from "./api";
+import { UsuarioRole } from "../shared/Enums/enums";
 
 interface Endereco {
     id: number,
@@ -45,7 +46,11 @@ function RegisterClientProvider({ children }: any) {
     const [client, setClient] = useState<ClienteInput | null>({
         id: 0,
         email: '',
-        senha: '',
+        usuario: {
+            login: '',
+            senha: '',
+            role: UsuarioRole.CLIENTE
+        },
         telefone: '',
         nome: '',
         cpfCnpj: '',
@@ -72,7 +77,11 @@ function RegisterClientProvider({ children }: any) {
             prev.telefone = params.telefone;
             prev.email = params.email;
             prev.nome = params.nome;
-            prev.senha = params.senha
+            prev.usuario = {
+                login: params.email,
+                senha: params.senha,
+                role: UsuarioRole.CLIENTE
+            }
             return prev;
         });
     }
@@ -91,6 +100,7 @@ function RegisterClientProvider({ children }: any) {
         setClient((prev) => {
             if (!prev) prev = {} as ClienteInput;
             prev.imagem = path;
+            console.log(prev);
             return prev;
         });
     }
@@ -116,7 +126,11 @@ function RegisterClientProvider({ children }: any) {
         setClient({
             id: 0,
             email: '',
-            senha: '',
+            usuario: {
+                login: '',
+                senha: '',
+                role: UsuarioRole.CLIENTE
+            },
             telefone: '',
             nome: '',
             cpfCnpj: '',

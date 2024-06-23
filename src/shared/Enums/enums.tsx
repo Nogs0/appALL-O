@@ -19,3 +19,8 @@ export enum TipoPessoaEnum {
     JURIDICA,
     FISICA_JURIDICA
 }
+
+export enum UsuarioRole {
+    PROVEDOR = 0,
+    CLIENTE
+}

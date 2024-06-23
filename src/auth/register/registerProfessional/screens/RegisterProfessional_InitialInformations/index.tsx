@@ -15,8 +15,8 @@ export default function RegisterProfessional_InitialInformations({ navigation }:
 
   const [cpfCnpj, setCpfCnpj] = useState<string>(!!profissional ? profissional.cpfCnpj : '');
   const [razaoSocial, setRazaoSocial] = useState<string>(!!profissional ? profissional.razaoSocial : '');
-  const [email, setEmail] = useState<string>(!!profissional ? profissional.email : '');
-  const [senha, setSenha] = useState<string>(!!profissional ? profissional.senha : '');
+  const [email, setEmail] = useState<string>(!!profissional ? profissional.usuario.login : '');
+  const [senha, setSenha] = useState<string>(!!profissional ? profissional.usuario.senha : '');
   const [incorrectInformations, setIncorrectInformations] = useState<boolean>(false);
 
   const handleButtonNext = () => {

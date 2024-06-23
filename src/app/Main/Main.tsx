@@ -2,7 +2,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import { useAuth } from '../../contexts/auth';
 import Home from './Home';
-import AvaliacaoServico from './Home/AvaliacaoServico';
 import ProfessionalList from './Home/ProfessionalList';
 import ProfessionalProfile from './Home/ProfessionalList/ProfessionalProfile';
 import ProfessionalEdit from './Home/ProfessionalList/ProfessionalProfile/ProfessionalEdit';
@@ -31,7 +30,6 @@ export default function Main({ navigation }: any) {
             <Stack.Screen name='ProfessionalList' component={ProfessionalList} options={{ headerShown: false }} />
             <Stack.Screen name='ProfessionalProfile' component={ProfessionalProfile} options={{ headerShown: false }} />
             <Stack.Screen name='ProfessionalReviews' component={ProfessionalReviews} options={{ headerShown: false }} />
-            <Stack.Screen name='AvaliacaoServico' component={AvaliacaoServico} options={{ headerShown: false }} />
           </>
         }
       </Stack.Group>

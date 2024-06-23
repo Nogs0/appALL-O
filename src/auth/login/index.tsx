@@ -36,7 +36,6 @@ export default function SignIn({ navigation }: any) {
             signIn({
                 login: email,
                 senha: password,
-                isProfessional
             })
                 .then(() => {
                     setIncorrectCredentials(false)
@@ -78,6 +77,7 @@ export default function SignIn({ navigation }: any) {
                                 onFocus={() => setIncorrectCredentials(false)}
                                 borderColor={incorrectCredentials ? redDefault : greyDefault}
                                 placeholder='E-mail'
+                                keyboardType='email-address'
                                 text={email}
                                 onChangeText={setEmail} />
                             <InputPassword

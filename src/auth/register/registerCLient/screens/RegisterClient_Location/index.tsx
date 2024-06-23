@@ -26,7 +26,7 @@ export default function RegisterProfessional_ServiceLocation({ navigation }: any
   const [loadingCEP, setLoadingCEP] = useState<boolean>(false);
   const handleButtonNext = () => {
     setAddress({
-      id : 0,
+      id: 0,
       cep,
       estado,
       cidade,
@@ -47,23 +47,27 @@ export default function RegisterProfessional_ServiceLocation({ navigation }: any
     )
   }
 
-  const searchCEP = () => {
-    setLoadingCEP(true);
-    setCidade('');
-    setEstado('');
-    setBairro('');
-    setLogradouro('');
-    setNumero('')
-    getAddress(cep).then((result) => {
-      setCidade(result.localidade);
-      setEstado(result.uf);
-      setBairro(result.bairro);
-      setLogradouro(result.logradouro);
-    }).catch(() => showMessage({
-      message: 'CEP inválido!',
-      type: 'danger'
-    }))
-      .finally(() => setLoadingCEP(false));
+  const searchCEP = (value: string) => {
+    setCep(value)
+    console.log(value.length)
+    if (value.length == 10) {
+      setLoadingCEP(true);
+      setCidade('');
+      setEstado('');
+      setBairro('');
+      setLogradouro('');
+      setNumero('')
+      getAddress(cep).then((result) => {
+        setCidade(result.localidade);
+        setEstado(result.uf);
+        setBairro(result.bairro);
+        setLogradouro(result.logradouro);
+      }).catch(() => showMessage({
+        message: 'CEP inválido!',
+        type: 'danger'
+      }))
+        .finally(() => setLoadingCEP(false));
+    }
   }
 
   return (
@@ -78,7 +82,7 @@ export default function RegisterProfessional_ServiceLocation({ navigation }: any
         <ScrollView>
           <Text style={styleRegister.title}>Informe seu endereço</Text>
           <View style={styleRegister.inputsContainer}>
-            <InputCEP onFocus={() => setIncorrectInformations(false)} isClient searchCEP={searchCEP} cep={cep} onChangeText={setCep} />
+            <InputCEP onFocus={() => setIncorrectInformations(false)} isClient cep={cep} onChangeText={searchCEP} />
             <Input onFocus={() => setIncorrectInformations(false)} editable={!loadingCEP} placeholder='Estado' text={estado} onChangeText={setEstado} />
             <Input onFocus={() => setIncorrectInformations(false)} editable={!loadingCEP} placeholder='Cidade' text={cidade} onChangeText={setCidade} />
             <Input onFocus={() => setIncorrectInformations(false)} editable={!loadingCEP} placeholder='Bairro' text={bairro} onChangeText={setBairro} />

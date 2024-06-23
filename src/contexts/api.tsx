@@ -1,6 +1,6 @@
 import React, { createContext, useContext } from 'react';
 import ALLORequestBase, { ALLORequestForm, verbosAPI } from '../services/api';
-import { TipoPessoaEnum } from '../shared/Enums/enums';
+import { TipoPessoaEnum, UsuarioRole } from '../shared/Enums/enums';
 import { getTypeFromFileName } from '../shared/helpers';
 import { api_url } from '../services/config-dev';
 import { useAuth } from './auth';
@@ -32,13 +32,21 @@ export interface ProvedorInput {
     idProfissoes: number[]
     perfilProvedorInput: PerfilProvedorInput,
     servicoImagens: string[],
-    senha: string,
+    usuario: {
+        login: string,
+        senha: string,
+        role: UsuarioRole.PROVEDOR
+    },
 }
 
 export interface ClienteInput {
     id: number | undefined,
     email: string,
-    senha: string,
+    usuario: {
+        login: string,
+        senha: string,
+        role: UsuarioRole.CLIENTE
+    },
     telefone: string,
     cpfCnpj: string,
     nome: string,
@@ -123,13 +131,8 @@ export interface PerfilProvedorOutput {
     quantidadeAvaliacoes: number | undefined
 }
 
-export interface ServicoOutput {
-    nomeCliente: string,
-    idServico: number
-}
-
 export interface FeedbackServicoInput {
-    idServico: number,
+    id: number,
     confirmado: boolean
 }
 
@@ -141,13 +144,13 @@ export interface ImagemUpload {
 export interface AvaliacaoInput {
     idServico: number,
     descricao: string,
-    imagens: ImagemUpload[],
     nota: number
 }
 
-export interface ServicoParaAvaliarOutput {
-    nomeProvedor: string,
-    idServico: number
+export interface ServicoOutput {
+    id: number,
+    provedor: ProvedorOutput,
+    cliente: ClienteOutput,
 }
 
 interface APIContextData {
@@ -170,7 +173,8 @@ interface APIContextData {
     updateImageProfessional(uri: string, fileName: string): Promise<string>,
     getServicosNaoVistosProfissional(id: number): Promise<ServicoOutput[]>,
     feedbackServico(input: FeedbackServicoInput): Promise<void>,
-    getServicosParaAvaliarCliente(id: number): Promise<ServicoParaAvaliarOutput[]>,
+    getServicosParaAvaliarCliente(id: number): Promise<ServicoOutput[]>,
+    registrarServico(idProfissional: number): Promise<void>,
     createAvaliacao(input: AvaliacaoInput): Promise<void>
 }
 
@@ -331,7 +335,7 @@ function APIProvider({ children }: any) {
 
     const createProvider = (profissional: ProvedorInput): Promise<void> => {
         return new Promise<void>((resolve, reject) => {
-            fetch(`${api_url}provedor`, {
+            fetch(`${api_url}provedor/register`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -350,7 +354,7 @@ function APIProvider({ children }: any) {
 
     const createClient = (client: ClienteInput): Promise<void> => {
         return new Promise<void>(async (resolve, reject) => {
-            fetch(`${api_url}cliente`, {
+            fetch(`${api_url}cliente/register`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -370,7 +374,12 @@ function APIProvider({ children }: any) {
     const getImageClient = (idImage: string): Promise<ArrayBuffer | string> => {
         return new Promise<ArrayBuffer | string>((resolve, reject) => {
             let urlToFetch = `${api_url}cliente/buscarImagem?fileName=${idImage}`;
-            fetch(urlToFetch)
+            fetch(urlToFetch, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                }
+            })
                 .then(response => response.blob())
                 .then(blob => {
                     const reader = new FileReader();
@@ -391,7 +400,12 @@ function APIProvider({ children }: any) {
         return new Promise<ArrayBuffer | string>((resolve, reject) => {
             let urlToFetch = `${api_url}provedor/buscarImagem?fileName=${idImage}`;
             console.log(urlToFetch)
-            fetch(urlToFetch)
+            fetch(urlToFetch, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                }
+            })
                 .then(response => response.blob())
                 .then(blob => {
                     const reader = new FileReader();
@@ -410,6 +424,7 @@ function APIProvider({ children }: any) {
 
     const updateImageClient = (uri: string, fileName: string): Promise<string> => {
         return new Promise<string>((resolve, reject) => {
+            console.log(uri)
             const form = new FormData();
             const imageObject = {
                 name: 'perfil-cliente',
@@ -430,8 +445,6 @@ function APIProvider({ children }: any) {
                     resolve(id);
                 })
                 .catch((e) => {
-
-                    console.log(e)
                     reject(e);
                 });
         })
@@ -467,59 +480,69 @@ function APIProvider({ children }: any) {
 
     const getServicosNaoVistosProfissional = (id: number): Promise<ServicoOutput[]> => {
         return new Promise<ServicoOutput[]>((resolve, reject) => {
-            resolve([
-                {
-                    idServico: 1,
-                    nomeCliente: 'Sergio Chulapa',
-                },
-                {
-                    idServico: 2,
-                    nomeCliente: 'Rosa Lima'
-                },
-                {
-                    idServico: 3,
-                    nomeCliente: 'Rosa Lima'
-                },
-                {
-                    idServico: 3,
-                    nomeCliente: 'Rosa Lima'
-                }
-            ])
+            ALLORequestBase<ServicoOutput[]>(token, verbosAPI.GET, 'servico/naoVistoPeloProvedor')
+                .then((result) => {
+                    resolve(result);
+                })
+                .catch((e) => {
+                    reject(e);
+                })
         })
     }
 
     const feedbackServico = (input: FeedbackServicoInput): Promise<void> => {
         return new Promise<void>((resolve, reject) => {
-            resolve()
+            ALLORequestBase(token, verbosAPI.PUT, 'servico/confirmacao', input)
+                .then(() => resolve())
+                .catch((e) => {
+                    reject();
+                })
         })
     }
 
-    const getServicosParaAvaliarCliente = (id: number): Promise<ServicoParaAvaliarOutput[]> => {
-        return new Promise<ServicoParaAvaliarOutput[]>((resolve, reject) => {
-            resolve([
-                {
-                    idServico: 1,
-                    nomeProvedor: 'Sergio Chulapa',
-                },
-                {
-                    idServico: 2,
-                    nomeProvedor: 'Rosa Lima'
-                },
-                {
-                    idServico: 3,
-                    nomeProvedor: 'Rosa Lima'
-                },
-                {
-                    idServico: 3,
-                    nomeProvedor: 'Rosa Lima'
-                }
-            ])
+    const getServicosParaAvaliarCliente = (id: number): Promise<ServicoOutput[]> => {
+        return new Promise<ServicoOutput[]>((resolve, reject) => {
+            ALLORequestBase<ServicoOutput[]>(token, verbosAPI.GET, 'servico/naoVistoPeloCliente')
+                .then((result) => {
+                    resolve(result);
+                })
+                .catch((e) => {
+                    reject(e);
+                })
         })
     }
 
     const createAvaliacao = (input: AvaliacaoInput): Promise<void> => {
         return new Promise<void>((resolve, reject) => {
-            resolve();
+            ALLORequestBase(token, verbosAPI.PUT, 'servico/avaliar',
+                {
+                    id: input.idServico, 
+                    avaliacao: {
+                        nota: input.nota,
+                        descricao: input.descricao
+                    }
+                })
+                .then((result) => resolve())
+                .catch((e) => {
+                    reject(e)
+                })
+        })
+    }
+
+    const registrarServico = (idProfissional: number): Promise<void> => {
+        return new Promise<void>((resolve, reject) => {
+            let urlToFetch = `${api_url}servico/abertura?idProvedor=${idProfissional}`;
+            fetch(urlToFetch, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                }
+            })
+                .then(response => resolve())
+                .catch((e) => {
+                    console.error('Erro ao buscar a imagem:', e);
+                    reject(e)
+                });
         })
     }
 
@@ -546,7 +569,8 @@ function APIProvider({ children }: any) {
                 getServicosNaoVistosProfissional,
                 feedbackServico,
                 getServicosParaAvaliarCliente,
-                createAvaliacao
+                createAvaliacao,
+                registrarServico
             }}>
             {children}
         </APIContext.Provider>

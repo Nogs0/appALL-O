@@ -5,11 +5,11 @@ import { blueDefault, orangeDefault } from "../shared/styleConsts";
 import { useRegisterProfessional } from "./registerProfessional";
 import ALLORequestBase from "../services/api";
 import { api_url } from "../services/config-dev";
+import { UsuarioRole } from "../shared/Enums/enums";
 
 interface AuthInput {
     login: string,
-    senha: string,
-    isProfessional: boolean
+    senha: string
 }
 
 interface User {
@@ -71,20 +71,26 @@ function AuthProvider({ children }: any) {
             fetch(`${api_url}auth/login`, {
                 method: 'POST',
                 body: JSON.stringify(input),
-                headers: {"Content-type": "application/json; charset=UTF-8"}
+                headers: { "Content-type": "application/json; charset=UTF-8" }
             })
-                .then((response) => response.text())
-                .then(async (text) => {
-                    console.log(text)
-                    setUser({ name: 'Matheus Feliciano', id: 1 });
-                    setToken(text);
+                .then((response) => response.json())
+                .then(async (json) => {
+                    if (json.code){
+                        reject();
+                        return;
+                    }
 
-                    if (input.isProfessional)
+                    setUser({ name: json.nome, id: json.id });
+                    setToken(json.token);
+                    setIsProfessional(json.role == "PROVEDOR")
+                    
+                    if (json.role == UsuarioRole.PROVEDOR)
                         setDefaultColor(blueDefault);
 
-                    await AsyncStorage.setItem('@RNAuth:user', JSON.stringify({ name: 'Matheus Feliciano', id: 1 }));
-                    await AsyncStorage.setItem('@RNAuth:token', text);
-                    await AsyncStorage.setItem('@RNAuth:isProfessional', JSON.stringify(input.isProfessional));
+                    await AsyncStorage.setItem('@RNAuth:user', JSON.stringify({ name: json.nome, id: json.id }));
+                    await AsyncStorage.setItem('@RNAuth:token', json.token);
+                    await AsyncStorage.setItem('@RNAuth:isProfessional', JSON.stringify(json.role == "PROVEDOR"));
+                    resolve();
                 })
                 .catch((e) => {
                     console.log('ERRO --->', e);

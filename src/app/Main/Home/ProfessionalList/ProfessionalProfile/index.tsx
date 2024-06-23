@@ -17,40 +17,31 @@ import style from './style';
 
 export default function ProfessionalProfile(props: any) {
 
-    const { getPerfilProfissional, getImageProfessional, getServicosNaoVistosProfissional, feedbackServico } = useAPI();
+    const { getPerfilProfissional, getImageProfessional, getServicosNaoVistosProfissional, feedbackServico, registrarServico } = useAPI();
     const { isProfessional, signOut, user } = useAuth();
     const [params, setParams] = useState<any>(props.route.params);
     const [professional, setProfessional] = useState<PerfilProvedorOutput>();
     const [imagem, setImagem] = useState<any>();
+    const [showDialogWhatsApp, setShowDialogWhatsApp] = useState<boolean>(false);
 
     const openWhatsapp = () => {
         let wppNumber = professional?.provedor.telefone.replace(fixPhone, "55$1$2$3");
         Linking.openURL('http://wa.me/' + wppNumber + `?text=ALL-O! ${professional?.nome}, tudo bem? Sou o(a) ${user?.name}, gostaria de solicitar um serviço!`)
     }
-    const registerService = () => {
-        console.log("Optou por registrar um serviço")
-    }
-
-    const handleWhatsapp = () => {
-
-        Alert.alert("Atenção!", "Você deseja abrir uma ordem de serviço?", [
-            {
-                text: 'Cancelar',
-                onPress: () => {
-                    console.log('Cancelou')
-                }
-
-            },
-            {
-                text: 'Sim',
-                onPress: () => {
-                    registerService()
-                    openWhatsapp()
-                }
-
-            }
-        ])
-
+    const handlePressOk = () => {
+        if (professional) {
+            registrarServico(professional?.id)
+                .then(() => {
+                    openWhatsapp();
+                    setShowDialogWhatsApp(false);
+                })
+                .catch((e) => {
+                    showMessage({
+                        message: 'Falha ao registrar serviço',
+                        type: 'danger'
+                    })
+                })
+        }
     }
 
     const [servicoAtual, setServicoAtual] = useState<number>(0);
@@ -103,26 +94,28 @@ export default function ProfessionalProfile(props: any) {
 
     const removeServico = (id: number) => {
         setServicosNaoVistos((prev) => {
-            let index = servicosNaoVistos.findIndex(x => x.idServico == id)
+            let index = servicosNaoVistos.findIndex(x => x.id == id)
             if (index != -1)
                 prev.splice(index, 1)
             return [...prev]
         })
     }
 
-    const handlePress = (idServico: number, confirmado: boolean) => {
-        removeServico(idServico)
-        showMessage({
-            message: 'Obrigado pelo feedback!',
-            type: 'success'
-        })
-
-        feedbackServico({ idServico, confirmado } as FeedbackServicoInput)
-            .finally(() =>
+    const handlePress = (id: number, confirmado: boolean) => {
+        feedbackServico({ id, confirmado } as FeedbackServicoInput)
+            .then(() => {
+                removeServico(id)
                 showMessage({
                     message: 'Obrigado pelo feedback!',
                     type: 'success'
-                }))
+                })
+            })
+            .catch((e) => {
+                showMessage({
+                    message: 'Falha ao registrar serviço',
+                    type: 'danger'
+                })
+            })
     }
 
     useEffect(() => {
@@ -133,29 +126,13 @@ export default function ProfessionalProfile(props: any) {
         return (
             <CustomDialog
                 isProfessional
-                cancel={() => handlePress(item.idServico, false)}
-                ok={() => handlePress(item.idServico, true)}
+                cancel={() => handlePress(item.id, false)}
+                ok={() => handlePress(item.id, true)}
                 title='NOTIFICAÇÃO DE SERVIÇO'
-                text={`ALL-O! ${professional?.nome}, você prestou algum serviço para o(a) cliente ${item.nomeCliente}?`}
+                text={`ALL-O! ${professional?.nome}, você prestou algum serviço para o(a) cliente ${item.cliente.nome}?`}
             />
         )
     }
-
-    const onViewableItemsChanged = ({ viewableItems }: any) => {
-        if (viewableItems[0] !== undefined) {
-            setServicoAtual(viewableItems[0]?.index)
-            console.log(viewableItems[0]?.index)
-        }
-    }
-
-    const viewabilityConfigCallbackPairs = useRef([
-        {
-            viewabilityConfig: {
-                itemVisiblePercentThreshold: 20
-            },
-            onViewableItemsChanged
-        }
-    ]);
 
     return (
         <SafeAreaView style={[style.container, { backgroundColor: isProfessional ? blueDefault : orangeDefault }]}>
@@ -177,38 +154,36 @@ export default function ProfessionalProfile(props: any) {
                                     height: '100%',
                                 }}
                                 contentContainerStyle={{ alignItems: 'center', justifyContent: 'center' }}
-                                data={servicosNaoVistos}
+                                data={[servicosNaoVistos[0]]}
                                 keyExtractor={(item, index) => index.toString()}
                                 renderItem={({ item }) => renderItem(item)}
                                 showsHorizontalScrollIndicator={false}
                                 pagingEnabled
-                                viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}
-                            />
-                            <FlatList
-                                horizontal
-                                style={{ alignSelf: 'center', bottom: 240 }}
-                                data={servicosNaoVistos}
-                                keyExtractor={(item, index) => index.toString()}
-                                renderItem={({ item, index }) => {
-                                    return (
-                                        <View
-                                            style={{
-                                                width: index === servicoAtual ? 12 : 8,
-                                                height: 8,
-                                                borderRadius: 4,
-                                                backgroundColor: index === servicoAtual ? blackDefault : blueDefault,
-                                                marginHorizontal: 2
-                                            }} />
-                                    )
-                                }}
-                                showsHorizontalScrollIndicator={false}
-                                pagingEnabled
-                                viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}
-                                scrollEnabled={false}
                             />
                         </View>
                         :
                         <></>
+                    }
+
+                    {
+                        showDialogWhatsApp ?
+                            <View style={{
+                                height: '100%',
+                                width: '100%',
+                                backgroundColor: greyLoadingDefault2,
+                                position: 'absolute',
+                                zIndex: 1,
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                            }}>
+                                <CustomDialog
+                                    cancel={() => setShowDialogWhatsApp(false)}
+                                    ok={() => handlePressOk()}
+                                    title='REQUISIÇÃO DE SERVIÇO'
+                                    text='ALL-O! Ao iniciar a conversa no WhatsApp registraremos a intenção de servico, tudo bem?' />
+                            </View>
+                            :
+                            <></>
                     }
 
                     <HeaderProfessional title={isProfessional ? 'SEU PERFIL' : params.profissao.replace(/^\w/, (c: string) => c.toUpperCase())}
@@ -254,7 +229,7 @@ export default function ProfessionalProfile(props: any) {
                                     backgroundColor: '#00000000',
 
                                 }}>
-                                    <WhatsappButton style={style.WhatsappContainer} telefone={professional.provedor.telefone} onPress={() => handleWhatsapp()} ></WhatsappButton>
+                                    <WhatsappButton style={style.WhatsappContainer} telefone={professional.provedor.telefone} onPress={() => setShowDialogWhatsApp(true)} ></WhatsappButton>
                                 </View>
                         }
                     </View>
