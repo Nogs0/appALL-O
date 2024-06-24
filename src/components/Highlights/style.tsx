@@ -33,7 +33,7 @@ export default StyleSheet.create({
     },
     imageProfessional: {
         flex: 1,
-        width: 340,
+        width: 320,
         height: 200,
         borderRadius: 15
     }

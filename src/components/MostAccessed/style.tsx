@@ -4,7 +4,7 @@ import { orangeDefault } from "../../shared/styleConsts";
 export default StyleSheet.create({
     container: {
         flex: 0.3,
-        marginHorizontal: 15
+        marginHorizontal: 25
     },
     label: {
         fontSize: 18,

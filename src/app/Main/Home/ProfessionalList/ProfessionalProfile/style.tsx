@@ -20,7 +20,7 @@ export default StyleSheet.create({
         fontFamily: 'Rubik-SemiBold'
     },
     firstSection: {
-        height: 80,
+        height: '10%',
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -34,22 +34,19 @@ export default StyleSheet.create({
         right: '15%'
     },
     secondSection: {
-        height: 80,
+        height: '15%',
         marginHorizontal: 20,
         justifyContent: 'space-between',
     },
     thirdSection: {
-        height: 80,
+        height: '20%',
     },
     fourthSection: {
-        height: 140,
+        height: '15%',
     },
     fifthSection: {
-        display: 'flex',
-        alignItems: 'flex-end',
-        height: 3090,
-        borderWidth: 3,
-        borderColor: "#ff0000",
+        borderColor: greyDefault,
+        borderTopWidth: 2,
     },
     doesntSendMessage: {
         color: greyDefault,
@@ -67,6 +64,7 @@ export default StyleSheet.create({
         height: 40,
         width: 180,
         bottom: 20,
-        right: 0
+        right: 0,
+        elevation: 5
     },
 })

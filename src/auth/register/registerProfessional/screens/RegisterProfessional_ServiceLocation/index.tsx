@@ -15,12 +15,12 @@ export default function RegisterProfessional_ServiceLocation({ navigation }: any
 
   const { profissional, setEndereco } = useRegisterProfessional();
 
-  const [cep, setCep] = useState<string>(!!profissional ? profissional.enderecoInput?.cep : '');
-  const [cidade, setCidade] = useState<string>(!!profissional ? profissional.enderecoInput?.cidade : '');
-  const [estado, setEstado] = useState<string>(!!profissional ? profissional.enderecoInput?.estado : '');
-  const [bairro, setBairro] = useState<string>(!!profissional ? profissional.enderecoInput?.bairro : '');
-  const [logradouro, setLogradouro] = useState<string>(!!profissional ? profissional.enderecoInput?.logradouro : '');
-  const [numero, setNumero] = useState<string>(!!profissional ? profissional.enderecoInput?.numero : '');
+  const [cep, setCep] = useState<string>(!!profissional ? profissional.provedor.enderecoInput?.cep : '');
+  const [cidade, setCidade] = useState<string>(!!profissional ? profissional.provedor.enderecoInput?.cidade : '');
+  const [estado, setEstado] = useState<string>(!!profissional ? profissional.provedor.enderecoInput?.estado : '');
+  const [bairro, setBairro] = useState<string>(!!profissional ? profissional.provedor.enderecoInput?.bairro : '');
+  const [logradouro, setLogradouro] = useState<string>(!!profissional ? profissional.provedor.enderecoInput?.logradouro : '');
+  const [numero, setNumero] = useState<string>(!!profissional ? profissional.provedor.enderecoInput?.numero : '');
   const [incorrectInformations, setIncorrectInformations] = useState<boolean>(false);
 
   const [loadingCEP, setLoadingCEP] = useState<boolean>(false);
@@ -51,7 +51,6 @@ export default function RegisterProfessional_ServiceLocation({ navigation }: any
 
   const searchCEP = (value: string) => {
     setCep(value)
-    console.log(value.length)
     if (value.length == 10) {
       setLoadingCEP(true);
       setCidade('');

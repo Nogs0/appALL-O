@@ -4,6 +4,7 @@ import { TipoPessoaEnum, UsuarioRole } from '../shared/Enums/enums';
 import { getTypeFromFileName } from '../shared/helpers';
 import { api_url } from '../services/config-dev';
 import { useAuth } from './auth';
+import Input from '../components/Input';
 
 export interface ClientDTO {
     id: number,
@@ -16,11 +17,18 @@ export interface ClientDTO {
 
 export interface PerfilProvedorInput {
     idProvedor: number,
-    idAvaliacao: number,
     descricao: string,
     perfilImage: string
 }
 
+export interface ProvedorCadastroInput {
+    usuario: {
+        login: string,
+        senha: string,
+        role: UsuarioRole.PROVEDOR
+    },
+    provedor: ProvedorInput
+}
 export interface ProvedorInput {
     id: number | undefined,
     email: string,
@@ -29,28 +37,27 @@ export interface ProvedorInput {
     enderecoInput: Endereco,
     razaoSocial: string,
     tipoPessoa: TipoPessoaEnum | undefined,
-    idProfissoes: number[]
-    perfilProvedorInput: PerfilProvedorInput,
+    idProfissao: number
     servicoImagens: string[],
-    usuario: {
-        login: string,
-        senha: string,
-        role: UsuarioRole.PROVEDOR
-    },
+    perfilProvedorInput: PerfilProvedorInput,
 }
 
-export interface ClienteInput {
-    id: number | undefined,
-    email: string,
+export interface ClienteCadastroInput {
     usuario: {
         login: string,
         senha: string,
         role: UsuarioRole.CLIENTE
     },
+    cliente: ClienteInput
+}
+
+export interface ClienteInput {
+    id: number | undefined,
+    email: string,
     telefone: string,
     cpfCnpj: string,
-    nome: string,
     enderecoInput: Endereco,
+    nome: string,
     imagem: string,
 }
 
@@ -74,7 +81,7 @@ export interface ProvedorOutput {
     id: number,
     razaoSocial: string,
     endereco: Endereco,
-    profissoes: ProfissaoOutput[],
+    profissao: ProfissaoOutput,
     tipoPessoa: TipoPessoaEnum,
     cpfCnpj: string,
     email: string,
@@ -93,25 +100,16 @@ export interface ClienteOutput {
     telefone: string,
     endereco: Endereco,
     favoritos: ProvedorOutput[],
-    ativo: boolean,
-
 }
 
 export interface PefilClienteOutput {
     id: number,
-    nome: string,
-    cpf: string,
-    email: string,
     cliente: ClienteOutput,
-    telefone: string,
     imagemPerfil: string,
-    provedoresFavoritados: ProvedorOutput[],
 }
 
 export interface AvaliacaoOutput {
     id: number,
-    provedor: ProvedorOutput,
-    cliente: PefilClienteOutput,
     nota: number,
     titulo: string,
     descricao: string
@@ -123,12 +121,10 @@ export interface PerfilProvedorOutput {
     avaliacao: AvaliacaoOutput,
     servicosConcluidos: number,
     mediaAvaliacao: number,
-    tempoCadastro: number,
+    tempoCadastro: string,
     imagemPerfil: string,
-    nome: string,
-    email: string,
     descricao: string,
-    quantidadeAvaliacoes: number | undefined
+    totalAvaliacoes: number
 }
 
 export interface FeedbackServicoInput {
@@ -151,26 +147,41 @@ export interface ServicoOutput {
     id: number,
     provedor: ProvedorOutput,
     cliente: ClienteOutput,
+    avaliacao: AvaliacaoOutput
+}
+
+export interface ProvedorListOutput {
+    idProvedor: number,
+    razaoSocial: string,
+    observacao: string,
+    mediaAvaliacao: number,
+    favorito: boolean,
+    imagemPerfil: string
 }
 
 interface APIContextData {
+    getProfissoesMaisUtilizadas(): Promise<ProfissaoOutput[]>,
+    getProfissoesAleatorias(): Promise<ProfissaoOutput[]>,
     getPerfilCliente(id: number): Promise<PefilClienteOutput>,
     getPerfilProfissional(id: number): Promise<PerfilProvedorOutput>,
     updateProfessional(input: ProvedorInput): Promise<void>,
     updateClient(input: ClienteInput): Promise<void>,
     updateFavoriteReview(id: number): Promise<boolean>,
+    updateFavoriteProvider(id: number): Promise<boolean>,
     getReviewsByProfessional(id: number): Promise<any>,
     updateSeenNotification(id: number): Promise<boolean>,
     getProfessions(): Promise<ProfissaoOutput[]>,
     sugerirProfissao(sugestao: string): Promise<void>,
-    createProvider(profissional: ProvedorInput): Promise<void>,
-    createClient(client: ClienteInput): Promise<void>,
+    createProvider(profissional: ProvedorCadastroInput): Promise<void>,
+    createClient(client: ClienteCadastroInput): Promise<void>,
     getProfessionsBySearch(search: string): Promise<ProfissaoOutput[]>
-    getAllProfessionalsByID(id: number): Promise<ProvedorOutput[]>,
+    getAllProfessionalsByID(id: number): Promise<ProvedorListOutput[]>,
     getImageClient(idImage: string): Promise<any>,
     getImageProfessional(idImage: string): Promise<any>,
     updateImageClient(uri: string, fileName: string): Promise<string>,
+    createImageClient(uri: string, fileName: string): Promise<string>,
     updateImageProfessional(uri: string, fileName: string): Promise<string>,
+    createImageProfessional(uri: string, fileName: string): Promise<string>,
     getServicosNaoVistosProfissional(id: number): Promise<ServicoOutput[]>,
     feedbackServico(input: FeedbackServicoInput): Promise<void>,
     getServicosParaAvaliarCliente(id: number): Promise<ServicoOutput[]>,
@@ -184,9 +195,9 @@ function APIProvider({ children }: any) {
 
     const { token } = useAuth();
 
-    const getAllProfessionalsByID = (id: number): Promise<ProvedorOutput[]> => {
-        return new Promise<ProvedorOutput[]>((resolve, reject) => {
-            ALLORequestBase<ProvedorOutput[]>(token, verbosAPI.GET, 'provedor/filter/profissao', `idProfissao=${id}`)
+    const getAllProfessionalsByID = (id: number): Promise<ProvedorListOutput[]> => {
+        return new Promise<ProvedorListOutput[]>((resolve, reject) => {
+            ALLORequestBase<ProvedorListOutput[]>(token, verbosAPI.GET, 'provedor/filter/profissao', `idProfissao=${id}`)
                 .then((result) => {
                     resolve(result);
                 })
@@ -198,7 +209,6 @@ function APIProvider({ children }: any) {
     }
 
     const getPerfilCliente = (id: number): Promise<PefilClienteOutput> => {
-        console.log(token)
         return new Promise<PefilClienteOutput>((resolve, reject) => {
             ALLORequestBase<PefilClienteOutput>(token, verbosAPI.GET, 'cliente/perfil', `idCliente=${id}`)
                 .then((result) => {
@@ -224,7 +234,6 @@ function APIProvider({ children }: any) {
     }
 
     const updateProfessional = (input: ProvedorInput): Promise<void> => {
-        console.log(input)
         return new Promise<void>((resolve, reject) => {
             ALLORequestBase<void>(token, verbosAPI.PUT, 'provedor', input)
                 .then(() => {
@@ -252,12 +261,27 @@ function APIProvider({ children }: any) {
 
     const updateFavoriteReview = (id: number): Promise<boolean> => {
         return new Promise<boolean>((resolve, reject) => {
-            try {
-                resolve(true)
-            }
-            catch (e) {
-                reject(e);
-            }
+            ALLORequestBase<ServicoOutput>(token, verbosAPI.PUT, 'provedor/perfil/destacar', id)
+                .then((result) => {
+                    resolve(result.avaliacao.id == id)
+                })
+                .catch((e) => {
+                    reject(e);
+                })
+        })
+    }
+
+    const updateFavoriteProvider = (id: number): Promise<boolean> => {
+        return new Promise<boolean>((resolve, reject) => {
+            ALLORequestBase<ClienteOutput>(token, verbosAPI.PUT, 'cliente/favoritar', id)
+                .then((result) => {
+                    resolve(result.favoritos.findIndex(x => x.id == id) != -1)
+                })
+                .catch((e) => {
+
+                    console.log(e.request);
+                    reject(e);
+                })
         })
     }
 
@@ -272,51 +296,57 @@ function APIProvider({ children }: any) {
         })
     }
 
-    const getReviewsByProfessional = (id: number): Promise<any> => {
-        return new Promise<any>((resolve, reject) => {
-            resolve({
-                professionalName: 'Marcio DME',
-                revs: [
-                    {
-                        client: 'Andrew Customer',
-                        rate: 5,
-                        rateNote: 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
-                        date: '09/05/2024',
-                        image: require('../assets/images/encanador.jpg'),
-                        images: [
-                            require('../assets/images/encanador.jpg'),
-                            require('../assets/images/encanador.jpg'),
-                            require('../assets/images/encanador.jpg'),
-                            require('../assets/images/encanador.jpg')
-                        ]
-                    },
-                ]
-            })
+    const getReviewsByProfessional = (id: number): Promise<ServicoOutput[]> => {
+        return new Promise<ServicoOutput[]>((resolve, reject) => {
+            ALLORequestBase<ServicoOutput[]>(token, verbosAPI.GET, 'servico/filter/provedor', `idProvedor=${id}`)
+                .then((result) => {
+                    resolve(result);
+                })
+                .catch((e) => {
+                    console.log(e.request);
+                    reject(e)
+                })
         })
     }
 
     const getProfessions = (): Promise<ProfissaoOutput[]> => {
         return new Promise<ProfissaoOutput[]>(async (resolve, reject) => {
-            ALLORequestBase<any>(token, verbosAPI.GET, 'profissao')
-                .then((result) => {
-                    resolve(result.content as ProfissaoOutput[]);
+            fetch(`${api_url}profissao`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then((result) => result.json())
+                .catch((e) => console.log(e))
+                .then((json) => {
+
+                    resolve(json as ProfissaoOutput[]);
                 })
                 .catch((e) => {
-                    console.log(e.request)
-                    reject(e);
+                    console.log(e.request);
+                    reject();
                 })
         })
     }
 
     const getProfessionsBySearch = (search: string): Promise<ProfissaoOutput[]> => {
         return new Promise<ProfissaoOutput[]>(async (resolve, reject) => {
-            ALLORequestBase<any>(token, verbosAPI.GET, 'profissao/filter', `profissao=${search}`)
-                .then((result) => {
-                    resolve(result as ProfissaoOutput[]);
+            fetch(`${api_url}profissao/filter?profissao=${search}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                }
+            })
+                .then((result) => result.json())
+                .catch((e) => console.log(e))
+                .then((json) => {
+                    console.log(json);
+                    resolve(json as ProfissaoOutput[]);
                 })
                 .catch((e) => {
-                    console.log(e.request)
-                    reject(e);
+                    console.log(e.request);
+                    reject();
                 })
         })
     }
@@ -333,7 +363,7 @@ function APIProvider({ children }: any) {
         })
     }
 
-    const createProvider = (profissional: ProvedorInput): Promise<void> => {
+    const createProvider = (profissional: ProvedorCadastroInput): Promise<void> => {
         return new Promise<void>((resolve, reject) => {
             fetch(`${api_url}provedor/register`, {
                 method: 'POST',
@@ -352,7 +382,7 @@ function APIProvider({ children }: any) {
         })
     }
 
-    const createClient = (client: ClienteInput): Promise<void> => {
+    const createClient = (client: ClienteCadastroInput): Promise<void> => {
         return new Promise<void>(async (resolve, reject) => {
             fetch(`${api_url}cliente/register`, {
                 method: 'POST',
@@ -399,7 +429,6 @@ function APIProvider({ children }: any) {
     const getImageProfessional = (idImage: string): Promise<ArrayBuffer | string> => {
         return new Promise<ArrayBuffer | string>((resolve, reject) => {
             let urlToFetch = `${api_url}provedor/buscarImagem?fileName=${idImage}`;
-            console.log(urlToFetch)
             fetch(urlToFetch, {
                 method: 'GET',
                 headers: {
@@ -424,7 +453,34 @@ function APIProvider({ children }: any) {
 
     const updateImageClient = (uri: string, fileName: string): Promise<string> => {
         return new Promise<string>((resolve, reject) => {
-            console.log(uri)
+            const form = new FormData();
+            const imageObject = {
+                name: 'perfil-cliente',
+                uri: uri,
+                type: `image/${getTypeFromFileName(fileName)}`
+            }
+
+            form.append('image', imageObject)
+            fetch(`${api_url}cliente/upload`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: form
+            })
+                .then((result) => result.text())
+                .then((id) => {
+                    resolve(id);
+                })
+                .catch((e) => {
+                    reject(e);
+                });
+        })
+    }
+
+    const createImageClient = (uri: string, fileName: string): Promise<string> => {
+        return new Promise<string>((resolve, reject) => {
             const form = new FormData();
             const imageObject = {
                 name: 'perfil-cliente',
@@ -450,7 +506,37 @@ function APIProvider({ children }: any) {
         })
     }
 
+
     const updateImageProfessional = (uri: string, fileName: string): Promise<string> => {
+        return new Promise<string>((resolve, reject) => {
+            const form = new FormData();
+            const imageObject = {
+                name: 'perfil-profissional',
+                uri: uri,
+                type: `image/${getTypeFromFileName(fileName)}`
+            }
+
+            form.append('image', imageObject)
+            fetch(`${api_url}provedor/upload`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: form
+            })
+                .then((result) => result.text())
+                .then((id) => {
+                    resolve(id);
+                })
+                .catch((e) => {
+                    console.log(e)
+                    reject(e);
+                });
+        })
+    }
+
+    const createImageProfessional = (uri: string, fileName: string): Promise<string> => {
         return new Promise<string>((resolve, reject) => {
             const form = new FormData();
             const imageObject = {
@@ -516,7 +602,7 @@ function APIProvider({ children }: any) {
         return new Promise<void>((resolve, reject) => {
             ALLORequestBase(token, verbosAPI.PUT, 'servico/avaliar',
                 {
-                    id: input.idServico, 
+                    id: input.idServico,
                     avaliacao: {
                         nota: input.nota,
                         descricao: input.descricao
@@ -540,20 +626,49 @@ function APIProvider({ children }: any) {
             })
                 .then(response => resolve())
                 .catch((e) => {
-                    console.error('Erro ao buscar a imagem:', e);
+                    console.log('Erro ao buscar a imagem:', e);
                     reject(e)
                 });
+        })
+    }
+
+    const getProfissoesAleatorias = (): Promise<ProfissaoOutput[]> => {
+        return new Promise<ProfissaoOutput[]>((resolve, reject) => {
+            ALLORequestBase<ProfissaoOutput[]>(token, verbosAPI.GET, 'profissoes/getAleatorias')
+                .then((result) => {
+                    resolve(result)
+                })
+                .catch((e) => {
+                    console.log('Erro ao buscar profissões aleatórias:', e);
+                    reject(e);
+                })
+        })
+    }
+
+    const getProfissoesMaisUtilizadas = (): Promise<ProfissaoOutput[]> => {
+        return new Promise<ProfissaoOutput[]>((resolve, reject) => {
+            ALLORequestBase<ProfissaoOutput[]>(token, verbosAPI.GET, 'profissoes/getMaisUtilizadas')
+                .then((result) => {
+                    resolve(result)
+                })
+                .catch((e) => {
+                    console.log('Erro ao buscar profissões mais utilizadas:', e);
+                    reject(e);
+                })
         })
     }
 
     return (
         <APIContext.Provider
             value={{
+                getProfissoesMaisUtilizadas,
+                getProfissoesAleatorias,
                 getAllProfessionalsByID,
                 getPerfilCliente,
                 getPerfilProfissional,
                 updateProfessional,
                 updateFavoriteReview,
+                updateFavoriteProvider,
                 getReviewsByProfessional,
                 updateSeenNotification,
                 updateClient,
@@ -564,7 +679,9 @@ function APIProvider({ children }: any) {
                 getProfessionsBySearch,
                 getImageClient,
                 updateImageClient,
+                createImageClient,
                 updateImageProfessional,
+                createImageProfessional,
                 getImageProfessional,
                 getServicosNaoVistosProfissional,
                 feedbackServico,

@@ -17,7 +17,7 @@ export default StyleSheet.create({
         borderColor: greyDefault,
     },
     professionName: {
-        fontSize: 12,
+        fontSize: 11,
         color: blackDefault,
         fontFamily: 'Rubik-SemiBold'
     }

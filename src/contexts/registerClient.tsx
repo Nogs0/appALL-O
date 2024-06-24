@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import { useAuth } from "./auth";
-import { ClienteInput, useAPI } from "./api";
+import { ClienteCadastroInput, useAPI } from "./api";
 import { UsuarioRole } from "../shared/Enums/enums";
 
 interface Endereco {
@@ -28,7 +28,7 @@ interface InitialInformationsClient {
 }
 
 interface RegisterClientContextData {
-    client: ClienteInput | null,
+    client: ClienteCadastroInput | null,
     loading: boolean,
     setInitialInformations(params: InitialInformationsClient): void,
     setAddress(address: Endereco): void,
@@ -43,40 +43,41 @@ function RegisterClientProvider({ children }: any) {
     const { endRegister } = useAuth();
     const { createClient } = useAPI();
 
-    const [client, setClient] = useState<ClienteInput | null>({
-        id: 0,
-        email: '',
+    const [client, setClient] = useState<ClienteCadastroInput | null>({
         usuario: {
             login: '',
             senha: '',
             role: UsuarioRole.CLIENTE
         },
-        telefone: '',
-        nome: '',
-        cpfCnpj: '',
-        enderecoInput: {
+        cliente: {
             id: 0,
-            cep: '',
-            estado: '',
-            cidade: '',
-            bairro: '',
-            logradouro: '',
-            numero: ''
-        },
-        imagem: ''
-
+            email: '',
+            telefone: '',
+            nome: '',
+            cpfCnpj: '',
+            enderecoInput: {
+                id: 0,
+                cep: '',
+                estado: '',
+                cidade: '',
+                bairro: '',
+                logradouro: '',
+                numero: ''
+            },
+            imagem: ''
+        }
     });
     const [loading, setLoading] = useState<boolean>(false);
 
     function setInitialInformations(params: InitialInformationsClient) {
         setClient((prev) => {
             if (!prev)
-                prev = {} as ClienteInput;
+                prev = {} as ClienteCadastroInput;
 
-            prev.cpfCnpj = params.cpfCnpj;
-            prev.telefone = params.telefone;
-            prev.email = params.email;
-            prev.nome = params.nome;
+            prev.cliente.cpfCnpj = params.cpfCnpj;
+            prev.cliente.telefone = params.telefone;
+            prev.cliente.email = params.email;
+            prev.cliente.nome = params.nome;
             prev.usuario = {
                 login: params.email,
                 senha: params.senha,
@@ -89,18 +90,17 @@ function RegisterClientProvider({ children }: any) {
 
     function setAddress(endereco: Endereco) {
         setClient((prev) => {
-            if (!prev) prev = {} as ClienteInput;
+            if (!prev) prev = {} as ClienteCadastroInput;
 
-            prev.enderecoInput = endereco;
+            prev.cliente.enderecoInput = endereco;
             return prev;
         });
     }
 
     function setProfilePic(path: string) {
         setClient((prev) => {
-            if (!prev) prev = {} as ClienteInput;
-            prev.imagem = path;
-            console.log(prev);
+            if (!prev) prev = {} as ClienteCadastroInput;
+            prev.cliente.imagem = path;
             return prev;
         });
     }
@@ -109,7 +109,6 @@ function RegisterClientProvider({ children }: any) {
         setLoading(true);
         return new Promise<void>((resolve, reject) => {
             if (client) {
-                console.log(client)
                 createClient(client)
                     .then(() => {
                         resolve();
@@ -124,26 +123,28 @@ function RegisterClientProvider({ children }: any) {
 
     function clearClient(): void {
         setClient({
-            id: 0,
-            email: '',
             usuario: {
                 login: '',
                 senha: '',
                 role: UsuarioRole.CLIENTE
             },
-            telefone: '',
-            nome: '',
-            cpfCnpj: '',
-            enderecoInput: {
+            cliente: {
                 id: 0,
-                cep: '',
-                estado: '',
-                cidade: '',
-                bairro: '',
-                logradouro: '',
-                numero: ''
-            },
-            imagem: ''
+                email: '',
+                telefone: '',
+                nome: '',
+                cpfCnpj: '',
+                enderecoInput: {
+                    id: 0,
+                    cep: '',
+                    estado: '',
+                    cidade: '',
+                    bairro: '',
+                    logradouro: '',
+                    numero: ''
+                },
+                imagem: ''
+            }
         });
         endRegister();
     }

@@ -9,7 +9,7 @@ import { greyDefault, redDefault } from '../../../../../shared/styleConsts';
 export default function RegisterProfessional_Description({ navigation }: any) {
   const { profissional, setDescription } = useRegisterProfessional();
 
-  const [desc, setDesc] = useState<string>(profissional ? profissional.descricao : '');
+  const [desc, setDesc] = useState<string>(profissional ? profissional.provedor.perfilProvedorInput.descricao : '');
   const [incorrectInformations, setIncorrectInformations] = useState<boolean>(false);
   const handleButtonNext = () => {
     setDescription(desc);

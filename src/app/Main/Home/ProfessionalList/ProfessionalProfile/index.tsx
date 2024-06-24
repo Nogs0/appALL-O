@@ -12,8 +12,9 @@ import WhatsappButton from '../../../../../components/WhatsappButton';
 import { FeedbackServicoInput, PerfilProvedorOutput, ServicoOutput, useAPI } from '../../../../../contexts/api';
 import { useAuth } from '../../../../../contexts/auth';
 import { fixPhone } from '../../../../../shared/helpers';
-import { blackDefault, blueDefault, greyLoadingDefault2, orangeDefault, whiteDefault } from '../../../../../shared/styleConsts';
+import { backgroundDialogDefault, blackDefault, blueDefault, greyLoadingDefault2, orangeDefault, whiteDefault } from '../../../../../shared/styleConsts';
 import style from './style';
+import { useNavigation } from '@react-navigation/native';
 
 export default function ProfessionalProfile(props: any) {
 
@@ -24,9 +25,11 @@ export default function ProfessionalProfile(props: any) {
     const [imagem, setImagem] = useState<any>();
     const [showDialogWhatsApp, setShowDialogWhatsApp] = useState<boolean>(false);
 
+    const navigation = useNavigation();
+
     const openWhatsapp = () => {
         let wppNumber = professional?.provedor.telefone.replace(fixPhone, "55$1$2$3");
-        Linking.openURL('http://wa.me/' + wppNumber + `?text=ALL-O! ${professional?.nome}, tudo bem? Sou o(a) ${user?.name}, gostaria de solicitar um serviço!`)
+        Linking.openURL('http://wa.me/' + wppNumber + `?text=ALL-O! ${professional?.provedor.razaoSocial}, tudo bem? Sou o(a) ${user?.name}, gostaria de solicitar um serviço!`)
     }
     const handlePressOk = () => {
         if (professional) {
@@ -44,7 +47,6 @@ export default function ProfessionalProfile(props: any) {
         }
     }
 
-    const [servicoAtual, setServicoAtual] = useState<number>(0);
     const [servicosNaoVistos, setServicosNaoVistos] = useState<ServicoOutput[]>([]);
 
     const getProfessional = (id: number) => {
@@ -80,7 +82,6 @@ export default function ProfessionalProfile(props: any) {
                 setImagem(result);
             })
             .catch((e) => {
-                console.log(e)
                 showMessage({
                     message: 'Falha ao carregar imagem',
                     type: 'danger'
@@ -119,18 +120,38 @@ export default function ProfessionalProfile(props: any) {
     }
 
     useEffect(() => {
-        getProfessional(isProfessional ? user?.id : params?.id);
+        navigation.addListener('focus', () => {
+            getProfessional(isProfessional ? user?.id : params?.id);
+        })
     }, [])
 
     const renderItem = (item: ServicoOutput) => {
         return (
             <CustomDialog
+                visible={true}
                 isProfessional
                 cancel={() => handlePress(item.id, false)}
                 ok={() => handlePress(item.id, true)}
                 title='NOTIFICAÇÃO DE SERVIÇO'
-                text={`ALL-O! ${professional?.nome}, você prestou algum serviço para o(a) cliente ${item.cliente.nome}?`}
+                text={`ALL-O! ${professional?.provedor.razaoSocial}, você prestou algum serviço para o(a) cliente ${item.cliente.nome}?`}
             />
+        )
+    }
+
+    const dataTeste = [
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {}
+    ]
+    const renderItemImage = (item: any) => {
+        return (
+            <Image style={{ width: 125, height: 125, flexGrow: 1 }} source={require('../../../../../assets/images/default-profile-pic.png')}></Image>
         )
     }
 
@@ -138,11 +159,19 @@ export default function ProfessionalProfile(props: any) {
         <SafeAreaView style={[style.container, { backgroundColor: isProfessional ? blueDefault : orangeDefault }]}>
             {professional ? (
                 <>
+
+                    <CustomDialog
+                        visible={showDialogWhatsApp}
+                        cancel={() => setShowDialogWhatsApp(false)}
+                        ok={() => handlePressOk()}
+                        title='REQUISIÇÃO DE SERVIÇO'
+                        text='ALL-O! Ao iniciar a conversa no WhatsApp registraremos a intenção de servico, tudo bem?' />
+
                     {servicosNaoVistos.length > 0 ?
                         <View style={{
                             height: '100%',
                             width: '100%',
-                            backgroundColor: greyLoadingDefault2,
+                            backgroundColor: backgroundDialogDefault,
                             position: 'absolute',
                             zIndex: 1,
                             alignItems: 'center',
@@ -165,68 +194,49 @@ export default function ProfessionalProfile(props: any) {
                         <></>
                     }
 
-                    {
-                        showDialogWhatsApp ?
-                            <View style={{
-                                height: '100%',
-                                width: '100%',
-                                backgroundColor: greyLoadingDefault2,
-                                position: 'absolute',
-                                zIndex: 1,
-                                alignItems: 'center',
-                                justifyContent: 'center'
-                            }}>
-                                <CustomDialog
-                                    cancel={() => setShowDialogWhatsApp(false)}
-                                    ok={() => handlePressOk()}
-                                    title='REQUISIÇÃO DE SERVIÇO'
-                                    text='ALL-O! Ao iniciar a conversa no WhatsApp registraremos a intenção de servico, tudo bem?' />
-                            </View>
-                            :
-                            <></>
-                    }
-
                     <HeaderProfessional title={isProfessional ? 'SEU PERFIL' : params.profissao.replace(/^\w/, (c: string) => c.toUpperCase())}
-                        navigation={props.navigation}
+                        navigation={navigation}
                         signOut={handleSignOut}
                         isProfessional={isProfessional}
                         defaultColor={isProfessional ? blueDefault : orangeDefault}
                         professionalId={professional.provedor.id} />
                     <View style={style.contentContainer} >
+                        <Text style={[style.nameProfessional, { color: isProfessional ? blueDefault : orangeDefault }]}>{professional.provedor.razaoSocial}</Text>
 
-                        <ScrollView >
-                            <Text style={[style.nameProfessional, { color: isProfessional ? blueDefault : orangeDefault }]}>{professional.nome}</Text>
+                        <View style={style.firstSection}>
+                            <StarsRating id={professional.id} rate={professional.mediaAvaliacao} numberRate={professional.totalAvaliacoes} navigation={navigation} defaultColor={isProfessional ? blueDefault : orangeDefault} nomeProfissional={professional.provedor.razaoSocial} avaliacaoFavorita={professional.avaliacao?.id} />
+                            {imagem ?
+                                <Image style={style.image} source={{ uri: imagem }}></Image>
+                                :
+                                <Image style={style.image} source={require('../../../../../assets/images/default-profile-pic.png')}></Image>
+                            }
+                        </View>
 
-                            <View style={style.firstSection}>
-                                <StarsRating id={professional.id} rate={professional.mediaAvaliacao} numberRate={professional.quantidadeAvaliacoes} navigation={props.navigation} defaultColor={isProfessional ? blueDefault : orangeDefault} />
-                                {imagem ?
-                                    <Image style={style.image} source={{ uri: imagem }}></Image>
-                                    :
-                                    <Image style={style.image} source={require('../../../../../assets/images/default-profile-pic.png')}></Image>
-                                }
-                            </View>
+                        <View style={style.secondSection}>
 
-                            <View style={style.secondSection}>
+                            <ProfessionalDescription description={professional.descricao} defaultColor={isProfessional ? blueDefault : orangeDefault} />
+                        </View>
+                        <View style={style.thirdSection}>
+                            <HighlightRate avaliacao={professional.avaliacao} defaultColor={isProfessional ? blueDefault : orangeDefault} />
+                        </View>
 
-                                <ProfessionalDescription description={professional.descricao} defaultColor={isProfessional ? blueDefault : orangeDefault} />
-                            </View>
-                            <View style={style.thirdSection}>
-                                <HighlightRate avaliacao={professional.avaliacao} defaultColor={isProfessional ? blueDefault : orangeDefault} />
+                        <View style={style.fourthSection}>
+                            <InfoCards servicosConcluidos={professional.servicosConcluidos} mediaAvaliacao={professional.mediaAvaliacao} tempoCadastro={professional.tempoCadastro} defaultColor={isProfessional ? blueDefault : orangeDefault} />
+                        </View>
 
-                            </View>
-
-                            <View style={style.fourthSection}>
-                                <InfoCards servicosConcluidos={professional.servicosConcluidos} mediaAvaliacao={professional.mediaAvaliacao} tempoCadastro={professional.mediaAvaliacao} defaultColor={isProfessional ? blueDefault : orangeDefault} />
-                            </View>
-
-                        </ScrollView>
+                        <FlatList
+                            style={style.fifthSection}
+                            data={dataTeste}
+                            keyExtractor={(item, index) => index.toString()}
+                            renderItem={({ item }) => renderItemImage(item)}
+                            numColumns={3}
+                        />
                         {
                             isProfessional ? <>
                             </> :
                                 <View style={{
                                     width: "100%",
                                     justifyContent: "flex-end",
-                                    backgroundColor: '#00000000',
 
                                 }}>
                                     <WhatsappButton style={style.WhatsappContainer} telefone={professional.provedor.telefone} onPress={() => setShowDialogWhatsApp(true)} ></WhatsappButton>

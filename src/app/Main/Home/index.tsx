@@ -9,14 +9,13 @@ import OtherProfessions from '../../../components/OtherProfessions';
 import SearchForAProfession from '../../../components/SearchForAProfessional';
 import { ProfissaoOutput, ServicoOutput, useAPI } from '../../../contexts/api';
 import { useAuth } from '../../../contexts/auth';
-import { greyLoadingDefault2, whiteDefault } from '../../../shared/styleConsts';
-
+import { backgroundDialogDefault, greyLoadingDefault2, whiteDefault } from '../../../shared/styleConsts';
 
 export default function Home({ navigation }: any) {
 
   const { getProfessionsBySearch, getServicosParaAvaliarCliente, createAvaliacao } = useAPI();
 
-  const { user } = useAuth();
+  const { user, isProfessional } = useAuth();
 
   const [search, setSearch] = useState<string>('');
   const [profissoes, setProfissoes] = useState<ProfissaoOutput[]>([]);
@@ -27,7 +26,7 @@ export default function Home({ navigation }: any) {
   const [descricao, setDescricao] = useState<string>('')
 
   useEffect(() => {
-    if (user)
+    if (user && !isProfessional)
       getServicosParaAvaliarCliente(user?.id)
         .then((result) => {
           setServicosParaAvaliar(result)
@@ -38,7 +37,6 @@ export default function Home({ navigation }: any) {
             type: 'danger'
           })
         })
-
   }, [])
 
   const handleSearch = (value: string) => {
@@ -116,7 +114,7 @@ export default function Home({ navigation }: any) {
         <View style={{
           height: '100%',
           width: '100%',
-          backgroundColor: greyLoadingDefault2,
+          backgroundColor: backgroundDialogDefault,
           position: 'absolute',
           zIndex: 1,
           alignItems: 'center',
@@ -154,8 +152,8 @@ export default function Home({ navigation }: any) {
         <>
           <ScrollView style={{ flex: 0.8 }}>
             <MostAccessed />
-            <Highlights />
-            <OtherProfessions navigation={navigation.navigation} />
+            <Highlights navigation={navigation} />
+            <OtherProfessions navigation={navigation} />
           </ScrollView>
         </>
       }

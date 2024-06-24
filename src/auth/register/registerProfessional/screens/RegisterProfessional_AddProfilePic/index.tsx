@@ -14,14 +14,14 @@ import style from './style';
 
 export default function RegisterProfessional_AddProfilePic({ navigation }: any) {
 
-  const { updateImageProfessional } = useAPI();
+  const { createImageProfessional } = useAPI();
   const { endingRegister, loading, setProfilePic } = useRegisterProfessional();
   const [imageTela, setImageTela] = useState<Asset>();
   const [loadingImage, setLoadingImage] = useState<boolean>(false);
 
   const handleButtonEnd = () => {
     if (imageTela?.uri && imageTela?.fileName) {
-      updateImageProfessional(imageTela.uri, imageTela.fileName)
+      createImageProfessional(imageTela.uri, imageTela.fileName)
         .then((result) => {
           setProfilePic(result);  
           navigation.navigate('RegisterProfessional_Images');

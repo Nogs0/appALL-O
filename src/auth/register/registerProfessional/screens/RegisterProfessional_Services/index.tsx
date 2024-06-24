@@ -14,11 +14,11 @@ import { ProfissaoOutput, useAPI } from '../../../../../contexts/api';
 export default function RegisterProfessional_Services(props: any) {
 
   const { getProfessions } = useAPI();
-  const { profissional,  setServices } = useRegisterProfessional();
+  const { profissional, setProfissao } = useRegisterProfessional();
 
   const [servico, setServico] = useState<string>('');
   const [searchingServico, setSearchingServico] = useState<boolean>(false);
-  const [listServicos, setListServicos] = useState<number[]>(profissional ? profissional.idProfissoes : []);
+  const [idProfissao, setIdProfissao] = useState<number>(profissional ? profissional.provedor.idProfissao : 0);
   const [incorrectInformations, setIncorrectInformations] = useState<boolean>(false);
 
   const [servicosBase, setServicosBase] = useState<ProfissaoOutput[]>([]);
@@ -26,7 +26,7 @@ export default function RegisterProfessional_Services(props: any) {
   const [tempServicosBase, setTempServicosBase] = useState<any[]>(servicosBase)
 
   const handleButtonNext = () => {
-    setServices(listServicos);
+    setProfissao(idProfissao);
     if (canGoToTheNextPage())
       props.navigation.navigate('RegisterProfessional_Description');
     else setIncorrectInformations(true)
@@ -34,28 +34,19 @@ export default function RegisterProfessional_Services(props: any) {
 
   const canGoToTheNextPage = (): boolean => {
     return (
-      listServicos.length > 0
+      idProfissao != null && idProfissao != 0
     )
   }
 
-  const addItem = (name: string) => {
+  const setItem = (name: string) => {
     setSearchingServico(false);
     setTempServicosBase(servicosBase);
 
-    let servicoToAdd = servicosBase.find(x => x.nome.toLowerCase() == name.trim().toLowerCase())
-    if (servicoToAdd) {
-      let index = listServicos.findIndex(x => x == servicoToAdd.id)
-      if (index == -1) {
-        setIncorrectInformations(false)
-        setListServicos((prev) => {
-          prev.push(servicoToAdd.id);
-          return [...prev];
-        })
-        setServico('');
-      } else showMessage({
-        message: 'Serviço já adicionado à lista!',
-        type: 'danger'
-      })
+    let servicoToSet = servicosBase.find(x => x.nome.toLowerCase() == name.trim().toLowerCase())
+    if (servicoToSet) {
+      setIdProfissao(servicoToSet.id)
+      setServico('');
+      setIncorrectInformations(false)
     }
   }
 
@@ -81,42 +72,14 @@ export default function RegisterProfessional_Services(props: any) {
       })
   }, [props])
 
-  const renderItem = (id: number) => {
-
-    let serv = servicosBase.find(x => x.id == id);
-    return (
-      <View style={
-        {
-          padding: 10,
-          borderColor: greyDefault,
-          borderBottomWidth: 1,
-          flexDirection: 'row',
-          justifyContent: 'space-between'
-        }}>
-        <Text style={{ color: blackDefault }}>{serv?.nome}</Text>
-        <TouchableOpacity
-          onPress={() => {
-            let index = listServicos.findIndex(x => x == id);
-            if (index != -1)
-              setListServicos((prev) => {
-                prev.splice(index, 1);
-                return [...prev];
-              });
-          }}>
-          <Icon name={'trash-can'} size={20} color={blackDefault}></Icon>
-        </TouchableOpacity>
-      </View>
-    )
-  }
-
   return (
     <SafeAreaView style={styleRegister.defaultContainer}>
       <HeaderRegisterProfessional navigation={props.navigation} />
       <View style={styleRegister.defaultContentContainer}>
-        <Text style={styleRegister.title}>Quais serviços você faz?</Text>
+        <Text style={styleRegister.title}>Qual sua profissão?</Text>
         <View style={style.addProfessionContainer}>
           <Input
-            placeholder={'Serviço'}
+            placeholder={'Personal trainer...'}
             text={servico}
             onChangeText={(value) => searchForServico(value)} />
           {
@@ -140,7 +103,7 @@ export default function RegisterProfessional_Services(props: any) {
                   renderItem={({ item }) =>
                     <TouchableOpacity
                       onPress={() => {
-                        addItem(item.nome);
+                        setItem(item.nome);
                       }}
                       style={{ borderBottomWidth: 1, borderBottomColor: greyDefault }}>
                       <Text style={{ color: blackDefault, fontSize: 24 }}>{item.nome}</Text>
@@ -152,15 +115,28 @@ export default function RegisterProfessional_Services(props: any) {
               <></>
           }
         </View>
-
-        <FlatList
-          style={{ width: '100%' }}
-          data={listServicos}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item }) => renderItem(item)} />
+        {
+          idProfissao != 0 ?
+            <View style={
+              {
+                width: '100%',
+                padding: 10,
+                flexDirection: 'row',
+                justifyContent: 'space-between'
+              }}>
+              <Text style={{ color: blackDefault, fontFamily: 'Rubik-SemiBold', fontSize: 20 }}>{servicosBase.find(x => x.id == idProfissao)?.nome}</Text>
+              <TouchableOpacity
+                onPress={() => {
+                  setIdProfissao(0)
+                }}>
+                <Icon name={'trash-can'} size={20} color={blackDefault}></Icon>
+              </TouchableOpacity>
+            </View> :
+            <></>
+        }
         {
           incorrectInformations ?
-            <Text style={{ color: redDefault, width: '100%', textAlign: 'left' }}>*Por favor, selecione ao menos um serviço!</Text>
+            <Text style={{ color: redDefault, width: '100%', textAlign: 'left' }}>*Por favor, selecione uma profisão!</Text>
             : <></>
         }
         <TouchableOpacity style={styleRegister.buttonNext}

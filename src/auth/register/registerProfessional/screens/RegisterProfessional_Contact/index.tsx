@@ -10,7 +10,7 @@ import { showMessage } from 'react-native-flash-message';
 export default function RegisterProfessional_Contact({ navigation }: any) {
 
   const { profissional, setContacts } = useRegisterProfessional();
-  const [telefone, setTelefone] = useState<string>(!!profissional ? profissional.telefone : '');
+  const [telefone, setTelefone] = useState<string>(!!profissional ? profissional.provedor.telefone : '');
 
   const handleButtonNext = () => {
     setContacts(telefone);

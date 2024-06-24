@@ -11,6 +11,7 @@ import { useAuth } from '../../../contexts/auth';
 import getAddress from '../../../services/cep';
 import { blackDefault, orangeDefault, whiteDefault } from '../../../shared/styleConsts';
 import style from './style';
+import { maskPhone } from '../../../shared/helpers';
 
 export default function ClientProfile(props: any) {
 
@@ -18,10 +19,9 @@ export default function ClientProfile(props: any) {
     const { signOut, user } = useAuth();
     const [params, setParams] = useState<any>(props);
     const [cliente, setCliente] = useState<PefilClienteOutput>();
-    const [nome, setNome] = useState<string>(cliente ? cliente.nome : '');
-    const [email, setEmail] = useState<string>(cliente ? cliente.email : '');
-    const [telefone, setTelefone] = useState<string>(cliente ? cliente.telefone : '');
-    const [cpfCnpj, setCpfCnpj] = useState<string>(cliente ? cliente.cliente.cpf : '');
+    const [nome, setNome] = useState<string>(cliente ? cliente.cliente.nome : '');
+    const [email, setEmail] = useState<string>(cliente ? cliente.cliente.email : '');
+    const [telefone, setTelefone] = useState<string>(cliente ? cliente.cliente.telefone : '');
     const [imagemId, setImagemId] = useState<string>(cliente ? cliente.imagemPerfil : '');
     const [imagem, setImagem] = useState<any>();
 
@@ -43,8 +43,7 @@ export default function ClientProfile(props: any) {
         getPerfilCliente(id)
             .then((resolve) => {
                 setCliente(resolve);
-                console.log(resolve);
-                if (resolve.imagemPerfil.length > 0)
+                if (resolve.imagemPerfil)
                     getImage(resolve.imagemPerfil);
             })
             .catch((e) => {
@@ -61,7 +60,6 @@ export default function ClientProfile(props: any) {
                 setImagem(result);
             })
             .catch((e) => {
-                console.log(e)
                 showMessage({
                     message: 'Falha ao carregar imagem',
                     type: 'danger'
@@ -69,18 +67,23 @@ export default function ClientProfile(props: any) {
             })
     }
 
-    const searchCEP = () => {
-        setLoadingCEP(true);
-        getAddress(cep).then((result) => {
-            setCidade(result.localidade);
-            setEstado(result.uf);
-            setBairro(result.bairro);
-            setLogradouro(result.logradouro);
-        }).catch(() => showMessage({
-            message: 'CEP inválido!',
-            type: 'danger'
-        }))
-            .finally(() => setLoadingCEP(false));
+    const searchCEP = (value: string) => {
+        setCep(value)
+
+        if (value.length == 10) {
+
+            setLoadingCEP(true);
+            getAddress(value).then((result) => {
+                setCidade(result.localidade);
+                setEstado(result.uf);
+                setBairro(result.bairro);
+                setLogradouro(result.logradouro);
+            }).catch(() => showMessage({
+                message: 'CEP inválido!',
+                type: 'danger'
+            }))
+                .finally(() => setLoadingCEP(false));
+        }
     }
 
     const changeImage = () => {
@@ -89,16 +92,14 @@ export default function ClientProfile(props: any) {
                 setLoadingImage(true);
                 updateImageClient(response.assets[0].uri, response.assets[0].fileName)
                     .then((newImage) => {
-                        console.log(newImage);
                         setImagemId(newImage);
-                        handleupdate();
                         getImage(newImage);
                         showMessage({
                             message: 'Imagem de perfil alterada',
                             type: 'success'
                         })
+                        handleupdate(newImage);
                     }).catch((e) => {
-                        console.log(e)
                         showMessage({
                             message: 'Falha ao atualizar imagem de perfil',
                             type: 'danger'
@@ -109,7 +110,7 @@ export default function ClientProfile(props: any) {
         })
     }
 
-    const handleupdate = () => {
+    const handleupdate = (newImage?: string) => {
         if (cliente) {
             setLoadingUpdate(true)
             updateClient({
@@ -117,8 +118,8 @@ export default function ClientProfile(props: any) {
                 nome,
                 email,
                 telefone,
-                imagem: imagemId,
-                cpfCnpj,
+                imagem: newImage ? newImage : imagemId,
+                cpfCnpj: cliente.cliente.cpf,
                 enderecoInput: {
                     id: cliente.cliente.endereco.id,
                     cep,
@@ -153,16 +154,16 @@ export default function ClientProfile(props: any) {
 
     useEffect(() => {
         if (cliente && cliente.cliente.endereco) {
-            setNome(cliente.nome);
-            setEmail(cliente.email);
+            setNome(cliente.cliente.nome);
+            setEmail(cliente.cliente.email);
             setTelefone(cliente.cliente.telefone);
-            setCpfCnpj(cliente.cliente.cpf);
             setCep(cliente.cliente.endereco.cep);
             setEstado(cliente.cliente.endereco.estado);
             setCidade(cliente.cliente.endereco.cidade);
             setBairro(cliente.cliente.endereco.bairro);
             setLogradouro(cliente.cliente.endereco.logradouro);
             setNumero(cliente.cliente.endereco.numero);
+            setImagemId(cliente.imagemPerfil);
         }
     }, [cliente])
 
@@ -178,7 +179,7 @@ export default function ClientProfile(props: any) {
                         :
                         <></>
                     }
-                    <HeaderClient title={cliente?.nome}
+                    <HeaderClient title={cliente?.cliente.nome}
                         navigation={props.navigation}
                         id={cliente?.id}
                         hasButton={false} />
@@ -237,8 +238,7 @@ export default function ClientProfile(props: any) {
                                     <View style={style.inputsContainer}>
                                         <Input editable={!loadingUpdate} text={nome} onChangeText={setNome} placeholder='Nome' />
                                         <Input editable={!loadingUpdate} text={email} onChangeText={setEmail} placeholder='Email' />
-                                        <Input editable={!loadingUpdate} text={telefone} onChangeText={setTelefone} placeholder='Email' />
-                                        <Input editable={!loadingUpdate} text={cpfCnpj} onChangeText={setCpfCnpj} placeholder='CPF' />
+                                        <Input isMask mask={maskPhone} editable={!loadingUpdate} text={telefone} onChangeText={setTelefone} placeholder='Email' />
                                     </View>
                                 </ScrollView>
                             </KeyboardAvoidingView>
@@ -252,7 +252,7 @@ export default function ClientProfile(props: any) {
                                         : <></>
                                 }
                                 <ScrollView>
-                                    <InputCEP isClient={true} searchCEP={searchCEP} cep={cep} onChangeText={setCep} />
+                                    <InputCEP isClient={true} cep={cep} onChangeText={searchCEP} />
                                     <Input editable={!loadingCEP && !loadingUpdate} placeholder='Estado' text={estado} onChangeText={setEstado} />
                                     <Input editable={!loadingCEP && !loadingUpdate} placeholder='Cidade' text={cidade} onChangeText={setCidade} />
                                     <Input editable={!loadingCEP && !loadingUpdate} placeholder='Bairro' text={bairro} onChangeText={setBairro} />

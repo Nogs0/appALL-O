@@ -17,8 +17,8 @@ export default function ProfessionalEdit(props: any) {
     const [params] = useState<any>(props.route.params);
     const [professional, setProfessional] = useState<PerfilProvedorOutput>();
 
-    const [razaoSocial, setRazaoSocial] = useState<string>(professional ? professional.nome : '');
-    const [email, setEmail] = useState<string>(professional ? professional.email : '');
+    const [razaoSocial, setRazaoSocial] = useState<string>(professional ? professional.provedor.razaoSocial : '');
+    const [email, setEmail] = useState<string>(professional ? professional.provedor.email : '');
     const [telefone, setTelefone] = useState<string>(professional ? professional.provedor.telefone : '');
     const [imagem, setImagem] = useState<any>();
     const [descricao, setDescricao] = useState<string>(professional ? professional.descricao : '');
@@ -38,15 +38,23 @@ export default function ProfessionalEdit(props: any) {
 
     const [tab, setTab] = useState<number>(0);
 
-    const searchCEP = () => {
-        setLoadingCEP(true);
-        getAddress(cep).then((result) => {
-            setCidade(result.localidade);
-            setEstado(result.uf);
-            setBairro(result.bairro);
-            setLogradouro(result.logradouro);
-        }).catch(() => Alert.alert("Erro", "CEP Inválido!"))
-            .finally(() => setLoadingCEP(false));
+    const searchCEP = (value: string) => {
+        setCep(value)
+
+        if (value.length == 10) {
+
+            setLoadingCEP(true);
+            getAddress(value).then((result) => {
+                setCidade(result.localidade);
+                setEstado(result.uf);
+                setBairro(result.bairro);
+                setLogradouro(result.logradouro);
+            }).catch(() => showMessage({
+                message: 'CEP inválido!',
+                type: 'danger'
+            }))
+                .finally(() => setLoadingCEP(false));
+        }
     }
 
     const changeImage = () => {
@@ -55,7 +63,6 @@ export default function ProfessionalEdit(props: any) {
                 setLoadingImage(true);
                 updateImageProfessional(response.assets[0].uri, response.assets[0].fileName)
                     .then((newImage) => {
-                        console.log(newImage);
                         setImagemId(newImage);
                         handleupdate();
                         getImage(newImage);
@@ -64,7 +71,6 @@ export default function ProfessionalEdit(props: any) {
                             type: 'success'
                         })
                     }).catch((e) => {
-                        console.log(e)
                         showMessage({
                             message: 'Falha ao atualizar imagem de perfil',
                             type: 'danger'
@@ -81,7 +87,6 @@ export default function ProfessionalEdit(props: any) {
                 setImagem(result);
             })
             .catch((e) => {
-                console.log(e)
                 showMessage({
                     message: 'Falha ao carregar imagem',
                     type: 'danger'
@@ -98,7 +103,6 @@ export default function ProfessionalEdit(props: any) {
             cpfCnpj: professional?.provedor.cpfCnpj,
             perfilProvedorInput: {
                 idProvedor: professional?.id,
-                idAvaliacao: professional?.avaliacao.id,
                 descricao,
                 perfilImage: imagemId,
             },
@@ -113,7 +117,7 @@ export default function ProfessionalEdit(props: any) {
                 logradouro,
                 numero
             },
-            idProfissoes: [1],
+            idProfissao: professional?.provedor.profissao.id,
             servicoImagens,
         } as ProvedorInput)
             .then(() => {
@@ -141,7 +145,6 @@ export default function ProfessionalEdit(props: any) {
     }
 
     const addImage = () => {
-        console.log(servicoImagens)
         launchImageLibrary({ mediaType: 'photo' }, (response) => {
             if (response.assets && response.assets.length > 0)
                 setServicoImagens((prev) => {
@@ -166,7 +169,6 @@ export default function ProfessionalEdit(props: any) {
         getPerfilProfissional(id)
             .then((result) => {
                 setProfessional(result);
-                console.log(result)
                 if (result.imagemPerfil)
                     getImage(result.imagemPerfil);
             })
@@ -184,8 +186,8 @@ export default function ProfessionalEdit(props: any) {
 
     useEffect(() => {
         if (professional) {
-            setRazaoSocial(professional.nome);
-            setEmail(professional.email);
+            setRazaoSocial(professional.provedor.razaoSocial);
+            setEmail(professional.provedor.email);
             setTelefone(professional.provedor.telefone);
             setDescricao(professional.descricao);
             setCep(professional.provedor.endereco.cep);
@@ -194,6 +196,7 @@ export default function ProfessionalEdit(props: any) {
             setBairro(professional.provedor.endereco.bairro);
             setLogradouro(professional.provedor.endereco.logradouro);
             setNumero(professional.provedor.endereco.numero);
+            setImagemId(professional.imagemPerfil);
         }
     }, [professional])
 
@@ -208,7 +211,7 @@ export default function ProfessionalEdit(props: any) {
                         :
                         <></>
                     }
-                    <HeaderProfessional title={professional?.nome}
+                    <HeaderProfessional title={professional?.provedor.razaoSocial}
                         navigation={props.navigation}
                         defaultColor={blueDefault} />
                     <View style={style.contentContainer}>
@@ -272,6 +275,7 @@ export default function ProfessionalEdit(props: any) {
                                     <View style={style.inputsContainer}>
                                         <Input editable={!loadingUpdate} text={razaoSocial} onChangeText={setRazaoSocial} placeholder='Nome' />
                                         <Input editable={!loadingUpdate} text={email} onChangeText={setEmail} placeholder='Email' />
+                                        <Input editable={!loadingUpdate} text={telefone} onChangeText={setTelefone} placeholder='Telefone' />
                                         <TextInput placeholder={'Sou um profissional pontual e que gosta de que tudo esteja bem feito!'}
                                             style={style.textArea}
                                             value={descricao}
@@ -293,7 +297,7 @@ export default function ProfessionalEdit(props: any) {
                                         : <></>
                                 }
                                 <ScrollView>
-                                    <InputCEP searchCEP={searchCEP} cep={cep} onChangeText={setCep} />
+                                    <InputCEP cep={cep} onChangeText={searchCEP} />
                                     <Input editable={!loadingCEP && !loadingUpdate} placeholder='Estado' text={estado} onChangeText={setEstado} />
                                     <Input editable={!loadingCEP && !loadingUpdate} placeholder='Cidade' text={cidade} onChangeText={setCidade} />
                                     <Input editable={!loadingCEP && !loadingUpdate} placeholder='Bairro' text={bairro} onChangeText={setBairro} />

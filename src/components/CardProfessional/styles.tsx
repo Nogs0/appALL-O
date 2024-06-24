@@ -30,6 +30,7 @@ export default StyleSheet.create({
         flex: 0.7,
         alignItems: 'flex-start',
         marginLeft: 20,
+        justifyContent: 'space-between'
     },
     nameProfessional: {
         fontFamily: 'Rubik-Bold',

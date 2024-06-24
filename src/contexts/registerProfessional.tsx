@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import { useAuth } from "./auth";
-import { Endereco, ProvedorInput, useAPI } from "./api";
+import { Endereco, ProvedorCadastroInput, useAPI } from "./api";
 import { TipoPessoaEnum, UsuarioRole } from "../shared/Enums/enums";
 import md5 from 'md5';
 
@@ -12,11 +12,11 @@ interface InitialInformationsProfessional {
 }
 
 interface RegisterProfessionalContextData {
-    profissional: ProvedorInput | null,
+    profissional: ProvedorCadastroInput | null,
     loading: boolean,
     setInitialInformations(params: InitialInformationsProfessional): void,
     setDescription(description: string): void,
-    setServices(services: number[]): void,
+    setProfissao(profissaoId: number): void,
     setEndereco(endereco: Endereco): void,
     setContacts(phoneNumber: string): void,
     setImages(images: any): void,
@@ -32,47 +32,48 @@ function RegisterProfessionalProvider({ children }: any) {
     const { endRegister } = useAuth();
     const { createProvider } = useAPI();
 
-    const [profissional, setProfissional] = useState<ProvedorInput | null>({
-        id: 0,
+    const [profissional, setProfissional] = useState<ProvedorCadastroInput | null>({
         usuario: {
             login: '',
             senha: '',
             role: UsuarioRole.PROVEDOR
         },
-        razaoSocial: '',
-        cpfCnpj: '',
-        email: '',
-        idProfissoes: [],
-        perfilProvedorInput: {
-            idProvedor: 0,
-            idAvaliacao: 0,
-            descricao: '',
-            perfilImage: ''
-        },
-        enderecoInput: {
+        provedor: {
+
             id: 0,
-            cep: '',
-            estado: '',
-            cidade: '',
-            bairro: '',
-            logradouro: '',
-            numero: ''
-        },
-        telefone: '',
-        tipoPessoa: TipoPessoaEnum.FISICA,
-        servicoImagens: [],
+            razaoSocial: '',
+            cpfCnpj: '',
+            email: '',
+            idProfissao: 0,
+            perfilProvedorInput: {
+                idProvedor: 0,
+                descricao: '',
+                perfilImage: ''
+            },
+            enderecoInput: {
+                id: 0,
+                cep: '',
+                estado: '',
+                cidade: '',
+                bairro: '',
+                logradouro: '',
+                numero: ''
+            },
+            telefone: '',
+            tipoPessoa: TipoPessoaEnum.FISICA,
+            servicoImagens: [],
+        }
     });
     const [loading, setLoading] = useState<boolean>(false);
 
     function setInitialInformations(params: InitialInformationsProfessional) {
         setProfissional((prev) => {
             if (!prev)
-                prev = {} as ProvedorInput;
+                prev = {} as ProvedorCadastroInput;
 
-            prev.razaoSocial = params.razaoSocial;
-            prev.cpfCnpj = params.cpfCnpj;
-            prev.email = params.email;
-            console.log(md5(params.senha));
+            prev.provedor.razaoSocial = params.razaoSocial;
+            prev.provedor.cpfCnpj = params.cpfCnpj;
+            prev.provedor.email = params.email;
             prev.usuario = {
                 login: params.email,
                 senha: params.senha,
@@ -85,18 +86,18 @@ function RegisterProfessionalProvider({ children }: any) {
     function setDescription(descricao: string) {
         setProfissional((prev) => {
             if (!prev)
-                prev = {} as ProvedorInput;
+                prev = {} as ProvedorCadastroInput;
 
-            prev.perfilProvedorInput.descricao = descricao;
+            prev.provedor.perfilProvedorInput.descricao = descricao;
             return prev;
         });
     }
 
-    function setServices(profissoes: number[]) {
+    function setProfissao(profissaoId: number) {
         setProfissional((prev) => {
             if (!prev)
-                prev = {} as ProvedorInput;
-            prev.idProfissoes = profissoes;
+                prev = {} as ProvedorCadastroInput;
+            prev.provedor.idProfissao = profissaoId;
             return prev;
         });
     }
@@ -104,9 +105,9 @@ function RegisterProfessionalProvider({ children }: any) {
     function setEndereco(endereco: Endereco) {
         setProfissional((prev) => {
             if (!prev)
-                prev = {} as ProvedorInput;
+                prev = {} as ProvedorCadastroInput;
 
-            prev.enderecoInput = endereco;
+            prev.provedor.enderecoInput = endereco;
             return prev;
         });
     }
@@ -114,9 +115,9 @@ function RegisterProfessionalProvider({ children }: any) {
     function setContacts(telefone: string) {
         setProfissional((prev) => {
             if (!prev)
-                prev = {} as ProvedorInput;
+                prev = {} as ProvedorCadastroInput;
 
-            prev.telefone = telefone;
+            prev.provedor.telefone = telefone;
             return prev;
         });
     }
@@ -124,17 +125,17 @@ function RegisterProfessionalProvider({ children }: any) {
     function setImages(images: any) {
         setProfissional((prev) => {
             if (!prev)
-                prev = {} as ProvedorInput;
+                prev = {} as ProvedorCadastroInput;
 
-            prev.servicoImagens = images;
+            prev.provedor.servicoImagens = images;
             return prev;
         });
     }
 
     function setProfilePic(path: string) {
         setProfissional((prev) => {
-            if (!prev) prev = {} as ProvedorInput;
-            prev.perfilProvedorInput.perfilImage = path;
+            if (!prev) prev = {} as ProvedorCadastroInput;
+            prev.provedor.perfilProvedorInput.perfilImage = path;
             return prev;
         });
     }
@@ -157,41 +158,43 @@ function RegisterProfessionalProvider({ children }: any) {
 
     function clearProfessional(): void {
         setProfissional({
-            id: 0,
             usuario: {
                 login: '',
                 senha: '',
                 role: UsuarioRole.PROVEDOR
             },
-            razaoSocial: '',
-            cpfCnpj: '',
-            email: '',
-            idProfissoes: [],
-            perfilProvedorInput: {
-                idProvedor: 0,
-                idAvaliacao: 0,
-                descricao: '',
-                perfilImage: ''
-            },
-            enderecoInput: {
+            provedor: {
+    
                 id: 0,
-                cep: '',
-                estado: '',
-                cidade: '',
-                bairro: '',
-                logradouro: '',
-                numero: ''
-            },
-            telefone: '',
-            tipoPessoa: TipoPessoaEnum.FISICA,
-            servicoImagens: [],
+                razaoSocial: '',
+                cpfCnpj: '',
+                email: '',
+                idProfissao: 0,
+                perfilProvedorInput: {
+                    idProvedor: 0,
+                    descricao: '',
+                    perfilImage: ''
+                },
+                enderecoInput: {
+                    id: 0,
+                    cep: '',
+                    estado: '',
+                    cidade: '',
+                    bairro: '',
+                    logradouro: '',
+                    numero: ''
+                },
+                telefone: '',
+                tipoPessoa: TipoPessoaEnum.FISICA,
+                servicoImagens: [],
+            }
         });
         endRegister();
     }
 
     return (
         <RegisterProfessionalContext.Provider
-            value={{ profissional, setInitialInformations, setDescription, setServices, setEndereco, setContacts, setImages, endingRegister, loading, clearProfessional, setProfilePic }}>
+            value={{ profissional, setInitialInformations, setDescription, setProfissao, setEndereco, setContacts, setImages, endingRegister, loading, clearProfessional, setProfilePic }}>
             {children}
         </RegisterProfessionalContext.Provider>
     )

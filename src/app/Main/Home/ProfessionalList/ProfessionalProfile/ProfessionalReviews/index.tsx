@@ -4,7 +4,7 @@ import { showMessage } from 'react-native-flash-message';
 import CardReview from '../../../../../../components/CardReview';
 import FilterReviews from '../../../../../../components/FilterReviews';
 import HeaderProfessional from '../../../../../../components/HeaderProfessional';
-import { useAPI } from '../../../../../../contexts/api';
+import { AvaliacaoOutput, ServicoOutput, useAPI } from '../../../../../../contexts/api';
 import { ButtonFilterEnumReviews } from '../../../../../../shared/Enums/enums';
 import { whiteDefault } from '../../../../../../shared/styleConsts';
 import style from './style';
@@ -16,8 +16,9 @@ export default function ProfessionalReviews(props: any) {
     const { updateFavoriteReview, getReviewsByProfessional } = useAPI();
 
     const [params, setParams] = useState<any>(props.route?.params);
-    const [reviews, setReviews] = useState<any>();
+    const [reviews, setReviews] = useState<ServicoOutput[]>();
     const [loading, setLoading] = useState<boolean>(false);
+    const [avaliacaoFavorita, setAvaliacaoFavorita] = useState<number>()
 
     const [buttonSelected, setButtonSelected] = useState<ButtonFilterEnumReviews>(ButtonFilterEnumReviews.date);
 
@@ -25,29 +26,27 @@ export default function ProfessionalReviews(props: any) {
         console.log(buttonSelected);
     }, [buttonSelected]);
 
-    const renderItem = (review: any) => {
+    const renderItem = (review: ServicoOutput) => {
         return (<CardReview
             id={review.id}
-            image={review.image}
-            client={review.client}
-            rate={review.rate}
-            rateNote={review.rateNote}
-            images={review.images}
-            date={review.date}
-            favorite={review.favorite}
+            client={review.cliente.nome}
+            rate={review.avaliacao?.nota}
+            rateNote={review.avaliacao?.descricao}
+            favorite={review.avaliacao?.id == avaliacaoFavorita}
             isProfessional={isProfessional}
-            setFavoriteCallback={() => handleUpdateFavoriteReview(review.id)} />)
+            setFavoriteCallback={() => handleUpdateFavoriteReview(review.avaliacao?.id)} />)
     }
 
     const handleUpdateFavoriteReview = (id: number) => {
         setLoading(true)
+        setAvaliacaoFavorita(id);
         updateFavoriteReview(id)
             .then((response) => {
                 showMessage({
                     message: 'Atualização favorita atualizada com sucesso!',
                     type: 'success'
                 })
-                getReviews(id);
+                getReviews(params.id);
             })
             .catch((e) => {
                 showMessage({
@@ -73,21 +72,23 @@ export default function ProfessionalReviews(props: any) {
     }
 
     useEffect(() => {
-        getReviews(params.id);
+        if (params.id){
+            setAvaliacaoFavorita(params.avaliacaoFavorita);
+            getReviews(params.id);
+        }
     }, [params])
 
     return (
         <SafeAreaView style={[style.container, { backgroundColor: params?.defaultColor }]}>
-            {!loading && reviews? (
+            {!loading && reviews ? (
                 <>
                     <HeaderProfessional title={'Reviews'} navigation={props?.navigation}
                         defaultColor={params?.defaultColor} />
                     <View style={style.contentContainer}>
-                        <Text style={[style.nameProfessional, { color: params?.defaultColor }]}>{reviews.professionalName}</Text>
-                        <FilterReviews onPress={(pressionado: any) => setButtonSelected(pressionado)} button={buttonSelected} defaultColor={params?.defaultColor} />
+                        <Text style={[style.nameProfessional, { color: params?.defaultColor }]}>{params.nomeProfissional}</Text>
                         <FlatList
                             style={style.listContainer}
-                            data={reviews.revs}
+                            data={reviews}
                             keyExtractor={(item, index) => index.toString()}
                             renderItem={({ item }) => renderItem(item)}
                         />

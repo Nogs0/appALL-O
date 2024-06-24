@@ -1,42 +1,100 @@
-import { View, Text, SafeAreaView } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { ActivityIndicator, SafeAreaView, View } from 'react-native'
 import CardProfession from '../CardProfession'
 import style from './style'
-import { useNavigation } from '@react-navigation/native'
+import { ProfissaoOutput, useAPI } from '../../contexts/api';
+import { showMessage } from 'react-native-flash-message';
+import { orangeDefault } from '../../shared/styleConsts';
 
 export default function OtherProfessions(props: any) {
 
-    const goToListProfession = (profession: string) => {
-        props.navigation.navigate("ProfessionalList", { profession })
+    const { getProfissoesAleatorias } = useAPI();
+    const [profissoes, setProfissoes] = useState<ProfissaoOutput[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+
+    useEffect(() => {
+        getProfissoesAleatorias()
+            .then((result) => {
+                setProfissoes(result)
+            })
+            .catch((e) => {
+                setProfissoes([
+                    {
+                        id: 34,
+                        nome: "Nutricionista",
+                        nomeIcone: "food-apple-outline"
+                    },
+                    {
+                        id: 35,
+                        nome: "Padeiro",
+                        nomeIcone: "bread-slice"
+                    },
+                    {
+                        id: 37,
+                        nome: "Personal Trainer",
+                        nomeIcone: "jump-rope"
+                    },
+                    {
+                        id: 41,
+                        nome: "Secretária",
+                        nomeIcone: "account-tie"
+                    },
+                    {
+                        id: 42,
+                        nome: "Social Media",
+                        nomeIcone: "instagram"
+                    },
+                    {
+                        id: 43,
+                        nome: "Soldador",
+                        nomeIcone: "fire"
+                    }
+                ])
+            }).finally(() => setLoading(false))
+    }, [])
+
+    const goToListProfession = (item: ProfissaoOutput) => {
+        props.navigation.navigate("ProfessionalList", { profissao: item.nome, id: item.id })
     }
 
     return (
-        <SafeAreaView style={style.container}>
-            <View style={style.row}>
-                <CardProfession profession={'Fotográfo'} onPress={() => goToListProfession('Encanador')} professionIcon={'camera'} professionId={1} />
-                <CardProfession profession={'Social Media'} onPress={() => goToListProfession('Encanador')} professionIcon={'instagram'} professionId={1} />
-                <CardProfession profession={'Professor'} onPress={() => goToListProfession('Encanador')} professionIcon={'script-text-outline'} professionId={1} />
-            </View>
-            <View style={style.row}>
-                <CardProfession profession={'Informática'} onPress={() => goToListProfession('Encanador')} professionIcon={'mouse'} professionId={1} />
-                <CardProfession profession={'Pintor'} onPress={() => goToListProfession('Encanador')} professionIcon={'format-paint'} professionId={1} />
-                <CardProfession profession={'Funileiro'} onPress={() => goToListProfession('Encanador')} professionIcon={'car-door'} professionId={1} />
-            </View>
-            <View style={style.row}>
-                <CardProfession profession={'Fotográfo'} onPress={() => goToListProfession('Encanador')} professionIcon={'camera'} professionId={1} />
-                <CardProfession profession={'Social Media'} onPress={() => goToListProfession('Encanador')} professionIcon={'instagram'} professionId={1} />
-                <CardProfession profession={'Professor'} onPress={() => goToListProfession('Encanador')} professionIcon={'script-text-outline'} professionId={1} />
-            </View>
-            <View style={style.row}>
-                <CardProfession profession={'Fotográfo'} onPress={() => goToListProfession('Encanador')} professionIcon={'camera'} professionId={1} />
-                <CardProfession profession={'Social Media'} onPress={() => goToListProfession('Encanador')} professionIcon={'instagram'} professionId={1} />
-                <CardProfession profession={'Professor'} onPress={() => goToListProfession('Encanador')} professionIcon={'script-text-outline'} professionId={1} />
-            </View>
-            <View style={style.row}>
-                <CardProfession profession={'Fotográfo'} onPress={() => goToListProfession('Encanador')} professionIcon={'camera'} professionId={1} />
-                <CardProfession profession={'Social Media'} onPress={() => goToListProfession('Encanador')} professionIcon={'instagram'} professionId={1} />
-                <CardProfession profession={'Professor'} onPress={() => goToListProfession('Encanador')} professionIcon={'script-text-outline'} professionId={1} />
-            </View>
-        </SafeAreaView>
+        profissoes.length == 6 && !loading ?
+            <SafeAreaView style={style.container}>
+                <View style={style.row}>
+                    <CardProfession
+                        profession={profissoes[0].nome}
+                        onPress={() => goToListProfession(profissoes[0])}
+                        professionIcon={profissoes[0].nomeIcone}
+                        professionId={profissoes[0].id} />
+                    <CardProfession
+                        profession={profissoes[1].nome}
+                        onPress={() => goToListProfession(profissoes[1])}
+                        professionIcon={profissoes[1].nomeIcone}
+                        professionId={profissoes[1].id} />
+                    <CardProfession profession={profissoes[2].nome}
+                        onPress={() => goToListProfession(profissoes[2])}
+                        professionIcon={profissoes[2].nomeIcone}
+                        professionId={profissoes[2].id} />
+                </View>
+                <View style={style.row}>
+                    <CardProfession
+                        profession={profissoes[3].nome}
+                        onPress={() => goToListProfession(profissoes[3])}
+                        professionIcon={profissoes[3].nomeIcone}
+                        professionId={profissoes[3].id} />
+                    <CardProfession
+                        profession={profissoes[4].nome}
+                        onPress={() => goToListProfession(profissoes[4])}
+                        professionIcon={profissoes[4].nomeIcone}
+                        professionId={profissoes[4].id} />
+                    <CardProfession
+                        profession={profissoes[5].nome}
+                        onPress={() => goToListProfession(profissoes[5])}
+                        professionIcon={profissoes[5].nomeIcone}
+                        professionId={profissoes[5].id} />
+                </View>
+            </SafeAreaView>
+            :
+            <ActivityIndicator size={40} color={orangeDefault} />
     )
 }

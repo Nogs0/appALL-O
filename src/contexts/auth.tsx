@@ -1,11 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createContext, useContext, useEffect, useState } from "react";
-import api, { verbosAPI } from '../services/api';
-import { blueDefault, orangeDefault } from "../shared/styleConsts";
-import { useRegisterProfessional } from "./registerProfessional";
-import ALLORequestBase from "../services/api";
 import { api_url } from "../services/config-dev";
-import { UsuarioRole } from "../shared/Enums/enums";
 
 interface AuthInput {
     login: string,
@@ -38,33 +33,40 @@ function AuthProvider({ children }: any) {
     const [user, setUser] = useState<User | null>(null);
     const [isProfessional, setIsProfessional] = useState<boolean>(false);
     const [isRegister, setIsRegister] = useState<boolean>(false);
-    const [defaultColor, setDefaultColor] = useState<string>(orangeDefault);
 
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        async function loadStorageData() {
-            const storagedUser = await AsyncStorage.getItem('@RNAuth:user');
-            const storagedToken = await AsyncStorage.getItem('@RNAuth:token');
-            const storagedIsProfessional = await AsyncStorage.getItem('@RNAuth:isProfessional');
-
-            let isprofessional = false;
-            console.log(storagedToken)
-
-            if (storagedUser && storagedToken && storagedIsProfessional) {
-                setUser(JSON.parse(storagedUser));
-                isprofessional = JSON.parse(storagedIsProfessional);
-                setIsProfessional(isprofessional);
-                setToken(storagedToken)
-            }
-            if (isprofessional)
-                setDefaultColor(blueDefault);
-
-            setLoading(false);
-        }
-
-        loadStorageData();
+        loadStorageData()
+            .then(() => {
+                setLoading(false);
+            })
+            .catch(() => {
+                console.log('ERRO AUTH')
+            })
     }, []);
+
+    const loadStorageData = (): Promise<void> => {
+        return new Promise<void>((resolve, reject) => {
+            AsyncStorage.getItem('@RNAuth:user')
+                .then((storagedUser) => {
+                    AsyncStorage.getItem('@RNAuth:token')
+                        .then((storagedToken) => {
+                            AsyncStorage.getItem('@RNAuth:isProfessional')
+                                .then((storagedIsProfessional) => {
+                                    if (storagedUser && storagedToken && storagedIsProfessional) {
+                                        setIsProfessional(JSON.parse(storagedIsProfessional));
+                                        setToken(storagedToken)
+                                        setUser(JSON.parse(storagedUser));
+                                    }
+
+                                    setLoading(false);
+
+                                }).catch((e) => console.log(e));
+                        }).catch((e) => console.log(e));
+                }).catch((e) => console.log(e));
+        })
+    }
 
     function signIn(input: AuthInput): Promise<void> {
         return new Promise<void>((resolve, reject) => {
@@ -74,26 +76,29 @@ function AuthProvider({ children }: any) {
                 headers: { "Content-type": "application/json; charset=UTF-8" }
             })
                 .then((response) => response.json())
-                .then(async (json) => {
-                    if (json.code){
+                .then((json) => {
+                    if (json.code) {
                         reject();
                         return;
                     }
 
-                    setUser({ name: json.nome, id: json.id });
-                    setToken(json.token);
                     setIsProfessional(json.role == "PROVEDOR")
-                    
-                    if (json.role == UsuarioRole.PROVEDOR)
-                        setDefaultColor(blueDefault);
+                    setToken(json.token);
+                    setUser({ name: json.nome, id: json.id });
 
-                    await AsyncStorage.setItem('@RNAuth:user', JSON.stringify({ name: json.nome, id: json.id }));
-                    await AsyncStorage.setItem('@RNAuth:token', json.token);
-                    await AsyncStorage.setItem('@RNAuth:isProfessional', JSON.stringify(json.role == "PROVEDOR"));
-                    resolve();
+                    AsyncStorage.setItem('@RNAuth:user', JSON.stringify({ name: json.nome, id: json.id }))
+                        .then(() => {
+                            AsyncStorage.setItem('@RNAuth:token', json.token)
+                                .then(() => {
+                                    AsyncStorage.setItem('@RNAuth:isProfessional', JSON.stringify(json.role == "PROVEDOR"))
+                                        .then(() => {
+                                            resolve();
+                                        });
+                                });
+                        });
                 })
                 .catch((e) => {
-                    console.log('ERRO --->', e);
+                    console.log('ERRO AUTH SIGNIN--->', e);
                     reject(e);
                 })
         })
@@ -120,7 +125,6 @@ function AuthProvider({ children }: any) {
             {children}
         </AuthContext.Provider>
     )
-
 }
 
 function useAuth() {

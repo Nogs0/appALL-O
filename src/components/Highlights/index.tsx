@@ -5,30 +5,39 @@ import { useNavigation } from '@react-navigation/native';
 
 const DATA = [
   {
+    id: 1,
     image: require('../../assets/images/jardineiro.jpg'),
-    name: 'Marcio Grass'
+    name: 'Marcio Grass',
+    profissao: 'Soldador'
   },
   {
+    id: 1,
     image: require('../../assets/images/eletricista.jpg'),
-    name: 'Marcio Fios'
+    name: 'Marcio Fios',
+    profissao: 'Soldador'
+
   },
   {
+    id: 1,
     image: require('../../assets/images/encanador.jpg'),
-    name: 'Marcio Canos'
+    name: 'Marcio Canos',
+    profissao: 'Soldador'
   },
   {
+    id: 1,
     image: require('../../assets/images/mecanico.jpg'),
-    name: 'Marcio Rodas'
+    name: 'Marcio Rodas',
+    profissao: 'Soldador'
   }
 ]
 
-export default function Highlights() {
-
-  const navigation = useNavigation();
+export default function Highlights({ navigation }: any) {
 
   const renderItem = (item: any, navigation: any) => {
     return (
-      <TouchableOpacity style={style.containerImage} onPress={() => navigation.navigate('ProfessionalProfile', { id: 1, navigation })}>
+      <TouchableOpacity style={style.containerImage} onPress={() => {
+        navigation.navigate('ProfessionalProfile', { id: item.id, profissao: item.profissao })
+      }}>
         <Image style={style.imageProfessional}
           source={item.image}></Image>
         <Text style={style.nameProfessional}>{item.name}</Text>
@@ -40,6 +49,7 @@ export default function Highlights() {
     <SafeAreaView style={style.container}>
       <Text style={style.label}>Profissionais em destaque</Text>
       <FlatList
+        showsHorizontalScrollIndicator={false}
         horizontal={true}
         data={DATA}
         keyExtractor={(item, index) => index.toString()}

@@ -10,7 +10,8 @@ export default StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: 10,
-        marginHorizontal: 45
+        marginHorizontal: 45,
+        elevation: 5
     },
     titleContainer: {
         borderBottomWidth: 1,

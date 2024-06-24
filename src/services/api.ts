@@ -38,7 +38,6 @@ export default function ALLORequestBase<T>(token: string, method: verbosAPI, url
                 try {
                     if (params)
                         url = `${url}?${params}`;
-
                     await api.get(url, {
                         headers: {
                             'Authorization': `Bearer ${token}`,
@@ -85,7 +84,7 @@ export default function ALLORequestBase<T>(token: string, method: verbosAPI, url
                             'Content-Type': 'application/json'
                         }
                     }).then((result) => {
-                        resolve(result.data.content)
+                        resolve(result.data)
                     })
                         .catch((e) => {
                             reject(e);

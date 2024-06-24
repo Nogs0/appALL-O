@@ -16,9 +16,12 @@ export default function InfoCards({ servicosConcluidos, mediaAvaliacao, tempoCad
 
     return (
         <SafeAreaView style={style.container}>
-            {getCard(servicosConcluidos, "Serviços feitos")}
-            {getCard(mediaAvaliacao, "Média de avaliações")}
-            {getCard(tempoCadastro, "Tempo de app")}
+            {getCard(servicosConcluidos, "Serviços realizados")}
+            {getCard(mediaAvaliacao, "Média das avaliações")}
+            <View style={style.card}>
+                <Text style={{ color: defaultColor, fontFamily: 'Rubik-SemiBold', fontSize: 12, textAlign: 'center' }}>{tempoCadastro}</Text>
+                <Text style={style.description}>Início no ALL-O</Text>
+            </View>
         </SafeAreaView>
     )
 }

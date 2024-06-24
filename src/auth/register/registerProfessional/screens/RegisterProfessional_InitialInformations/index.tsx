@@ -13,8 +13,8 @@ import style from './style'
 export default function RegisterProfessional_InitialInformations({ navigation }: any) {
   const { profissional, setInitialInformations, clearProfessional } = useRegisterProfessional();
 
-  const [cpfCnpj, setCpfCnpj] = useState<string>(!!profissional ? profissional.cpfCnpj : '');
-  const [razaoSocial, setRazaoSocial] = useState<string>(!!profissional ? profissional.razaoSocial : '');
+  const [cpfCnpj, setCpfCnpj] = useState<string>(!!profissional ? profissional.provedor.cpfCnpj : '');
+  const [razaoSocial, setRazaoSocial] = useState<string>(!!profissional ? profissional.provedor.razaoSocial : '');
   const [email, setEmail] = useState<string>(!!profissional ? profissional.usuario.login : '');
   const [senha, setSenha] = useState<string>(!!profissional ? profissional.usuario.senha : '');
   const [incorrectInformations, setIncorrectInformations] = useState<boolean>(false);

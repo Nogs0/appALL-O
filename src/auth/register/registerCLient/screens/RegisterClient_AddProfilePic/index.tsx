@@ -15,14 +15,14 @@ import { useAPI } from '../../../../../contexts/api';
 
 export default function RegisterCliente_AddProfilePic({ navigation }: any) {
 
-  const { updateImageClient } = useAPI();
+  const { createImageClient } = useAPI();
   const { endingRegister, loading, setProfilePic } = useRegisterClient();
   const [imageTela, setImageTela] = useState<Asset>();
   const [loadingImage, setLoadingImage] = useState<boolean>(false);
 
   const handleButtonEnd = () => {
     if (imageTela?.uri && imageTela?.fileName) {
-      updateImageClient(imageTela.uri, imageTela.fileName)
+      createImageClient(imageTela.uri, imageTela.fileName)
         .then((result) => {
           setProfilePic(result)
           endingRegister().then(() => {

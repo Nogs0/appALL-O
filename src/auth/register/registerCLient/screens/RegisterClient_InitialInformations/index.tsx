@@ -12,11 +12,11 @@ import style from './style';
 export default function RegisterProfessional_InitialInformations({ navigation }: any) {
 
   const { client, setInitialInformations, clearClient } = useRegisterClient();
-  const [cpfCnpj, setCpfCnpj] = useState<string>(!!client ? client.cpfCnpj : '');
-  const [nome, setNome] = useState<string>(client ? client.nome : '');
-  const [email, setEmail] = useState<string>(client ? client.email : '');
-  const [telefone, setTelefone] = useState<string>(client ? client.telefone : '');
-  const [senha, setSenha] = useState<string>(client ? client.senha : '');
+  const [cpfCnpj, setCpfCnpj] = useState<string>(!!client ? client.cliente.cpfCnpj : '');
+  const [nome, setNome] = useState<string>(client ? client.cliente.nome : '');
+  const [email, setEmail] = useState<string>(client ? client.cliente.email : '');
+  const [telefone, setTelefone] = useState<string>(client ? client.cliente.telefone : '');
+  const [senha, setSenha] = useState<string>(client ? client.usuario.senha : '');
   const [incorrectInformations, setIncorrectInformations] = useState<boolean>(false);
 
   const handleButtonNext = () => {

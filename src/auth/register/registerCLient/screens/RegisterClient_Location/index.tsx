@@ -15,12 +15,12 @@ export default function RegisterProfessional_ServiceLocation({ navigation }: any
 
   const { client, setAddress } = useRegisterClient();
 
-  const [cep, setCep] = useState<string>(!!client ? client.enderecoInput?.cep : '');
-  const [cidade, setCidade] = useState<string>(!!client ? client.enderecoInput?.cidade : '');
-  const [estado, setEstado] = useState<string>(!!client ? client.enderecoInput?.estado : '');
-  const [bairro, setBairro] = useState<string>(!!client ? client.enderecoInput?.bairro : '');
-  const [logradouro, setLogradouro] = useState<string>(!!client ? client.enderecoInput?.logradouro : '');
-  const [numero, setNumero] = useState<string>(!!client ? client.enderecoInput?.numero : '');
+  const [cep, setCep] = useState<string>(!!client ? client.cliente.enderecoInput?.cep : '');
+  const [cidade, setCidade] = useState<string>(!!client ? client.cliente.enderecoInput?.cidade : '');
+  const [estado, setEstado] = useState<string>(!!client ? client.cliente.enderecoInput?.estado : '');
+  const [bairro, setBairro] = useState<string>(!!client ? client.cliente.enderecoInput?.bairro : '');
+  const [logradouro, setLogradouro] = useState<string>(!!client ? client.cliente.enderecoInput?.logradouro : '');
+  const [numero, setNumero] = useState<string>(!!client ? client.cliente.enderecoInput?.numero : '');
   const [incorrectInformations, setIncorrectInformations] = useState<boolean>(false);
 
   const [loadingCEP, setLoadingCEP] = useState<boolean>(false);
@@ -49,7 +49,6 @@ export default function RegisterProfessional_ServiceLocation({ navigation }: any
 
   const searchCEP = (value: string) => {
     setCep(value)
-    console.log(value.length)
     if (value.length == 10) {
       setLoadingCEP(true);
       setCidade('');
@@ -57,7 +56,7 @@ export default function RegisterProfessional_ServiceLocation({ navigation }: any
       setBairro('');
       setLogradouro('');
       setNumero('')
-      getAddress(cep).then((result) => {
+      getAddress(value).then((result) => {
         setCidade(result.localidade);
         setEstado(result.uf);
         setBairro(result.bairro);
