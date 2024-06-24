@@ -221,7 +221,7 @@ export default function ProfessionalProfile(props: any) {
                         </View>
 
                         <View style={style.fourthSection}>
-                            <InfoCards servicosConcluidos={professional.servicosConcluidos} mediaAvaliacao={professional.mediaAvaliacao} tempoCadastro={professional.tempoCadastro} defaultColor={isProfessional ? blueDefault : orangeDefault} />
+                            <InfoCards servicosConcluidos={professional.servicosConcluidos} mediaAvaliacao={professional.mediaAvaliacao.toFixed(1)} tempoCadastro={professional.tempoCadastro} defaultColor={isProfessional ? blueDefault : orangeDefault} />
                         </View>
 
                         <FlatList

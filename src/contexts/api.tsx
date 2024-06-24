@@ -634,7 +634,7 @@ function APIProvider({ children }: any) {
 
     const getProfissoesAleatorias = (): Promise<ProfissaoOutput[]> => {
         return new Promise<ProfissaoOutput[]>((resolve, reject) => {
-            ALLORequestBase<ProfissaoOutput[]>(token, verbosAPI.GET, 'profissoes/getAleatorias')
+            ALLORequestBase<ProfissaoOutput[]>(token, verbosAPI.GET, 'profissao/aleatorias')
                 .then((result) => {
                     resolve(result)
                 })
@@ -647,7 +647,7 @@ function APIProvider({ children }: any) {
 
     const getProfissoesMaisUtilizadas = (): Promise<ProfissaoOutput[]> => {
         return new Promise<ProfissaoOutput[]>((resolve, reject) => {
-            ALLORequestBase<ProfissaoOutput[]>(token, verbosAPI.GET, 'profissoes/getMaisUtilizadas')
+            ALLORequestBase<ProfissaoOutput[]>(token, verbosAPI.GET, 'profissao/destaques')
                 .then((result) => {
                     resolve(result)
                 })

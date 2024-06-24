@@ -64,7 +64,7 @@ export default function ProfessionalEdit(props: any) {
                 updateImageProfessional(response.assets[0].uri, response.assets[0].fileName)
                     .then((newImage) => {
                         setImagemId(newImage);
-                        handleupdate();
+                        handleupdate(newImage);
                         getImage(newImage);
                         showMessage({
                             message: 'Imagem de perfil alterada',
@@ -94,7 +94,7 @@ export default function ProfessionalEdit(props: any) {
             })
     }
 
-    const handleupdate = () => {
+    const handleupdate = (newImage?: string) => {
         setLoadingUpdate(true)
         updateProfessional({
             id: professional?.id,
@@ -104,7 +104,7 @@ export default function ProfessionalEdit(props: any) {
             perfilProvedorInput: {
                 idProvedor: professional?.id,
                 descricao,
-                perfilImage: imagemId,
+                perfilImage: newImage ? newImage : imagemId,
             },
             razaoSocial,
             tipoPessoa: professional?.provedor.tipoPessoa,

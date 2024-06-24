@@ -3,24 +3,25 @@ import { ActivityIndicator, SafeAreaView, Text, TouchableOpacity, View } from 'r
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { Image } from 'react-native';
+import { showMessage } from 'react-native-flash-message';
 import { Asset, launchImageLibrary } from 'react-native-image-picker';
 import HeaderRegisterClient from '../../../../../components/HeaderRegisterClient';
+import { useAPI } from '../../../../../contexts/api';
 import { useRegisterClient } from '../../../../../contexts/registerClient';
-import { blackDefault, blueDefault, orangeDefault, redDefault, whiteDefault } from '../../../../../shared/styleConsts';
+import { blackDefault, orangeDefault, whiteDefault } from '../../../../../shared/styleConsts';
 import styleRegister from '../../style';
 import style from './style';
-import { showMessage } from 'react-native-flash-message';
-import { ALLORequestForm } from '../../../../../services/api';
-import { useAPI } from '../../../../../contexts/api';
 
 export default function RegisterCliente_AddProfilePic({ navigation }: any) {
 
   const { createImageClient } = useAPI();
-  const { endingRegister, loading, setProfilePic } = useRegisterClient();
+  const { endingRegister, setProfilePic } = useRegisterClient();
   const [imageTela, setImageTela] = useState<Asset>();
   const [loadingImage, setLoadingImage] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleButtonEnd = () => {
+    setLoading(true);
     if (imageTela?.uri && imageTela?.fileName) {
       createImageClient(imageTela.uri, imageTela.fileName)
         .then((result) => {
@@ -39,7 +40,7 @@ export default function RegisterCliente_AddProfilePic({ navigation }: any) {
             message: 'Falha no upload da imagem',
             type: 'danger'
           })
-        })
+        }).finally(() => setLoading(false))
     } else {
       endingRegister().then(() => {
         navigation.navigate('RegisterClient_OkEndRegister');
@@ -49,7 +50,7 @@ export default function RegisterCliente_AddProfilePic({ navigation }: any) {
             message: 'Falha ao cadastrar cliente!',
             type: 'danger'
           })
-        })
+        }).finally(() => setLoading(false))
     }
   }
 
