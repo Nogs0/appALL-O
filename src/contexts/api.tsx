@@ -168,7 +168,7 @@ export interface ProvedorListOutput {
 }
 
 interface APIContextData {
-    getProvedorHighlits(): Promise<ProvedorDestaqueOutput[]>,
+    getProvedorHighlights(): Promise<ProvedorDestaqueOutput[]>,
     getProfissoesMaisUtilizadas(): Promise<ProfissaoOutput[]>,
     getProfissoesAleatorias(): Promise<ProfissaoOutput[]>,
     getPerfilCliente(id: number): Promise<PefilClienteOutput>,
@@ -721,7 +721,7 @@ function APIProvider({ children }: any) {
         })
     }
 
-    const getProvedorHighlits = (): Promise<ProvedorDestaqueOutput[]> => {
+    const getProvedorHighlights = (): Promise<ProvedorDestaqueOutput[]> => {
         return new Promise<ProvedorDestaqueOutput[]>((resolve, reject) => {
             ALLORequestBase<ProvedorDestaqueOutput[]>(token, verbosAPI.GET, 'provedor/melhoresAvaliados')
             .then((result) => {
@@ -766,7 +766,7 @@ function APIProvider({ children }: any) {
                 getServicosParaAvaliarCliente,
                 createAvaliacao,
                 registrarServico,
-                getProvedorHighlits
+                getProvedorHighlights
             }}>
             {children}
         </APIContext.Provider>
