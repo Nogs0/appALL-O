@@ -167,7 +167,14 @@ export interface ProvedorListOutput {
     imagemPerfil: string
 }
 
+export interface NotificacaoOutput {
+    nomeCliente: string,
+    mensagem: string,
+    dtRegistro: string
+}
+
 interface APIContextData {
+    getProvedorNotificacoes(): Promise<NotificacaoOutput[]>,
     getProvedorHighlights(): Promise<ProvedorDestaqueOutput[]>,
     getProfissoesMaisUtilizadas(): Promise<ProfissaoOutput[]>,
     getProfissoesAleatorias(): Promise<ProfissaoOutput[]>,
@@ -734,9 +741,23 @@ function APIProvider({ children }: any) {
         })
     }
 
+    const getProvedorNotificacoes = (): Promise<NotificacaoOutput[]> => {
+        return new Promise<NotificacaoOutput[]>((resolve, reject) => {
+            ALLORequestBase<NotificacaoOutput[]>(token, verbosAPI.GET, 'notificacao')
+            .then((result) => {
+                resolve(result);
+            })
+            .catch((e) => {
+                console.log('Erro ao buscar notificações:', e);
+                reject(e);
+            })
+        })
+    }
+
     return (
         <APIContext.Provider
             value={{
+                getProvedorNotificacoes,
                 getImageServico,
                 updateImageProfessionalServico,
                 getProfissoesMaisUtilizadas,

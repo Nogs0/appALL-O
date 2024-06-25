@@ -9,16 +9,8 @@ export default StyleSheet.create({
         borderColor: greyDefault,
         padding: 15
     },
-    imageContainer: {
-        flex: 0.2
-    },
-    image: {
-        width: 50,
-        height: 50,
-        borderRadius: 50
-    },
     infoContainer: {
-        flex: 0.8
+        flex: 1
     },
     nameClient: {
         color: blackDefault,
