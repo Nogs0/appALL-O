@@ -77,6 +77,13 @@ export interface ProfissaoOutput {
     nome: string
 }
 
+export interface ProvedorDestaqueOutput{
+    id: number,
+    razaoSocial: string,
+    nomeProfissao: string,
+    imagem: string
+}
+
 export interface ProvedorOutput {
     id: number,
     razaoSocial: string,
@@ -160,6 +167,7 @@ export interface ProvedorListOutput {
 }
 
 interface APIContextData {
+    getProvedorHighlits(): Promise<ProvedorDestaqueOutput[]>,
     getProfissoesMaisUtilizadas(): Promise<ProfissaoOutput[]>,
     getProfissoesAleatorias(): Promise<ProfissaoOutput[]>,
     getPerfilCliente(id: number): Promise<PefilClienteOutput>,
@@ -658,6 +666,19 @@ function APIProvider({ children }: any) {
         })
     }
 
+    const getProvedorHighlits = (): Promise<ProvedorDestaqueOutput[]> => {
+        return new Promise<ProvedorDestaqueOutput[]>((resolve, reject) => {
+            ALLORequestBase<ProvedorDestaqueOutput[]>(token, verbosAPI.GET, 'provedor/melhoresAvaliados')
+            .then((result) => {
+                resolve(result);
+            })
+            .catch((e) => {
+                console.log('Erro ao buscar profissionais melhores avaliados:', e);
+                reject(e);
+            })
+        })
+    }
+
     return (
         <APIContext.Provider
             value={{
@@ -687,7 +708,8 @@ function APIProvider({ children }: any) {
                 feedbackServico,
                 getServicosParaAvaliarCliente,
                 createAvaliacao,
-                registrarServico
+                registrarServico,
+                getProvedorHighlits
             }}>
             {children}
         </APIContext.Provider>

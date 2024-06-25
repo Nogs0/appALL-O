@@ -1,46 +1,37 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { FlatList, Image, SafeAreaView, Text, TouchableOpacity } from 'react-native'
 import style from './style'
 import { useNavigation } from '@react-navigation/native';
+import { ProvedorDestaqueOutput, useAPI } from '../../contexts/api';
+import { showMessage } from 'react-native-flash-message';
 
-const DATA = [
-  {
-    id: 1,
-    image: require('../../assets/images/jardineiro.jpg'),
-    name: 'Marcio Grass',
-    profissao: 'Soldador'
-  },
-  {
-    id: 1,
-    image: require('../../assets/images/eletricista.jpg'),
-    name: 'Marcio Fios',
-    profissao: 'Soldador'
-
-  },
-  {
-    id: 1,
-    image: require('../../assets/images/encanador.jpg'),
-    name: 'Marcio Canos',
-    profissao: 'Soldador'
-  },
-  {
-    id: 1,
-    image: require('../../assets/images/mecanico.jpg'),
-    name: 'Marcio Rodas',
-    profissao: 'Soldador'
-  }
-]
 
 export default function Highlights({ navigation }: any) {
 
-  const renderItem = (item: any, navigation: any) => {
+  const { getProvedorHighlits } = useAPI();
+
+  const [profissionais, setProfissionais] = useState<ProvedorDestaqueOutput[]>([]);
+
+  useEffect(() => {
+    getProvedorHighlits()
+    .then((result) => {
+      setProfissionais([...result])
+    }).catch((e) => {
+      showMessage({
+        message: 'Falha ao carregar profissionais',
+        type: 'danger'
+      });
+    });
+  }, [])
+
+  const renderItem = (item: ProvedorDestaqueOutput, navigation: any) => {
     return (
       <TouchableOpacity style={style.containerImage} onPress={() => {
-        navigation.navigate('ProfessionalProfile', { id: item.id, profissao: item.profissao })
+        navigation.navigate('ProfessionalProfile', { id: item.id, profissao: item.nomeProfissao })
       }}>
-        <Image style={style.imageProfessional}
-          source={item.image}></Image>
-        <Text style={style.nameProfessional}>{item.name}</Text>
+        {/* <Image style={style.imageProfessional}
+          source={item.imagem}></Image> */}
+        <Text style={style.nameProfessional}>{item.razaoSocial}</Text>
       </TouchableOpacity>
     )
   }
@@ -51,7 +42,7 @@ export default function Highlights({ navigation }: any) {
       <FlatList
         showsHorizontalScrollIndicator={false}
         horizontal={true}
-        data={DATA}
+        data={profissionais}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => renderItem(item, navigation)}
       />
