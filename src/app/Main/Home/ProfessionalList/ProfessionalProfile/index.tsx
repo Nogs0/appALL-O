@@ -15,6 +15,7 @@ import { fixPhone } from '../../../../../shared/helpers';
 import { backgroundDialogDefault, blackDefault, blueDefault, greyLoadingDefault2, orangeDefault, whiteDefault } from '../../../../../shared/styleConsts';
 import style from './style';
 import { useNavigation } from '@react-navigation/native';
+import ImagemServico from '../../../../../components/ImagemServico';
 
 export default function ProfessionalProfile(props: any) {
 
@@ -138,20 +139,9 @@ export default function ProfessionalProfile(props: any) {
         )
     }
 
-    const dataTeste = [
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {}
-    ]
-    const renderItemImage = (item: any) => {
+    const renderItemImage = (item: string) => {
         return (
-            <Image style={{ width: 125, height: 125, flexGrow: 1 }} source={require('../../../../../assets/images/default-profile-pic.png')}></Image>
+            <ImagemServico item={item}/>
         )
     }
 
@@ -226,7 +216,7 @@ export default function ProfessionalProfile(props: any) {
 
                         <FlatList
                             style={style.fifthSection}
-                            data={dataTeste}
+                            data={professional.imagensServicos}
                             keyExtractor={(item, index) => index.toString()}
                             renderItem={({ item }) => renderItemImage(item)}
                             numColumns={3}

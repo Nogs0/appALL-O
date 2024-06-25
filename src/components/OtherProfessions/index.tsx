@@ -15,7 +15,6 @@ export default function OtherProfessions(props: any) {
     useEffect(() => {
         getProfissoesAleatorias()
             .then((result) => {
-                console.log(result);
                 setProfissoes(result)
             })
             .catch((e) => {
