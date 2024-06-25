@@ -124,7 +124,8 @@ export interface PerfilProvedorOutput {
     tempoCadastro: string,
     imagemPerfil: string,
     descricao: string,
-    totalAvaliacoes: number
+    totalAvaliacoes: number,
+    imagensServicos: string[]
 }
 
 export interface FeedbackServicoInput {
@@ -178,9 +179,11 @@ interface APIContextData {
     getAllProfessionalsByID(id: number): Promise<ProvedorListOutput[]>,
     getImageClient(idImage: string): Promise<any>,
     getImageProfessional(idImage: string): Promise<any>,
+    getImageServico(idImage: string): Promise<any>,
     updateImageClient(uri: string, fileName: string): Promise<string>,
     createImageClient(uri: string, fileName: string): Promise<string>,
     updateImageProfessional(uri: string, fileName: string): Promise<string>,
+    updateImageProfessionalServico(uri: string, fileName: string): Promise<string>,
     createImageProfessional(uri: string, fileName: string): Promise<string>,
     getServicosNaoVistosProfissional(id: number): Promise<ServicoOutput[]>,
     feedbackServico(input: FeedbackServicoInput): Promise<void>,
@@ -234,6 +237,7 @@ function APIProvider({ children }: any) {
     }
 
     const updateProfessional = (input: ProvedorInput): Promise<void> => {
+        console.log(input)
         return new Promise<void>((resolve, reject) => {
             ALLORequestBase<void>(token, verbosAPI.PUT, 'provedor', input)
                 .then(() => {
@@ -451,6 +455,31 @@ function APIProvider({ children }: any) {
         })
     }
 
+    const getImageServico = (idImage: string): Promise<ArrayBuffer | string> => {
+        return new Promise<ArrayBuffer | string>((resolve, reject) => {
+            let urlToFetch = `${api_url}provedor/buscarImagem/servico?fileName=${idImage}`;
+            fetch(urlToFetch, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                }
+            })
+                .then(response => response.blob())
+                .then(blob => {
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                        const imageData = reader.result;
+                        resolve(imageData);
+                    };
+                    reader.readAsDataURL(blob);
+                })
+                .catch((e) => {
+                    console.error('Erro ao buscar a imagem:', e);
+                    reject(e)
+                });
+        })
+    }
+
     const updateImageClient = (uri: string, fileName: string): Promise<string> => {
         return new Promise<string>((resolve, reject) => {
             const form = new FormData();
@@ -506,7 +535,6 @@ function APIProvider({ children }: any) {
         })
     }
 
-
     const updateImageProfessional = (uri: string, fileName: string): Promise<string> => {
         return new Promise<string>((resolve, reject) => {
             const form = new FormData();
@@ -520,8 +548,35 @@ function APIProvider({ children }: any) {
             fetch(`${api_url}provedor/upload`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'multipart/form-data',
-                    'Authorization': `Bearer ${token}`
+                    'Content-Type': 'multipart/form-data'
+                },
+                body: form
+            })
+                .then((result) => result.text())
+                .then((id) => {
+                    resolve(id);
+                })
+                .catch((e) => {
+                    console.log(e)
+                    reject(e);
+                });
+        })
+    }
+
+    const updateImageProfessionalServico = (uri: string, fileName: string): Promise<string> => {
+        return new Promise<string>((resolve, reject) => {
+            const form = new FormData();
+            const imageObject = {
+                name: 'servico-profissional',
+                uri: uri,
+                type: `image/${getTypeFromFileName(fileName)}`
+            }
+
+            form.append('image', imageObject)
+            fetch(`${api_url}provedor/upload/servico`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'multipart/form-data'
                 },
                 body: form
             })
@@ -661,6 +716,8 @@ function APIProvider({ children }: any) {
     return (
         <APIContext.Provider
             value={{
+                getImageServico,
+                updateImageProfessionalServico,
                 getProfissoesMaisUtilizadas,
                 getProfissoesAleatorias,
                 getAllProfessionalsByID,

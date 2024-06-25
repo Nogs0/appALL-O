@@ -4,6 +4,7 @@ import { showMessage } from 'react-native-flash-message';
 import { launchImageLibrary } from 'react-native-image-picker';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import HeaderProfessional from '../../../../../../components/HeaderProfessional';
+import ImagemServico from '../../../../../../components/ImagemServico';
 import Input from '../../../../../../components/Input';
 import InputCEP from '../../../../../../components/InputCEP';
 import { PerfilProvedorOutput, ProvedorInput, useAPI } from '../../../../../../contexts/api';
@@ -12,7 +13,7 @@ import { blackDefault, blueDefault, greyDefault, whiteDefault } from '../../../.
 import style from './style';
 
 export default function ProfessionalEdit(props: any) {
-    const { updateProfessional, updateImageProfessional, getPerfilProfissional, getImageProfessional } = useAPI();
+    const { updateProfessional, updateImageProfessional, getPerfilProfissional, getImageProfessional, updateImageProfessionalServico } = useAPI();
 
     const [params] = useState<any>(props.route.params);
     const [professional, setProfessional] = useState<PerfilProvedorOutput>();
@@ -30,7 +31,8 @@ export default function ProfessionalEdit(props: any) {
     const [logradouro, setLogradouro] = useState<string>(professional ? professional.provedor.endereco.logradouro : '');
     const [numero, setNumero] = useState<string>(professional ? professional.provedor.endereco.numero : '');
     const [imagemId, setImagemId] = useState<string>(professional ? professional.imagemPerfil : '')
-    const [servicoImagens, setServicoImagens] = useState<string[]>([]);
+
+    const [servicoImagensIds, setServicoImagensIds] = useState<string[]>(professional ? professional.imagensServicos : []);
 
     const [loadingCEP, setLoadingCEP] = useState<boolean>(false);
     const [loadingUpdate, setLoadingUpdate] = useState<boolean>(false);
@@ -118,7 +120,7 @@ export default function ProfessionalEdit(props: any) {
                 numero
             },
             idProfissao: professional?.provedor.profissao.id,
-            servicoImagens,
+            servicoImagens: servicoImagensIds,
         } as ProvedorInput)
             .then(() => {
                 if (professional)
@@ -137,28 +139,33 @@ export default function ProfessionalEdit(props: any) {
     }
 
     const renderItem = (item: any) => {
+        console.log(item)
         return (
-            <TouchableOpacity disabled={loadingUpdate} style={style.imageContainerFlatList} onLongPress={() => removeImage(item.fileName)}>
-                <Image style={style.imageFlatList} source={{ uri: item }}></Image>
-            </TouchableOpacity>
+            <ImagemServico loadingUpdate={loadingUpdate} removeImage={removeImage} item={item}/>
         )
     }
 
     const addImage = () => {
         launchImageLibrary({ mediaType: 'photo' }, (response) => {
-            if (response.assets && response.assets.length > 0)
-                setServicoImagens((prev) => {
-                    if (response.assets && response.assets[0].uri)
-                        prev.push(response.assets[0].uri);
-                    return [...prev];
-                })
+            if (response.assets && response.assets.length > 0 && response.assets[0].uri && response.assets[0].fileName) {
+                updateImageProfessionalServico(response.assets[0].uri, response.assets[0].fileName)
+                    .then((newImage) => {
+                        setServicoImagensIds((prev) => [...prev, ...[newImage]])
+                    })
+                    .catch((e) => {
+                        showMessage({
+                            message: 'Falha no upload da imagem',
+                            type: 'danger'
+                        })
+                    })
+            }
         })
     }
 
-    const removeImage = (uri: string) => {
-        let indexToDelete = servicoImagens.findIndex(x => x == uri);
+    const removeImage = (item: string) => {
+        let indexToDelete = servicoImagensIds.findIndex((x: any) => x == item);
         if (indexToDelete != -1) {
-            setServicoImagens((prev) => {
+            setServicoImagensIds((prev: string[]) => {
                 prev.splice(indexToDelete, 1)
                 return [...prev]
             })
@@ -168,12 +175,13 @@ export default function ProfessionalEdit(props: any) {
     const getProfessional = (id: number) => {
         getPerfilProfissional(id)
             .then((result) => {
+                console.log(result);
                 setProfessional(result);
                 if (result.imagemPerfil)
                     getImage(result.imagemPerfil);
             })
             .catch((e) => {
-                showMessage({
+                showMessage({   
                     message: 'Falha ao carregar profissional!',
                     type: 'danger'
                 })
@@ -197,6 +205,8 @@ export default function ProfessionalEdit(props: any) {
             setLogradouro(professional.provedor.endereco.logradouro);
             setNumero(professional.provedor.endereco.numero);
             setImagemId(professional.imagemPerfil);
+            setServicoImagensIds(professional.imagensServicos);
+            console.log(professional.imagensServicos);
         }
     }, [professional])
 
@@ -310,7 +320,7 @@ export default function ProfessionalEdit(props: any) {
                             <View style={style.imageGridContainer}>
                                 <FlatList
                                     style={{ borderWidth: 1, width: '100%', marginBottom: 10, borderColor: greyDefault }}
-                                    data={servicoImagens}
+                                    data={servicoImagensIds}
                                     keyExtractor={(item, index) => index.toString()}
                                     numColumns={3}
                                     renderItem={({ item }) => renderItem(item)} />

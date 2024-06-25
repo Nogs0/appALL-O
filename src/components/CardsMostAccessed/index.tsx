@@ -49,6 +49,8 @@ export default function CardsMostAccessed(props: any) {
                     ])
                 else
                     setProfissoes(result)
+
+                console.log(result)
             })
             .catch((e) => {
                 setProfissoes([

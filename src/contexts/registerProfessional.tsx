@@ -19,7 +19,7 @@ interface RegisterProfessionalContextData {
     setProfissao(profissaoId: number): void,
     setEndereco(endereco: Endereco): void,
     setContacts(phoneNumber: string): void,
-    setImages(images: any): void,
+    setImages(images: string[]): void,
     endingRegister(): Promise<void>,
     clearProfessional(): void,
     setProfilePic(path: string): void
@@ -122,7 +122,7 @@ function RegisterProfessionalProvider({ children }: any) {
         });
     }
 
-    function setImages(images: any) {
+    function setImages(images: string[]) {
         setProfissional((prev) => {
             if (!prev)
                 prev = {} as ProvedorCadastroInput;
