@@ -5,7 +5,7 @@ export default StyleSheet.create({
     contentContainer: {
         backgroundColor: whiteDefault,
         borderRadius: 50,
-        height: 360,
+        height: 400,
         width: 300,
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -35,7 +35,7 @@ export default StyleSheet.create({
         borderTopWidth: 1,
         borderColor: greyLoadingDefault2,
         width: '100%',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     buttonOk: {
         width: '50%',

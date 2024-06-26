@@ -111,20 +111,12 @@ export default function Home({ navigation }: any) {
     <SafeAreaView style={{ flex: 1, backgroundColor: whiteDefault }}>
 
       {servicosParaAvaliar.length > 0 ?
-        <View style={{
-          height: '100%',
-          width: '100%',
-          backgroundColor: backgroundDialogDefault,
-          position: 'absolute',
-          zIndex: 1,
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}>
           <FlatList
             horizontal
             data={[servicosParaAvaliar[0]]}
             style={{
               height: '100%',
+              position: 'absolute'
             }}
             contentContainerStyle={{ alignItems: 'center', justifyContent: 'center' }}
             keyExtractor={(item, index) => index.toString()}
@@ -132,7 +124,6 @@ export default function Home({ navigation }: any) {
             showsHorizontalScrollIndicator={false}
             pagingEnabled
           />
-        </View>
         :
         <></>
       }

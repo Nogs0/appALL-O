@@ -32,6 +32,7 @@ export default function ProfessionalProfile(props: any) {
         let wppNumber = professional?.provedor.telefone.replace(fixPhone, "55$1$2$3");
         Linking.openURL('http://wa.me/' + wppNumber + `?text=ALL-O! ${professional?.provedor.razaoSocial}, tudo bem? Sou o(a) ${user?.name}, gostaria de solicitar um serviço!`)
     }
+
     const handlePressOk = () => {
         if (professional) {
             registrarServico(professional?.provedor.id)
@@ -141,7 +142,7 @@ export default function ProfessionalProfile(props: any) {
 
     const renderItemImage = (item: string) => {
         return (
-            <ImagemServico item={item}/>
+            <ImagemServico item={item} />
         )
     }
 
@@ -158,28 +159,19 @@ export default function ProfessionalProfile(props: any) {
                         text='ALL-O! Ao iniciar a conversa no WhatsApp registraremos a intenção de servico, tudo bem?' />
 
                     {servicosNaoVistos.length > 0 ?
-                        <View style={{
-                            height: '100%',
-                            width: '100%',
-                            backgroundColor: backgroundDialogDefault,
-                            position: 'absolute',
-                            zIndex: 1,
-                            alignItems: 'center',
-                            justifyContent: 'center'
-                        }}>
-                            <FlatList
-                                horizontal
-                                style={{
-                                    height: '100%',
-                                }}
-                                contentContainerStyle={{ alignItems: 'center', justifyContent: 'center' }}
-                                data={[servicosNaoVistos[0]]}
-                                keyExtractor={(item, index) => index.toString()}
-                                renderItem={({ item }) => renderItem(item)}
-                                showsHorizontalScrollIndicator={false}
-                                pagingEnabled
-                            />
-                        </View>
+                        <FlatList
+                            horizontal
+                            style={{
+                                height: '100%',
+                                position: 'absolute'
+                            }}
+                            contentContainerStyle={{ alignItems: 'center', justifyContent: 'center' }}
+                            data={[servicosNaoVistos[0]]}
+                            keyExtractor={(item, index) => index.toString()}
+                            renderItem={({ item }) => renderItem(item)}
+                            showsHorizontalScrollIndicator={false}
+                            pagingEnabled
+                        />
                         :
                         <></>
                     }
