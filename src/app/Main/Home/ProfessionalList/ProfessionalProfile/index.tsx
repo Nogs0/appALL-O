@@ -34,7 +34,7 @@ export default function ProfessionalProfile(props: any) {
     }
     const handlePressOk = () => {
         if (professional) {
-            registrarServico(professional?.id)
+            registrarServico(professional?.provedor.id)
                 .then(() => {
                     openWhatsapp();
                     setShowDialogWhatsApp(false);
