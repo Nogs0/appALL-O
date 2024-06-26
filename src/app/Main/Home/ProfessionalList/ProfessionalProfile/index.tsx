@@ -186,7 +186,7 @@ export default function ProfessionalProfile(props: any) {
                         <Text style={[style.nameProfessional, { color: isProfessional ? blueDefault : orangeDefault }]}>{professional.provedor.razaoSocial}</Text>
 
                         <View style={style.firstSection}>
-                            <StarsRating id={professional.id} rate={professional.mediaAvaliacao} numberRate={professional.totalAvaliacoes} navigation={navigation} defaultColor={isProfessional ? blueDefault : orangeDefault} nomeProfissional={professional.provedor.razaoSocial} avaliacaoFavorita={professional.avaliacao?.id} />
+                            <StarsRating id={professional.provedor.id} rate={professional.mediaAvaliacao} numberRate={professional.totalAvaliacoes} navigation={navigation} defaultColor={isProfessional ? blueDefault : orangeDefault} nomeProfissional={professional.provedor.razaoSocial} avaliacaoFavorita={professional.avaliacao?.id} />
                             {imagem ?
                                 <Image style={style.image} source={{ uri: imagem }}></Image>
                                 :
