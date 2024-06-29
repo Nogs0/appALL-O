@@ -3,7 +3,9 @@ import { whiteDefault, orangeDefault } from "../../shared/styleConsts";
 
 export default StyleSheet.create({
     container: {
-        flex: 1,
+        height: '100%',
+        width: '100%',
+        paddingTop: '15%',
         backgroundColor: whiteDefault,
         alignItems: 'center',
         justifyContent: 'center'
@@ -18,11 +20,11 @@ export default StyleSheet.create({
         flexDirection: 'row'
     },
     botaoAcao: {
-        width: 190,
-        height: 45,
         backgroundColor: orangeDefault,
         justifyContent: 'center',
-        borderRadius: 10
+        borderRadius: 10,
+        width: '50%',
+        height: 35
     },
     textTrocaLogin: {
         fontSize: 13,
@@ -41,19 +43,22 @@ export default StyleSheet.create({
     },
     inputsContainer: {
         width: '80%',
-        height: 120
     },
     buttonsContainer: {
-        marginTop: '10%',
-        width: '80%',
-        height: 200,
-        alignItems: 'center'
+        width: '100%',
+        height: '25%',
+        alignItems: 'center',
     },
     signInContainer: {
-        alignItems: 'center'
+        height: '50%',
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     registerContainer: {
-        marginTop: '30%',
-        alignItems: 'center'
+        height: '40%',
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'center'
     }
 })

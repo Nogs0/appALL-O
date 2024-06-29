@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { ActivityIndicator, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, KeyboardAvoidingView, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import style from './style';
 
@@ -72,20 +72,24 @@ export default function SignIn({ navigation }: any) {
                             <Icon name='change-circle' size={22} style={style.iconeTroca}></Icon>
                             <Text style={style.textTrocaLogin}> {text} </Text>
                         </TouchableOpacity>
-                        <View style={style.inputsContainer}>
-                            <Input
-                                onFocus={() => setIncorrectCredentials(false)}
-                                borderColor={incorrectCredentials ? redDefault : greyDefault}
-                                placeholder='E-mail'
-                                keyboardType='email-address'
-                                text={email}
-                                onChangeText={setEmail} />
-                            <InputPassword
-                                onFocus={() => setIncorrectCredentials(false)}
-                                borderColor={incorrectCredentials ? redDefault : greyDefault}
-                                text={password}
-                                onChangeText={setPassword} />
-                        </View>
+                        <KeyboardAvoidingView style={{height: 165, width: '100%'}}>
+                            <ScrollView style={{ width: '100%' }} contentContainerStyle={{ width: '100%', alignItems: 'center' }}>
+                                <View style={style.inputsContainer}>
+                                    <Input
+                                        onFocus={() => setIncorrectCredentials(false)}
+                                        borderColor={incorrectCredentials ? redDefault : greyDefault}
+                                        placeholder='E-mail'
+                                        keyboardType='email-address'
+                                        text={email}
+                                        onChangeText={setEmail} />
+                                    <InputPassword
+                                        onFocus={() => setIncorrectCredentials(false)}
+                                        borderColor={incorrectCredentials ? redDefault : greyDefault}
+                                        text={password}
+                                        onChangeText={setPassword} />
+                                </View>
+                            </ScrollView>
+                        </KeyboardAvoidingView>
                         {
                             incorrectCredentials ?
                                 <Text style={{ color: redDefault }}>*Email ou senha incorretos!</Text> : <></>
