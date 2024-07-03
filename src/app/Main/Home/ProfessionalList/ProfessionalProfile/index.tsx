@@ -156,7 +156,7 @@ export default function ProfessionalProfile(props: any) {
                         cancel={() => setShowDialogWhatsApp(false)}
                         ok={() => handlePressOk()}
                         title='REQUISIÇÃO DE SERVIÇO'
-                        text='ALL-O! Ao iniciar a conversa no WhatsApp registraremos a intenção de servico, tudo bem?' />
+                        text='ALL-O! Ao iniciar a conversa no WhatsApp registraremos a intenção de serviço, tudo bem?' />
 
                     {servicosNaoVistos.length > 0 ?
                         <FlatList

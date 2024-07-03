@@ -81,7 +81,7 @@ export default function SignIn({ navigation }: any) {
                                         placeholder='E-mail'
                                         keyboardType='email-address'
                                         text={email}
-                                        onChangeText={setEmail} />
+                                        onChangeText={(value) => setEmail(value.toLowerCase())} />
                                     <InputPassword
                                         onFocus={() => setIncorrectCredentials(false)}
                                         borderColor={incorrectCredentials ? redDefault : greyDefault}

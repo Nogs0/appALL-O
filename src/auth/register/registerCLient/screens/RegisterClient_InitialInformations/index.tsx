@@ -66,7 +66,7 @@ export default function RegisterProfessional_InitialInformations({ navigation }:
                 <Text style={{ color: redDefault, width: '100%', textAlign: 'left' }}>*Insira um documento válido!</Text>
                 : null
             }
-            <Input keyboardType='email-address' onFocus={() => setIncorrectEmail(false)} placeholder='Email' text={email} onChangeText={setEmail} />
+            <Input keyboardType='email-address' onFocus={() => setIncorrectEmail(false)} placeholder='Email' text={email} onChangeText={(value) => setEmail(value.toLowerCase())} />
             {
               incorrectEmail ?
                 <Text style={{ color: redDefault, width: '100%', textAlign: 'left' }}>*Insira um email válido!</Text>

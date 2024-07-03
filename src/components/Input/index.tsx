@@ -1,5 +1,5 @@
 import React from 'react'
-import { KeyboardTypeOptions, TextInput, View } from 'react-native'
+import { InputModeOptions, KeyboardTypeOptions, TextInput, View } from 'react-native'
 
 import styles from './styles'
 import MaskInput from 'react-native-mask-input'
@@ -16,7 +16,8 @@ type InputProps = {
   onFocus?: any,
   borderColor?: string,
   textColor?: string,
-  keyboardType?: KeyboardTypeOptions
+  keyboardType?: KeyboardTypeOptions,
+  inputMode?: InputModeOptions
 }
 export default function Input(props: InputProps) {
   return (
@@ -34,6 +35,7 @@ export default function Input(props: InputProps) {
             mask={props.mask} />
           :
           <TextInput
+            inputMode={props.inputMode}
             keyboardType={props.keyboardType ? props.keyboardType : 'default'}
             onFocus={props.onFocus}
             onBlur={props.onBlur}

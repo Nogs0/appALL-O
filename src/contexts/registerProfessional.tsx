@@ -128,6 +128,7 @@ function RegisterProfessionalProvider({ children }: any) {
                 prev = {} as ProvedorCadastroInput;
 
             prev.provedor.servicoImagens = images;
+            console.log(images)
             return prev;
         });
     }
@@ -142,6 +143,7 @@ function RegisterProfessionalProvider({ children }: any) {
 
     function endingRegister(): Promise<void> {
         setLoading(true);
+        console.log(profissional)
         return new Promise<void>((resolve, reject) => {
             if (profissional) {
                 createProvider(profissional)
