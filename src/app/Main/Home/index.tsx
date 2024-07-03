@@ -9,7 +9,7 @@ import OtherProfessions from '../../../components/OtherProfessions';
 import SearchForAProfession from '../../../components/SearchForAProfessional';
 import { ProfissaoOutput, ServicoOutput, useAPI } from '../../../contexts/api';
 import { useAuth } from '../../../contexts/auth';
-import { backgroundDialogDefault, greyLoadingDefault2, whiteDefault } from '../../../shared/styleConsts';
+import { whiteDefault } from '../../../shared/styleConsts';
 
 export default function Home({ navigation }: any) {
 
@@ -132,7 +132,7 @@ export default function Home({ navigation }: any) {
       {search.length > 0 ?
         <View style={{ alignItems: 'center', width: '100%' }}>
           <FlatList
-            style={{ width: '90%', height: '82%' }}
+            style={{ width: '90%', height: '80%' }}
             numColumns={3}
             data={profissoes}
             keyExtractor={(item, index) => index.toString()}

@@ -3,21 +3,19 @@ import { blackDefault, greyDefault, orangeDefault, whiteDefault } from "../../sh
 
 export default StyleSheet.create({
     container: {
-        width: '33.333333333333%',
-        height: '100%',
+        width: '30%',
+        borderRadius: 15,
+        borderWidth: 1,
+        borderColor: greyDefault,
+        marginHorizontal: '1%',
+        marginVertical: '1%',
+        padding: '2%',
     },
     informationContainer: {
         alignItems: 'center',
-        marginTop: 7,
-        marginHorizontal: 5,
-        backgroundColor: whiteDefault,
-        borderRadius: 15,
-        padding: 10,
-        borderWidth: 2,
-        borderColor: greyDefault,
     },
     professionName: {
-        fontSize: 11,
+        fontSize: 12,
         color: blackDefault,
         fontFamily: 'Rubik-SemiBold'
     }

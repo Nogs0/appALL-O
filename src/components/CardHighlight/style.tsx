@@ -1,10 +1,12 @@
-import { StyleSheet } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 import { whiteDefault, blackDefault } from "../../shared/styleConsts";
+
+const win = Dimensions.get('window');
 
 export default StyleSheet.create({
     containerImage: {
         paddingRight: 10,
-        flex: 0.9,
+        flex: 1,
         flexDirection: 'row',
         borderRadius: 15,
         alignItems: 'center',
@@ -36,8 +38,8 @@ export default StyleSheet.create({
     },
     imageProfessional: {
         flex: 1,
-        width: 320,
-        height: 200,
+        width: win.width - win.width * 0.25,
+        height: win.height > 710 ? win.height * 0.3 : win.height * 0.15,
         borderRadius: 15
     }
 })

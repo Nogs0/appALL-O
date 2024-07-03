@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Image } from 'react-native'
+import { View, Text, TouchableOpacity, Image, Dimensions } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import style from './style'
 import { useAPI } from '../../contexts/api';
@@ -16,6 +16,7 @@ export default function CardHighlight({ navigation, razaoSocial, nomeProfissao, 
 
     const { getImageProfessional } = useAPI();
     const [image, setImage] = useState<any>();
+    const win = Dimensions.get('window');
 
     useEffect(() => {
         getImageProfessional(imageId)
@@ -34,7 +35,7 @@ export default function CardHighlight({ navigation, razaoSocial, nomeProfissao, 
         <TouchableOpacity style={style.containerImage} onPress={() => {
             navigation.navigate('ProfessionalProfile', { id: id, profissao: nomeProfissao })
         }}>
-            {image ? <Image style={style.imageProfessional} source={{uri: image}}></Image> : <></>}
+            {image ? <Image resizeMethod='scale' style={style.imageProfessional} source={{ uri: image }}></Image> : <Image style={style.imageProfessional} source={require('../../assets/images/default-profile-pic.png')}></Image>}
             <Text style={style.nameProfissao}>{nomeProfissao}</Text>
             <Text style={style.nameProfessional}>{razaoSocial}</Text>
         </TouchableOpacity>

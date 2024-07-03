@@ -1,14 +1,18 @@
-import { View, Text, SafeAreaView } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
 import React from 'react'
-import style from './style'
+import { Dimensions, SafeAreaView, Text } from 'react-native'
 import CardsMostAccessed from '../CardsMostAccessed'
-import { NavigationContainer, useNavigation } from '@react-navigation/native'
+import style from './style'
 
 export default function MostAccessed() {
 
   const navigation = useNavigation();
+  const win = Dimensions.get('window');
+
   return (
-    <SafeAreaView style={style.container}>
+    <SafeAreaView style={{
+      marginHorizontal: 25
+    }}>
       <Text style={style.label}>Mais utilizados</Text>
       <CardsMostAccessed navigation={navigation} ></CardsMostAccessed>
     </SafeAreaView>

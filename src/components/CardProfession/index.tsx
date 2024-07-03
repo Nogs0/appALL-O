@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView, Touchable, TouchableOpacity } from 'react-native'
+import { View, Text, SafeAreaView, Touchable, TouchableOpacity, Dimensions } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { blackDefault, greyDefault, orangeDefault } from '../../shared/styleConsts'
@@ -19,7 +19,7 @@ export default function CardProfession(props: CardProfession) {
       <TouchableOpacity 
         style={style.informationContainer}
         onPress={props.onPress}>
-        <Icon color={blackDefault} name={props.professionIcon} size={35}></Icon>
+        <Icon color={blackDefault} name={props.professionIcon} size={32}></Icon>
         <Text style={style.professionName}>{props.profession}</Text>
       </TouchableOpacity>
     </SafeAreaView>

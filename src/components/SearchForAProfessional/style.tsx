@@ -1,17 +1,19 @@
-import { StyleSheet } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 import { blackDefault, greyDefault, orangeDefault, whiteDefault } from "../../shared/styleConsts";
+
+const win = Dimensions.get('window');
 
 export default StyleSheet.create({
     container: {
         marginHorizontal: 10,
         paddingTop: 10,
-        height: 120,
+        height: win.height > 710 ? 120 : 110,
         backgroundColor: whiteDefault
     },
     label: {
         left: 10,
         justifyContent: 'flex-start',
-        fontSize: 25,
+        fontSize: win.height > 710 ? 25 : 20,
         color: orangeDefault,
         fontFamily: 'Rubik-SemiBold',
     },

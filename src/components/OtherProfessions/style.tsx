@@ -3,8 +3,9 @@ import { orangeDefault } from "../../shared/styleConsts";
 
 export default StyleSheet.create({
     container: {
-        flex: 0.15,
-        marginHorizontal: 25,
+        flex: 1,
+        alignItems: 'center',
+        marginHorizontal: 25
     },
     row: {
         flexDirection: 'row'

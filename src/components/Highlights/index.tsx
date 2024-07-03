@@ -28,7 +28,6 @@ export default function Highlights({ navigation }: any) {
   }, [])
 
   const renderItem = (item: ProvedorDestaqueOutput) => {
-    console.log(item)
     return (
       <CardHighlight
         razaoSocial={item.razaoSocial}
@@ -44,13 +43,14 @@ export default function Highlights({ navigation }: any) {
       <Text style={style.label}>Profissionais em destaque</Text>
       {profissionais.length > 0 ?
         <FlatList
+          style={{marginHorizontal: 10}}
           showsHorizontalScrollIndicator={false}
           horizontal={true}
           data={profissionais}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => renderItem(item)}
         /> :
-        <Text style={{color: blackDefault}}>Profissionais não cadastrados!</Text>
+        <Text style={{ color: blackDefault }}>Profissionais não cadastrados!</Text>
       }
     </SafeAreaView>
   )

@@ -1,10 +1,12 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createContext, useContext, useEffect, useState } from "react";
 import { api_url } from "../services/config-dev";
+import OneSignal from "react-native-onesignal";
 
 interface AuthInput {
     login: string,
-    senha: string
+    senha: string,
+    oneSignalId?: string
 }
 
 interface User {
@@ -58,8 +60,8 @@ function AuthProvider({ children }: any) {
                                         setIsProfessional(JSON.parse(storagedIsProfessional));
                                         setToken(storagedToken)
                                         setUser(JSON.parse(storagedUser));
+                                        resolve()   
                                     }
-
                                     setLoading(false);
 
                                 }).catch((e) => console.log(e));
