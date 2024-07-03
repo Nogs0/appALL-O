@@ -17,7 +17,9 @@ export default function RegisterProfessional_InitialInformations({ navigation }:
   const [razaoSocial, setRazaoSocial] = useState<string>(!!profissional ? profissional.provedor.razaoSocial : '');
   const [email, setEmail] = useState<string>(!!profissional ? profissional.usuario.login : '');
   const [senha, setSenha] = useState<string>(!!profissional ? profissional.usuario.senha : '');
-  const [incorrectInformations, setIncorrectInformations] = useState<boolean>(false);
+  const [incorrectPassword, setIncorrectPassword] = useState<boolean>(false);
+  const [incorrectEmail, setIncorrectEmail] = useState<boolean>(false);
+  const [incorrectCpfCnpj, setIncorrectCpfCnpj] = useState<boolean>(false);
 
   const handleButtonNext = () => {
     setInitialInformations({
@@ -26,7 +28,6 @@ export default function RegisterProfessional_InitialInformations({ navigation }:
 
     if (canGoToTheNextStep())
       navigation.navigate('RegisterProfessional_Services');
-    else setIncorrectInformations(true)
   }
 
   const handleGoBack = () => {
@@ -34,8 +35,11 @@ export default function RegisterProfessional_InitialInformations({ navigation }:
   }
 
   const canGoToTheNextStep = (): boolean => {
+    setIncorrectEmail(!regexEMAIL.test(email.trim().toLowerCase()))
+    setIncorrectPassword(!(senha.length > 7))
+    setIncorrectCpfCnpj(!regexDocumento.test(cpfCnpj))
     return (
-      regexDocumento.test(cpfCnpj) && regexEMAIL.test(email) && senha.length > 0 && razaoSocial.length > 0
+      regexDocumento.test(cpfCnpj) && regexEMAIL.test(email) && senha.length > 7 && razaoSocial.length > 0
     )
   }
 
@@ -48,16 +52,26 @@ export default function RegisterProfessional_InitialInformations({ navigation }:
           <Text style={styleRegister.title}>Seja bem-vindo!</Text>
           <Text style={styleRegister.text}>Preencha os campos para criar a sua conta...</Text>
           <View style={styleRegister.inputsContainer}>
-            <Input onFocus={() => setIncorrectInformations(false)} placeholder='Nome' text={razaoSocial} onChangeText={setRazaoSocial}></Input>
-            <Input keyboardType='number-pad' onFocus={() => setIncorrectInformations(false)} placeholder='CNPJ ou CPF' text={cpfCnpj} onChangeText={setCpfCnpj}></Input>
-            <Input keyboardType='email-address' onFocus={() => setIncorrectInformations(false)} placeholder='Email' text={email} onChangeText={setEmail}></Input>
-            <InputPassword onFocus={() => setIncorrectInformations(false)} text={senha} onChangeText={setSenha}></InputPassword>
+            <Input placeholder='Nome' text={razaoSocial} onChangeText={setRazaoSocial}></Input>
+            <Input keyboardType='number-pad' onFocus={() => setIncorrectCpfCnpj(false)} placeholder='CNPJ ou CPF' text={cpfCnpj} onChangeText={setCpfCnpj}></Input>
+            {
+              incorrectCpfCnpj ?
+                <Text style={{ color: redDefault, width: '100%', textAlign: 'left' }}>*Insira um documento válido!</Text>
+                : null
+            }
+            <Input keyboardType='email-address' onFocus={() => setIncorrectEmail(false)} placeholder='Email' text={email} onChangeText={setEmail}></Input>
+            {
+              incorrectEmail ?
+                <Text style={{ color: redDefault, width: '100%', textAlign: 'left' }}>*Insira um email válido!</Text>
+                : null
+            }
+            <InputPassword onFocus={() => setIncorrectPassword(false)} text={senha} onChangeText={setSenha}></InputPassword>
+            {
+              incorrectPassword ?
+                <Text style={{ color: redDefault, width: '100%', textAlign: 'left' }}>*A senha deve possuir no mínimo 8 digitos!</Text>
+                : null
+            }
           </View>
-          {
-            incorrectInformations ?
-              <Text style={{ color: redDefault, width: '100%', textAlign: 'left' }}>*Por favor, preencha todos os campos corretamente!</Text>
-              : <></>
-          }
           <TouchableOpacity style={styleRegister.buttonNext}
             onPress={() => handleButtonNext()}>
             <Text style={styleRegister.textButtonNext}>Prosseguir</Text>
