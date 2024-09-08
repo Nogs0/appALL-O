@@ -5,6 +5,7 @@ import { useAuth } from '../contexts/auth';
 import { blueDefault, orangeDefault, whiteDefault } from '../shared/styleConsts';
 import Main from './Main/Main';
 import SecondTab from './SecondTab';
+import Mapa from './Mapa';
 
 const Tab = createBottomTabNavigator();
 export default function Pages() {
@@ -18,6 +19,12 @@ export default function Pages() {
           tabBarShowLabel: false,
           tabBarActiveTintColor: whiteDefault
         }}>
+        {!isProfessional ?
+          <Tab.Screen name="Map" component={Mapa} options={{
+            tabBarIcon: ({ color, focused }) => <ButtonTabBar defaultColor={orangeDefault} color={color} focused={focused} icon={"map"} />
+          }} />
+          : <></>
+        }
         <Tab.Screen name="Main" component={Main} options={{
           tabBarIcon: ({ color, focused }) => <ButtonTabBar defaultColor={isProfessional ? blueDefault : orangeDefault} color={color} focused={focused} icon={"home"} />
         }} />
