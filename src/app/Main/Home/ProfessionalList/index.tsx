@@ -11,7 +11,7 @@ import { showMessage } from 'react-native-flash-message';
 import { orangeDefault } from '../../../../shared/styleConsts';
 
 export default function ProfessionalList(props: any) {
-  const { getAllProfessionalsByID, updateFavoriteProvider } = useAPI();
+  const { getAllProfessionalsByID, updateFavoriteProvider, getAllProfessionalsByProfissaoIdMaisRelevantes, getAllProfessionalsByProfissaoIdMelhorAvaliados } = useAPI();
   const [params, setParams] = useState<any>(props.route.params)
   const navigation = useNavigation();
   const [profissionais, setProfissionais] = useState<ProvedorListOutput[]>([])
@@ -19,7 +19,31 @@ export default function ProfessionalList(props: any) {
   const [buttonSelected, setButtonSelected] = useState<ButtonFilterEnumProfessions>(ButtonFilterEnumProfessions.nextToYou);
 
   useEffect(() => {
-    console.log("FILTRO DEPOIS AAAAAAAAAAA")
+    if (buttonSelected == ButtonFilterEnumProfessions.bestRated)
+      getAllProfessionalsByProfissaoIdMelhorAvaliados(params.id)
+        .then((result) => {
+          setProfissionais(result)
+        }).catch((e) => {
+          showMessage({
+            message: "Falha ao carregar profissionais.",
+            type: "danger"
+          });
+        }).finally(() => {
+          setLoading(false)
+        })
+    else if (buttonSelected == ButtonFilterEnumProfessions.recognized)
+      getAllProfessionalsByProfissaoIdMaisRelevantes(params.id)
+        .then((result) => {
+          setProfissionais(result)
+        }).catch((e) => {
+          showMessage({
+            message: "Falha ao carregar profissionais.",
+            type: "danger"
+          });
+        }).finally(() => {
+          setLoading(false)
+        })
+
   }, [buttonSelected]);
 
   useEffect(() => {
@@ -43,7 +67,7 @@ export default function ProfessionalList(props: any) {
 
   const handleFavoritarProfissional = (id: number) => {
     updateFavoriteProvider(id)
-      .then((result) => {})
+      .then((result) => { })
       .catch((e) => {
         showMessage({
           message: 'Falha ao favoritar profissional',

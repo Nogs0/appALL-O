@@ -45,11 +45,11 @@ export default function Mapa() {
         style={style.mapa}
         region={region}
       >
-        {markers.map((marker) => {
+        {/* {markers.map((marker) => {
           return (
             
           )
-        })}
+        })} */}
       </MapView>
     </View>
   )

@@ -5,6 +5,6 @@ import AuthRotes from './auth.routes';
 
 export default function Routes() {
     const { signed } = useAuth();
-    // return signed ? <AppRoutes /> : <AuthRotes />;
-    return <AppRoutes />;
+    return signed ? <AppRoutes /> : <AuthRotes />;
+    // return <AppRoutes />;
 }

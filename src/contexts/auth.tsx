@@ -100,7 +100,7 @@ function AuthProvider({ children }: any) {
                         });
                 })
                 .catch((e) => {
-                    console.log('ERRO AUTH SIGNIN--->', e);
+                    console.log('ERRO AUTH SIGNIN--->', e.message);
                     reject(e);
                 })
         })

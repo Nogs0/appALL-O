@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { FlatList, SafeAreaView, ScrollView, View } from 'react-native';
 import { showMessage } from 'react-native-flash-message';
+import { launchImageLibrary } from 'react-native-image-picker';
 import CardProfession from '../../../components/CardProfession';
-import CustomDialogAvaliacao from '../../../components/CustomDialogAvaliacao';
 import Highlights from '../../../components/Highlights';
 import MostAccessed from '../../../components/MostAccessed';
 import OtherProfessions from '../../../components/OtherProfessions';
 import SearchForAProfession from '../../../components/SearchForAProfessional';
+import TelaAvaliacao from '../../../components/TelaAvaliacao';
 import { ProfissaoOutput, ServicoOutput, useAPI } from '../../../contexts/api';
 import { useAuth } from '../../../contexts/auth';
 import { whiteDefault } from '../../../shared/styleConsts';
 
 export default function Home({ navigation }: any) {
 
-  const { getProfessionsBySearch, getServicosParaAvaliarCliente, createAvaliacao } = useAPI();
+  const { getProfessionsBySearch, getServicosParaAvaliarCliente, createAvaliacao, uploadImageAvaliacao } = useAPI();
 
   const { user, isProfessional } = useAuth();
 
@@ -22,14 +23,17 @@ export default function Home({ navigation }: any) {
 
   const [servicosParaAvaliar, setServicosParaAvaliar] = useState<ServicoOutput[]>([])
 
-  const [nota, setNota] = useState<number>(5);
+  const [estrelasQualidade, setEstrelasQualidade] = useState<number>(5);
+  const [estrelasAgilidade, setEstrelasAgilidade] = useState<number>(5);
+  const [estrelasPreco, setEstrelasPreco] = useState<number>(5);
   const [descricao, setDescricao] = useState<string>('')
+  const [fotosAvaliacao, setFotosAvaliacao] = useState<any[]>([]);
 
   useEffect(() => {
     if (user && !isProfessional)
       getServicosParaAvaliarCliente(user?.id)
         .then((result) => {
-          setServicosParaAvaliar(result)
+          setServicosParaAvaliar(result);
         })
         .catch((e) => {
           showMessage({
@@ -69,16 +73,41 @@ export default function Home({ navigation }: any) {
     )
   }
 
+  const anexarImagem = () => {
+    launchImageLibrary({ mediaType: 'photo' }, (response) => {
+      if (response.assets && response.assets.length > 0 && response.assets[0].uri && response.assets[0].fileName) {
+        setFotosAvaliacao((prev) => [...prev, ...[{uri: response.assets[0].uri}]])
+        // uploadImageAvaliacao(response.assets[0].uri, response.assets[0].fileName)
+        //       .then((newImage) => {
+        //           setFotosAvaliacao((prev) => [...prev, ...[newImage]])
+        //       })
+        //       .catch((e) => {
+        //           showMessage({
+        //               message: 'Falha no upload da imagem',
+        //               type: 'danger'
+        //           })
+        //       })
+
+      }
+  })
+  }
+
   const renderItemServico = (item: ServicoOutput) => {
     return (
-      <CustomDialogAvaliacao
+      <TelaAvaliacao
         ok={() => handlePress(item.id)}
         title='NOTIFICAÇÃO DE SERVIÇO'
         text={`ALL-O! ${user?.name}, você poderia avaliar o serviço realizado pelo(a) profissional ${item.provedor.razaoSocial}?`}
-        estrelas={nota}
-        setEstrelas={setNota}
+        estrelasQualidade={estrelasQualidade}
+        setEstrelasQualidade={setEstrelasQualidade}
+        estrelasAgilidade={estrelasAgilidade}
+        setEstrelasAgilidade={setEstrelasAgilidade}
+        estrelasPreco={estrelasPreco}
+        setEstrelasPreco={setEstrelasPreco}
         descricao={descricao}
         setDescricao={setDescricao}
+        anexarImagem={anexarImagem}
+        imagens={fotosAvaliacao}
       />
     )
   }

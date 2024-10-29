@@ -4,9 +4,8 @@ import { blackDefault, blueDefault, greyDefault, greyLoadingDefault, greyLoading
 export default StyleSheet.create({
     contentContainer: {
         backgroundColor: whiteDefault,
-        borderRadius: 50,
-        height: 400,
-        width: 300,
+        height: '100%',
+        width: '100%',
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: 10,
@@ -48,7 +47,7 @@ export default StyleSheet.create({
     },
     descContainer: {
         width: '100%',
-        height: '40%',
+        height: '25%',
         alignItems: 'center',
         justifyContent: 'center',
     },

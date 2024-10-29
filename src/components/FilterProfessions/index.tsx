@@ -26,7 +26,7 @@ export default function FilterProfessions(props: FilterProfessionsProps) {
             <ButtonTab backgroundColor={props.button == ButtonFilterEnumProfessions.recognized ? orangeDefault : whiteDefault} 
             color={props.button == ButtonFilterEnumProfessions.recognized ? whiteDefault : greyDefault} 
             borderColor={props.button == ButtonFilterEnumProfessions.recognized ? whiteDefault : greyDefault} 
-            width={'45%'} onPress={() => { props.onPress(ButtonFilterEnumProfessions.recognized) }} text={'Conhecidos'} />
+            width={'45%'} onPress={() => { props.onPress(ButtonFilterEnumProfessions.recognized) }} text={'Relevância'} />
         </View>
     )
 }

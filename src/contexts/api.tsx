@@ -192,6 +192,8 @@ interface APIContextData {
     createClient(client: ClienteCadastroInput): Promise<void>,
     getProfessionsBySearch(search: string): Promise<ProfissaoOutput[]>
     getAllProfessionalsByID(id: number): Promise<ProvedorListOutput[]>,
+    getAllProfessionalsByProfissaoIdMaisRelevantes(idProfissao: number): Promise<ProvedorListOutput[]>,
+    getAllProfessionalsByProfissaoIdMelhorAvaliados(idProfissao: number): Promise<ProvedorListOutput[]>,
     getImageClient(idImage: string): Promise<any>,
     getImageProfessional(idImage: string): Promise<any>,
     getImageServico(idImage: string): Promise<any>,
@@ -199,6 +201,7 @@ interface APIContextData {
     createImageClient(uri: string, fileName: string): Promise<string>,
     updateImageProfessional(uri: string, fileName: string): Promise<string>,
     updateImageProfessionalServico(uri: string, fileName: string): Promise<string>,
+    uploadImageAvaliacao(uri: string, fileName: string): Promise<string>,
     createImageProfessional(uri: string, fileName: string): Promise<string>,
     getServicosNaoVistosProfissional(id: number): Promise<ServicoOutput[]>,
     feedbackServico(input: FeedbackServicoInput): Promise<void>,
@@ -216,6 +219,32 @@ function APIProvider({ children }: any) {
     const getAllProfessionalsByID = (id: number): Promise<ProvedorListOutput[]> => {
         return new Promise<ProvedorListOutput[]>((resolve, reject) => {
             ALLORequestBase<ProvedorListOutput[]>(token, verbosAPI.GET, 'provedor/filter/profissao', `idProfissao=${id}`)
+                .then((result) => {
+                    resolve(result);
+                })
+                .catch((e) => {
+                    console.log(e.request);
+                    reject(e);
+                })
+        })
+    }
+
+    const getAllProfessionalsByProfissaoIdMaisRelevantes = (idProfissao: number): Promise<ProvedorListOutput[]> => {
+        return new Promise<ProvedorListOutput[]>((resolve, reject) => {
+            ALLORequestBase<ProvedorListOutput[]>(token, verbosAPI.GET, 'provedor/maisRelevantes', `idProfissao=${idProfissao}`)
+                .then((result) => {
+                    resolve(result);
+                })
+                .catch((e) => {
+                    console.log(e.request);
+                    reject(e);
+                })
+        })
+    }
+
+    const getAllProfessionalsByProfissaoIdMelhorAvaliados = (idProfissao: number): Promise<ProvedorListOutput[]> => {
+        return new Promise<ProvedorListOutput[]>((resolve, reject) => {
+            ALLORequestBase<ProvedorListOutput[]>(token, verbosAPI.GET, 'provedor/melhoresAvaliados', `idProfissao=${idProfissao}`)
                 .then((result) => {
                     resolve(result);
                 })
@@ -606,6 +635,34 @@ function APIProvider({ children }: any) {
         })
     }
 
+    const uploadImageAvaliacao = (uri: string, fileName: string): Promise<string> => {
+        return new Promise<string>((resolve, reject) => {
+            const form = new FormData();
+            const imageObject = {
+                name: 'avaliacao-servico',
+                uri: uri,
+                type: `image/${getTypeFromFileName(fileName)}`
+            }
+
+            form.append('image', imageObject)
+            fetch(`${api_url}avaliacao/upload`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                },
+                body: form
+            })
+                .then((result) => result.text())
+                .then((id) => {
+                    resolve(id);
+                })
+                .catch((e) => {
+                    console.log(e)
+                    reject(e);
+                });
+        })
+    }
+
     const createImageProfessional = (uri: string, fileName: string): Promise<string> => {
         return new Promise<string>((resolve, reject) => {
             const form = new FormData();
@@ -763,6 +820,8 @@ function APIProvider({ children }: any) {
                 getProfissoesMaisUtilizadas,
                 getProfissoesAleatorias,
                 getAllProfessionalsByID,
+                getAllProfessionalsByProfissaoIdMelhorAvaliados,
+                getAllProfessionalsByProfissaoIdMaisRelevantes,
                 getPerfilCliente,
                 getPerfilProfissional,
                 updateProfessional,
@@ -787,7 +846,8 @@ function APIProvider({ children }: any) {
                 getServicosParaAvaliarCliente,
                 createAvaliacao,
                 registrarServico,
-                getProvedorHighlights
+                getProvedorHighlights,
+                uploadImageAvaliacao
             }}>
             {children}
         </APIContext.Provider>
