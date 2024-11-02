@@ -8,11 +8,14 @@ import style from './style'
 interface CardReviewProps {
     id: number
     client: string,
-    rate: number,
+    qualidade: number,
+    agilidade: number,
+    preco: number,
     rateNote: string,
     favorite: boolean,
     isProfessional: boolean,
-    setFavoriteCallback(): void
+    setFavoriteCallback(): void,
+    onClick(): void
 }
 
 export default function CardReview(props: CardReviewProps) {
@@ -23,12 +26,12 @@ export default function CardReview(props: CardReviewProps) {
     }
 
     return (
-        <View style={style.cardReview}>
+        <TouchableOpacity style={style.cardReview} onPress={() => props.onClick()}>
             <View style={style.infoContainer}>
                 <View style={style.cardHeader}>
                     <Text style={style.nameClient}>{props.client}</Text>
                 </View>
-                <Stars rate={props.rate} />
+                <Stars rate={(props.agilidade + props.qualidade + props.preco)/3} />
                 <Text style={style.rateNote}>{props.rateNote}</Text>
             </View>
             <TouchableOpacity
@@ -36,6 +39,6 @@ export default function CardReview(props: CardReviewProps) {
                 onPress={props.setFavoriteCallback}>
                 {props.isProfessional ? getFavorite(props.favorite) : <></>}
             </TouchableOpacity>
-        </View>
+        </TouchableOpacity>
     )
 }

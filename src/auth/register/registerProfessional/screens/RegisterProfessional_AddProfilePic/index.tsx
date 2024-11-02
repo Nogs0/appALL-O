@@ -72,7 +72,7 @@ export default function RegisterProfessional_AddProfilePic({ navigation }: any) 
               :
               <View style={style.noImage}>
                 <Icon name={'camera'} size={50} color={blackDefault}></Icon>
-                <Text style={{ color: blackDefault, fontFamily: 'Rubik-SemiBold' }}>Adicionar foto de perfil</Text>
+                <Text style={{ color: blackDefault, fontFamily: 'Rubik-SemiBold', textAlign: 'center' }}>Adicionar foto de perfil</Text>
                 {loadingImage ?
                   <ActivityIndicator style={style.loadingImage} size={35} color={blueDefault} />
                   :

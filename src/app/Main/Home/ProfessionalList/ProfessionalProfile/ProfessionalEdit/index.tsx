@@ -228,17 +228,17 @@ export default function ProfessionalEdit(props: any) {
                         <View style={style.tabsContainer}>
                             <TouchableOpacity disabled={loadingUpdate} style={[style.tab, { backgroundColor: tab == 0 ? blueDefault : whiteDefault }]}
                                 onPress={() => setTab(0)}>
-                                <Text style={{ color: tab == 0 ? whiteDefault : blackDefault, fontSize: 20, fontFamily: 'Rubik-SemiBold' }}>Pessoal
+                                <Text style={{ color: tab == 0 ? whiteDefault : blackDefault, fontSize: 16, fontFamily: 'Rubik-SemiBold' }}>Pessoal
                                 </Text>
                             </TouchableOpacity>
                             <TouchableOpacity disabled={loadingUpdate || loadingCEP} style={[style.tab, { backgroundColor: tab == 1 ? blueDefault : whiteDefault }]}
                                 onPress={() => setTab(1)}>
-                                <Text style={{ color: tab == 1 ? whiteDefault : blackDefault, fontSize: 20, fontFamily: 'Rubik-SemiBold' }}>Endereço
+                                <Text style={{ color: tab == 1 ? whiteDefault : blackDefault, fontSize: 16, fontFamily: 'Rubik-SemiBold' }}>Endereço
                                 </Text>
                             </TouchableOpacity>
                             <TouchableOpacity disabled={loadingUpdate} style={[style.tab, { backgroundColor: tab == 2 ? blueDefault : whiteDefault }]}
                                 onPress={() => setTab(2)}>
-                                <Text style={{ color: tab == 2 ? whiteDefault : blackDefault, fontSize: 20, fontFamily: 'Rubik-SemiBold' }}>Imagens
+                                <Text style={{ color: tab == 2 ? whiteDefault : blackDefault, fontSize: 16, fontFamily: 'Rubik-SemiBold' }}>Imagens
                                 </Text>
                             </TouchableOpacity>
                         </View>
@@ -334,7 +334,7 @@ export default function ProfessionalEdit(props: any) {
                         }
                         <TouchableOpacity disabled={loadingUpdate} style={style.buttonUpdate}
                             onPress={() => handleupdate()}>
-                            <Text style={{ color: whiteDefault, fontSize: 24, fontFamily: 'Rubik-SemiBold' }}>Atualizar Informações</Text>
+                            <Text style={{ color: whiteDefault, fontSize: 20, fontFamily: 'Rubik-SemiBold' }}>Atualizar dados</Text>
                         </TouchableOpacity>
                     </View>
                 </>

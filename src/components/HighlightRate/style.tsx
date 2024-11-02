@@ -23,14 +23,15 @@ export default StyleSheet.create({
     },
     name: {
         color: blackDefault,
-        fontSize: 20,
+        fontSize: 16,
         fontFamily: 'Rubik-SemiBold'
     },
     rateNote: {
         textAlign: 'left',
         color: whiteDefault,
         fontFamily: 'Rubik-LightItalic',
-        width: '90%'
+        width: '90%',
+        fontSize: 14,
     },
     rateStars: {
         width: '20%',

@@ -91,7 +91,7 @@ export default function RegisterProfessional_Images({ navigation }: any) {
       <SafeAreaView style={styleRegister.defaultContainer}>
         <HeaderRegisterProfessional navigation={navigation} />
         <View style={styleRegister.defaultContentContainer}>
-          <Icon name={'image-plus'} size={50} color={blackDefault}></Icon>
+          <Icon name={'image-plus'} size={30} color={blackDefault}></Icon>
           <Text style={styleRegister.title}>Adicione imagens!</Text>
 
           <Text style={styleRegister.text}>

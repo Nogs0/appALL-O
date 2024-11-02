@@ -4,7 +4,7 @@ import { blackDefault, blueDefault, greyDefault, greyLoadingDefault, greyLoading
 export default StyleSheet.create({
     contentContainer: {
         backgroundColor: whiteDefault,
-        height: '100%',
+        height: '90%',
         width: '100%',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -47,7 +47,7 @@ export default StyleSheet.create({
     },
     descContainer: {
         width: '100%',
-        height: '25%',
+        height: '20%',
         alignItems: 'center',
         justifyContent: 'center',
     },

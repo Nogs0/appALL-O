@@ -37,7 +37,7 @@ export default StyleSheet.create({
         paddingTop: '2%',
         paddingHorizontal: 10,
         color: 'black',
-        fontSize: 20,
+        fontSize: 14,
         fontFamily: 'Rubik-Light',
         textAlign: 'center'
     },

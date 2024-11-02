@@ -117,9 +117,12 @@ export interface PefilClienteOutput {
 
 export interface AvaliacaoOutput {
     id: number,
-    nota: number,
+    qualidade: number,
+    preco: number,
+    agilidade: number,
     titulo: string,
     descricao: string
+    uriImagens: string[]
 }
 
 export interface PerfilProvedorOutput {
@@ -148,7 +151,10 @@ export interface ImagemUpload {
 export interface AvaliacaoInput {
     idServico: number,
     descricao: string,
-    nota: number
+    qualidade: number
+    agilidade: number
+    preco: number,
+    uriImagens: string[]
 }
 
 export interface ServicoOutput {
@@ -191,9 +197,7 @@ interface APIContextData {
     createProvider(profissional: ProvedorCadastroInput): Promise<void>,
     createClient(client: ClienteCadastroInput): Promise<void>,
     getProfessionsBySearch(search: string): Promise<ProfissaoOutput[]>
-    getAllProfessionalsByID(id: number): Promise<ProvedorListOutput[]>,
-    getAllProfessionalsByProfissaoIdMaisRelevantes(idProfissao: number): Promise<ProvedorListOutput[]>,
-    getAllProfessionalsByProfissaoIdMelhorAvaliados(idProfissao: number): Promise<ProvedorListOutput[]>,
+    getProvedoresByFilter(idProfissao: number, melhoresAvaliados: boolean, maisRelevantes: boolean): Promise<ProvedorListOutput[]>,
     getImageClient(idImage: string): Promise<any>,
     getImageProfessional(idImage: string): Promise<any>,
     getImageServico(idImage: string): Promise<any>,
@@ -202,6 +206,7 @@ interface APIContextData {
     updateImageProfessional(uri: string, fileName: string): Promise<string>,
     updateImageProfessionalServico(uri: string, fileName: string): Promise<string>,
     uploadImageAvaliacao(uri: string, fileName: string): Promise<string>,
+    getImageAvaliacao(idImage: string): Promise<any>,
     createImageProfessional(uri: string, fileName: string): Promise<string>,
     getServicosNaoVistosProfissional(id: number): Promise<ServicoOutput[]>,
     feedbackServico(input: FeedbackServicoInput): Promise<void>,
@@ -216,35 +221,10 @@ function APIProvider({ children }: any) {
 
     const { token } = useAuth();
 
-    const getAllProfessionalsByID = (id: number): Promise<ProvedorListOutput[]> => {
+    const getProvedoresByFilter = (idProfissao: number, melhoresAvaliados: boolean, maisRelevantes: boolean): Promise<ProvedorListOutput[]> => {
         return new Promise<ProvedorListOutput[]>((resolve, reject) => {
-            ALLORequestBase<ProvedorListOutput[]>(token, verbosAPI.GET, 'provedor/filter/profissao', `idProfissao=${id}`)
-                .then((result) => {
-                    resolve(result);
-                })
-                .catch((e) => {
-                    console.log(e.request);
-                    reject(e);
-                })
-        })
-    }
-
-    const getAllProfessionalsByProfissaoIdMaisRelevantes = (idProfissao: number): Promise<ProvedorListOutput[]> => {
-        return new Promise<ProvedorListOutput[]>((resolve, reject) => {
-            ALLORequestBase<ProvedorListOutput[]>(token, verbosAPI.GET, 'provedor/maisRelevantes', `idProfissao=${idProfissao}`)
-                .then((result) => {
-                    resolve(result);
-                })
-                .catch((e) => {
-                    console.log(e.request);
-                    reject(e);
-                })
-        })
-    }
-
-    const getAllProfessionalsByProfissaoIdMelhorAvaliados = (idProfissao: number): Promise<ProvedorListOutput[]> => {
-        return new Promise<ProvedorListOutput[]>((resolve, reject) => {
-            ALLORequestBase<ProvedorListOutput[]>(token, verbosAPI.GET, 'provedor/melhoresAvaliados', `idProfissao=${idProfissao}`)
+            ALLORequestBase<ProvedorListOutput[]>(token, verbosAPI.GET, 'provedor', 
+                `idProfissao=${idProfissao}&melhoresAvaliados=${melhoresAvaliados}&maisRelevantes=${maisRelevantes}`)
                 .then((result) => {
                     resolve(result);
                 })
@@ -474,6 +454,31 @@ function APIProvider({ children }: any) {
         })
     }
 
+    const getImageAvaliacao = (idImage: string): Promise<ArrayBuffer | string> => {
+        return new Promise<ArrayBuffer | string>((resolve, reject) => {
+            let urlToFetch = `${api_url}servico/searchImage?filename=${idImage}`;
+            fetch(urlToFetch, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                }
+            })
+                .then(response => response.blob())
+                .then(blob => {
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                        const imageData = reader.result;
+                        resolve(imageData);
+                    };
+                    reader.readAsDataURL(blob);
+                })
+                .catch((e) => {
+                    console.error('Erro ao buscar a imagem:', e);
+                    reject(e)
+                });
+        })
+    }
+
     const getImageProfessional = (idImage: string): Promise<ArrayBuffer | string> => {
         return new Promise<ArrayBuffer | string>((resolve, reject) => {
             let urlToFetch = `${api_url}provedor/buscarImagem?fileName=${idImage}`;
@@ -644,11 +649,13 @@ function APIProvider({ children }: any) {
                 type: `image/${getTypeFromFileName(fileName)}`
             }
 
-            form.append('image', imageObject)
-            fetch(`${api_url}avaliacao/upload`, {
+            console.log(`${api_url}servico/upload`)
+            form.append('file', imageObject)
+            fetch(`${api_url}servico/upload`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'multipart/form-data'
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `Bearer ${token}`,
                 },
                 body: form
             })
@@ -731,8 +738,11 @@ function APIProvider({ children }: any) {
                 {
                     id: input.idServico,
                     avaliacao: {
-                        nota: input.nota,
-                        descricao: input.descricao
+                        qualidade: input.qualidade,
+                        preco: input.preco,
+                        agilidade: input.agilidade,
+                        descricao: input.descricao,
+                        uriImagens: input.uriImagens
                     }
                 })
                 .then((result) => resolve())
@@ -817,11 +827,10 @@ function APIProvider({ children }: any) {
                 getProvedorNotificacoes,
                 getImageServico,
                 updateImageProfessionalServico,
+                getImageAvaliacao,
                 getProfissoesMaisUtilizadas,
                 getProfissoesAleatorias,
-                getAllProfessionalsByID,
-                getAllProfessionalsByProfissaoIdMelhorAvaliados,
-                getAllProfessionalsByProfissaoIdMaisRelevantes,
+                getProvedoresByFilter,
                 getPerfilCliente,
                 getPerfilProfissional,
                 updateProfessional,

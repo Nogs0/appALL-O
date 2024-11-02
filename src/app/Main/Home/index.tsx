@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { FlatList, SafeAreaView, ScrollView, View } from 'react-native';
 import { showMessage } from 'react-native-flash-message';
 import { launchImageLibrary } from 'react-native-image-picker';
@@ -11,6 +11,7 @@ import TelaAvaliacao from '../../../components/TelaAvaliacao';
 import { ProfissaoOutput, ServicoOutput, useAPI } from '../../../contexts/api';
 import { useAuth } from '../../../contexts/auth';
 import { whiteDefault } from '../../../shared/styleConsts';
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function Home({ navigation }: any) {
 
@@ -28,20 +29,23 @@ export default function Home({ navigation }: any) {
   const [estrelasPreco, setEstrelasPreco] = useState<number>(5);
   const [descricao, setDescricao] = useState<string>('')
   const [fotosAvaliacao, setFotosAvaliacao] = useState<any[]>([]);
+  const [imagensAvaliacaoIds, setImagensAvaliacaoIds] = useState<string[]>([]);
 
-  useEffect(() => {
-    if (user && !isProfessional)
-      getServicosParaAvaliarCliente(user?.id)
-        .then((result) => {
-          setServicosParaAvaliar(result);
-        })
-        .catch((e) => {
-          showMessage({
-            message: 'Falha ao carregar serviços para avaliar',
-            type: 'danger'
+  useFocusEffect(
+    useCallback(() => {
+      if (user && !isProfessional)
+        getServicosParaAvaliarCliente(user?.id)
+          .then((result) => {
+            setServicosParaAvaliar(result);
           })
-        })
-  }, [])
+          .catch((e) => {
+            showMessage({
+              message: 'Falha ao carregar serviços para avaliar',
+              type: 'danger'
+            })
+          })
+    }, [])
+  )
 
   const handleSearch = (value: string) => {
     setSearch(value);
@@ -76,20 +80,24 @@ export default function Home({ navigation }: any) {
   const anexarImagem = () => {
     launchImageLibrary({ mediaType: 'photo' }, (response) => {
       if (response.assets && response.assets.length > 0 && response.assets[0].uri && response.assets[0].fileName) {
-        setFotosAvaliacao((prev) => [...prev, ...[{uri: response.assets[0].uri}]])
-        // uploadImageAvaliacao(response.assets[0].uri, response.assets[0].fileName)
-        //       .then((newImage) => {
-        //           setFotosAvaliacao((prev) => [...prev, ...[newImage]])
-        //       })
-        //       .catch((e) => {
-        //           showMessage({
-        //               message: 'Falha no upload da imagem',
-        //               type: 'danger'
-        //           })
-        //       })
+        uploadImageAvaliacao(response.assets[0].uri, response.assets[0].fileName)
+          .then((newImage) => {
+            setImagensAvaliacaoIds((prev) => [...prev, ...[newImage]])
+            setFotosAvaliacao((prev) => {
+              if (response.assets)
+                prev.push({ uri: response.assets[0].uri, fileName: response.assets[0].fileName });
+              return [...prev];
+            })
+          })
+          .catch((e) => {
+            showMessage({
+              message: 'Falha no upload da imagem',
+              type: 'danger'
+            })
+          })
 
       }
-  })
+    })
   }
 
   const renderItemServico = (item: ServicoOutput) => {
@@ -122,10 +130,19 @@ export default function Home({ navigation }: any) {
   }
 
   const handlePress = (idServico: number) => {
-    createAvaliacao({ idServico, descricao, nota })
+    createAvaliacao({
+      idServico,
+      descricao,
+      qualidade: estrelasQualidade,
+      agilidade: estrelasAgilidade,
+      preco: estrelasPreco,
+      uriImagens: imagensAvaliacaoIds
+    })
       .then(() => {
         removeServico(idServico);
-        setNota(5);
+        setEstrelasQualidade(5);
+        setEstrelasAgilidade(5);
+        setEstrelasPreco(5);
         setDescricao('');
       })
       .catch((e) => {
@@ -140,19 +157,19 @@ export default function Home({ navigation }: any) {
     <SafeAreaView style={{ flex: 1, backgroundColor: whiteDefault }}>
 
       {servicosParaAvaliar.length > 0 ?
-          <FlatList
-            horizontal
-            data={[servicosParaAvaliar[0]]}
-            style={{
-              height: '100%',
-              position: 'absolute'
-            }}
-            contentContainerStyle={{ alignItems: 'center', justifyContent: 'center' }}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }) => renderItemServico(item)}
-            showsHorizontalScrollIndicator={false}
-            pagingEnabled
-          />
+        <FlatList
+          horizontal
+          data={[servicosParaAvaliar[0]]}
+          style={{
+            height: '100%',
+            position: 'absolute'
+          }}
+          contentContainerStyle={{ alignItems: 'center', justifyContent: 'center' }}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item }) => renderItemServico(item)}
+          showsHorizontalScrollIndicator={false}
+          pagingEnabled
+        />
         :
         <></>
       }

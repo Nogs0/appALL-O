@@ -16,7 +16,7 @@ export default StyleSheet.create({
     },
     nameProfessional: {
         textAlign: 'center',
-        fontSize: 32,
+        fontSize: 26,
         fontFamily: 'Rubik-SemiBold'
     },
     firstSection: {

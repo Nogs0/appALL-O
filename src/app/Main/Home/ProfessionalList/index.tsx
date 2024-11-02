@@ -11,7 +11,7 @@ import { showMessage } from 'react-native-flash-message';
 import { orangeDefault } from '../../../../shared/styleConsts';
 
 export default function ProfessionalList(props: any) {
-  const { getAllProfessionalsByID, updateFavoriteProvider, getAllProfessionalsByProfissaoIdMaisRelevantes, getAllProfessionalsByProfissaoIdMelhorAvaliados } = useAPI();
+  const { getProvedoresByFilter, updateFavoriteProvider } = useAPI();
   const [params, setParams] = useState<any>(props.route.params)
   const navigation = useNavigation();
   const [profissionais, setProfissionais] = useState<ProvedorListOutput[]>([])
@@ -19,51 +19,36 @@ export default function ProfessionalList(props: any) {
   const [buttonSelected, setButtonSelected] = useState<ButtonFilterEnumProfessions>(ButtonFilterEnumProfessions.nextToYou);
 
   useEffect(() => {
+    setProfissionais([])
     if (buttonSelected == ButtonFilterEnumProfessions.bestRated)
-      getAllProfessionalsByProfissaoIdMelhorAvaliados(params.id)
-        .then((result) => {
-          setProfissionais(result)
-        }).catch((e) => {
-          showMessage({
-            message: "Falha ao carregar profissionais.",
-            type: "danger"
-          });
-        }).finally(() => {
-          setLoading(false)
-        })
+      loadProvedores(params.id, true, false)
     else if (buttonSelected == ButtonFilterEnumProfessions.recognized)
-      getAllProfessionalsByProfissaoIdMaisRelevantes(params.id)
-        .then((result) => {
-          setProfissionais(result)
-        }).catch((e) => {
-          showMessage({
-            message: "Falha ao carregar profissionais.",
-            type: "danger"
-          });
-        }).finally(() => {
-          setLoading(false)
-        })
+      loadProvedores(params.id, false, true)
 
   }, [buttonSelected]);
 
   useEffect(() => {
     if (params) {
       setLoading(true);
-      getAllProfessionalsByID(params.id)
-        .then((result) => {
-          setProfissionais(result)
-        }
-        ).catch((e) => {
-          showMessage({
-            message: "Falha ao carregar profissionais.",
-            type: "danger"
-          });
-        }).finally(() => {
-          setLoading(false)
-        })
+      loadProvedores(params.id, false, false)
 
     }
   }, [params])
+
+  const loadProvedores= (idProfissao: number, melhoresAvaliados: boolean, maisrelevantes: boolean) => {
+    getProvedoresByFilter(idProfissao, melhoresAvaliados, maisrelevantes)
+    .then((result) => {
+      setProfissionais(result)
+    }
+    ).catch((e) => {
+      showMessage({
+        message: "Falha ao carregar profissionais.",
+        type: "danger"
+      });
+    }).finally(() => {
+      setLoading(false)
+    })
+  }
 
   const handleFavoritarProfissional = (id: number) => {
     updateFavoriteProvider(id)

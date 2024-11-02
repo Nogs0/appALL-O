@@ -15,7 +15,7 @@ export default StyleSheet.create({
         alignItems: 'center',
     },
     professionName: {
-        fontSize: 12,
+        fontSize: 10,
         color: blackDefault,
         fontFamily: 'Rubik-SemiBold'
     }

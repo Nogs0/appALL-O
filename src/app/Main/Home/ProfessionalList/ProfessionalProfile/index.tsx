@@ -221,7 +221,11 @@ export default function ProfessionalProfile(props: any) {
                                     justifyContent: "flex-end",
 
                                 }}>
-                                    <WhatsappButton style={style.WhatsappContainer} telefone={professional.provedor.telefone} onPress={() => setShowDialogWhatsApp(true)} ></WhatsappButton>
+                                    <WhatsappButton
+                                        style={style.WhatsappContainer}
+                                        telefone={professional.provedor.telefone}
+                                        onPress={() => setShowDialogWhatsApp(true)}>
+                                    </WhatsappButton>
                                 </View>
                         }
                     </View>

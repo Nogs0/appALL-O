@@ -21,7 +21,7 @@ export default function HighlightRate(props: HighlightRateProps) {
                         <Text ellipsizeMode='tail' numberOfLines={4} style={style.rateNote}>{`"${props.avaliacao.descricao}"`}</Text>
                     </View>
                     <View style={style.rateStars}>
-                        <Icon name={'star'} color={whiteDefault} size={13}>{`${props.avaliacao.nota.toFixed(1)}`}</Icon>
+                        <Icon name={'star'} color={whiteDefault} size={13}>{`${((props.avaliacao.qualidade + props.avaliacao.agilidade + props.avaliacao.preco)/3).toFixed(1)}`}</Icon>
                     </View>
                 </View>
                 :

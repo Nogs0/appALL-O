@@ -9,6 +9,7 @@ import { ButtonFilterEnumReviews } from '../../../../../../shared/Enums/enums';
 import { whiteDefault } from '../../../../../../shared/styleConsts';
 import style from './style';
 import { useAuth } from '../../../../../../contexts/auth';
+import TelaAvaliacao from '../../../../../../components/TelaAvaliacao';
 
 export default function ProfessionalReviews(props: any) {
 
@@ -21,20 +22,44 @@ export default function ProfessionalReviews(props: any) {
     const [avaliacaoFavorita, setAvaliacaoFavorita] = useState<number>()
 
     const [buttonSelected, setButtonSelected] = useState<ButtonFilterEnumReviews>(ButtonFilterEnumReviews.date);
+    const [showAvaliacao, setShowAvaliacao] = useState<boolean>(false);
+
+    const [estrelasAgilidade, setEstrelasAgilidade] = useState<number>(0);
+    const [estrelasQualidade, setEstrelasQualidade] = useState<number>(0);
+    const [estrelasPreco, setEstrelasPreco] = useState<number>(0);
+    const [descricao, setDescricao] = useState<string>('');
+    const [imagens, setImagens] = useState<string[]>([]);
+    const [clienteNome, setClienteNome] = useState<string>('');
 
     useEffect(() => {
         console.log(buttonSelected);
     }, [buttonSelected]);
 
     const renderItem = (review: ServicoOutput) => {
-        return (<CardReview
-            id={review.id}
-            client={review.cliente.nome}
-            rate={review.avaliacao?.nota}
-            rateNote={review.avaliacao?.descricao}
-            favorite={review.avaliacao?.id == avaliacaoFavorita}
-            isProfessional={isProfessional}
-            setFavoriteCallback={() => handleUpdateFavoriteReview(review.avaliacao?.id)} />)
+        console.log(review.avaliacao)
+        return (
+            <CardReview
+                id={review.id}
+                client={review.cliente.nome}
+                qualidade={review.avaliacao?.qualidade}
+                agilidade={review.avaliacao?.agilidade}
+                preco={review.avaliacao?.preco}
+                rateNote={review.avaliacao?.descricao}
+                favorite={review.avaliacao?.id == avaliacaoFavorita}
+                isProfessional={isProfessional}
+                setFavoriteCallback={() => handleUpdateFavoriteReview(review.avaliacao?.id)}
+                onClick={() => openModalAvaliacao(review)} />
+        )
+    }
+
+    const openModalAvaliacao = (review: ServicoOutput) => {
+        setClienteNome(review.cliente.nome)
+        setShowAvaliacao(true);
+        setEstrelasAgilidade(review.avaliacao.agilidade);
+        setEstrelasQualidade(review.avaliacao.qualidade);
+        setEstrelasPreco(review.avaliacao.preco);
+        setDescricao(review.avaliacao.descricao);
+        setImagens(review.avaliacao.uriImagens);
     }
 
     const handleUpdateFavoriteReview = (id: number) => {
@@ -72,7 +97,7 @@ export default function ProfessionalReviews(props: any) {
     }
 
     useEffect(() => {
-        if (params.id){
+        if (params.id) {
             setAvaliacaoFavorita(params.avaliacaoFavorita);
             getReviews(params.id);
         }
@@ -80,6 +105,25 @@ export default function ProfessionalReviews(props: any) {
 
     return (
         <SafeAreaView style={[style.container, { backgroundColor: params?.defaultColor }]}>
+            {showAvaliacao ?
+                <TelaAvaliacao
+                    isView={true}
+                    anexarImagem={() => {}}
+                    text={clienteNome}
+                    setDescricao={() => { }}
+                    setEstrelasQualidade={() => { }}
+                    setEstrelasAgilidade={() => { }}
+                    setEstrelasPreco={() => { }}
+                    title='Avaliacao'
+                    ok={() => setShowAvaliacao(false)}
+                    estrelasAgilidade={estrelasAgilidade}
+                    estrelasQualidade={estrelasQualidade}
+                    estrelasPreco={estrelasPreco}
+                    descricao={descricao}
+                    imagens={imagens}
+                >
+                </TelaAvaliacao>
+                : <></>}
             {!loading && reviews ? (
                 <>
                     <HeaderProfessional title={'Reviews'} navigation={props?.navigation}

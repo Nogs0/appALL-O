@@ -19,7 +19,7 @@ export default StyleSheet.create({
         flex: 1,
         color: orangeDefault,
         fontFamily: 'Rubik-SemiBold',
-        fontSize: 32
+        fontSize: 24
     }
 
 })
