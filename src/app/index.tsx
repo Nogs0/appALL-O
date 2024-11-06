@@ -19,15 +19,15 @@ export default function Pages() {
           tabBarShowLabel: false,
           tabBarActiveTintColor: whiteDefault
         }}>
+        <Tab.Screen name="Main" component={Main} options={{
+          tabBarIcon: ({ color, focused }) => <ButtonTabBar defaultColor={isProfessional ? blueDefault : orangeDefault} color={color} focused={focused} icon={"home"} />
+        }} />
         {!isProfessional ?
           <Tab.Screen name="Map" component={Mapa} options={{
             tabBarIcon: ({ color, focused }) => <ButtonTabBar defaultColor={orangeDefault} color={color} focused={focused} icon={"map"} />
           }} />
           : <></>
         }
-        <Tab.Screen name="Main" component={Main} options={{
-          tabBarIcon: ({ color, focused }) => <ButtonTabBar defaultColor={isProfessional ? blueDefault : orangeDefault} color={color} focused={focused} icon={"home"} />
-        }} />
         <Tab.Screen name="SecondTab" component={SecondTab} options={{
           tabBarIcon: ({ color, focused }) => <ButtonTabBar defaultColor={isProfessional ? blueDefault : orangeDefault} color={color} focused={focused} icon={isProfessional ? "bell" : "account"} />
         }} />

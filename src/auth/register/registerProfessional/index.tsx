@@ -11,8 +11,9 @@ import RegisterProfessional_Services from './screens/RegisterProfessional_Servic
 import RegisterProfessional_InitialInformations from './screens/RegisterProfessional_InitialInformations'
 import { blueDefault } from '../../../shared/styleConsts'
 import RegisterProfessional_AddProfilePic from './screens/RegisterProfessional_AddProfilePic'
+import RegisterProfessional_LatLong from './screens/RegisterProfessional_LatLong'
 
-export default function RegisterProfessional({goBack} : any) {
+export default function RegisterProfessional({ goBack }: any) {
   const Stack = createNativeStackNavigator();
   return (
     <Stack.Navigator initialRouteName='RegisterProfessional_InitialInformations'>
@@ -23,6 +24,7 @@ export default function RegisterProfessional({goBack} : any) {
         <Stack.Screen name="RegisterProfessional_OkProfession" component={RegisterProfessional_OkProfession} options={{ headerShown: false }} />
         <Stack.Screen name="RegisterProfessional_Description" component={RegisterProfessional_Description} options={{ headerShown: false }} />
         <Stack.Screen name="RegisterProfessional_ServiceLocation" component={RegisterProfessional_ServiceLocation} options={{ headerShown: false }} />
+        <Stack.Screen name="RegisterProfessional_LatLong" component={RegisterProfessional_LatLong} options={{ headerShown: false }} />
         <Stack.Screen name="RegisterProfessional_Contact" component={RegisterProfessional_Contact} options={{ headerShown: false }} />
         <Stack.Screen name="RegisterProfessional_AddProfilePic" component={RegisterProfessional_AddProfilePic} options={{ headerShown: false }} />
         <Stack.Screen name="RegisterProfessional_Images" component={RegisterProfessional_Images} options={{ headerShown: false }} />

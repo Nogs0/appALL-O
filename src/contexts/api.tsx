@@ -68,7 +68,9 @@ export interface Endereco {
     cidade: string,
     bairro: string,
     logradouro: string,
-    numero: string
+    numero: string,
+    latitude: string,
+    longitude: string
 }
 
 export interface ProfissaoOutput {

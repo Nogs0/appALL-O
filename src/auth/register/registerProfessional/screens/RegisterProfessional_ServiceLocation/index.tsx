@@ -4,6 +4,7 @@ import styleRegister from '../../style'
 import style from './style'
 import { useRegisterProfessional } from '../../../../../contexts/registerProfessional';
 import getAddress from '../../../../../services/cep';
+import getLatLong from '../../../../../services/latlong';
 import HeaderRegisterProfessional from '../../../../../components/HeaderRegisterProfessional';
 import Input from '../../../../../components/Input';
 import InputCEP from '../../../../../components/InputCEP';
@@ -25,27 +26,40 @@ export default function RegisterProfessional_ServiceLocation({ navigation }: any
 
   const [loadingCEP, setLoadingCEP] = useState<boolean>(false);
   const handleButtonNext = () => {
-    setEndereco({
-      cep,
-      estado,
-      cidade,
-      bairro,
-      logradouro,
-      numero,
-    } as Endereco);
-    if (canGoToTheNextStep())
-      navigation.navigate('RegisterProfessional_Contact');
+    if (canGoToTheNextStep()) {
+      getLatLong({
+        cep,
+        estado,
+        cidade,
+        bairro,
+        logradouro,
+        numero,
+      } as Endereco)
+        .then((result) => {
+          setEndereco({
+            cep,
+            estado,
+            cidade,
+            bairro,
+            logradouro,
+            numero,
+            latitude: result.latitude,
+            longitude: result.longitude
+          } as Endereco);
+          navigation.navigate('RegisterProfessional_LatLong');
+        })
+    }
     else setIncorrectInformations(true)
   }
 
   const canGoToTheNextStep = (): boolean => {
     return (
       cep.length > 0 &&
-            estado.length > 0 &&
-            cidade.length > 0 &&
-            bairro.length > 0 &&
-            logradouro.length > 0 &&
-            numero.length > 0
+      estado.length > 0 &&
+      cidade.length > 0 &&
+      bairro.length > 0 &&
+      logradouro.length > 0 &&
+      numero.length > 0
     )
   }
 

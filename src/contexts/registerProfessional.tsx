@@ -57,7 +57,9 @@ function RegisterProfessionalProvider({ children }: any) {
                 cidade: '',
                 bairro: '',
                 logradouro: '',
-                numero: ''
+                numero: '',
+                latitude: '',
+                longitude: ''
             },
             telefone: '',
             tipoPessoa: TipoPessoaEnum.FISICA,
@@ -184,7 +186,9 @@ function RegisterProfessionalProvider({ children }: any) {
                     cidade: '',
                     bairro: '',
                     logradouro: '',
-                    numero: ''
+                    numero: '',
+                    latitude: '',
+                    longitude: ''
                 },
                 telefone: '',
                 tipoPessoa: TipoPessoaEnum.FISICA,
